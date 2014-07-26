@@ -1,0 +1,66 @@
+// Copyright 2014 Michael Scarlett
+// All rights reserved
+
+package com.scarlettapps.skydiver3d.world.gamestate;
+
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.GdxRuntimeException;
+
+public abstract class GameController implements InputProcessor {
+	
+	protected Vector2 touchPosition;
+	protected float ax = 0;
+	protected float ay = 0;
+	protected boolean faster = false;
+	
+	public final float getAx() {
+		return ax;
+	}
+	
+	public final float getAy() {
+		return ay;
+	}
+	
+	public final boolean getFaster() {
+		return faster;
+	}
+	
+	public final Vector2 getTouchPosition() {
+		return touchPosition;
+	}
+	
+	@Override
+	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+		return false;
+	}
+	
+	@Override
+	public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+		return false; //check if the menu buttons were pressed
+	}
+	
+	@Override
+	public boolean touchDragged(int screenX, int screenY, int pointer) {
+		return false;
+	}
+
+	@Override
+	public boolean mouseMoved(int screenX, int screenY) {
+		return false;
+	}
+
+	public static final GameController newGameController() {
+		switch (Gdx.app.getType()) {
+			case Android:
+				return new AndroidGameController();
+			case Desktop:
+				return new DesktopGameController();
+			default:
+				throw new GdxRuntimeException("Unknown app type");
+		}
+	}
+
+	public void update(float delta) {}
+}
