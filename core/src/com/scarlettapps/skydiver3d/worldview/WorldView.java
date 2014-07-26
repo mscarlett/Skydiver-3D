@@ -12,16 +12,20 @@ import com.badlogic.gdx.graphics.g3d.ModelBatch;
 import com.badlogic.gdx.graphics.g3d.decals.CameraGroupStrategy;
 import com.badlogic.gdx.graphics.g3d.decals.Decal;
 import com.badlogic.gdx.graphics.g3d.decals.DecalBatch;
+import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.SortedIntList.Node;
 import com.scarlettapps.skydiver3d.DefaultScreen;
 import com.scarlettapps.skydiver3d.SkyDiver3D;
+import com.scarlettapps.skydiver3d.world.Cloud;
 import com.scarlettapps.skydiver3d.world.Collectible;
 import com.scarlettapps.skydiver3d.world.Collectibles;
 import com.scarlettapps.skydiver3d.world.Plane;
 import com.scarlettapps.skydiver3d.world.Skydiver;
 import com.scarlettapps.skydiver3d.world.Target;
+import com.scarlettapps.skydiver3d.world.Terrain;
 import com.scarlettapps.skydiver3d.world.World;
 import com.scarlettapps.skydiver3d.world.gamestate.StatusManager;
 import com.scarlettapps.skydiver3d.worldview.ui.AccuracyMeter;
@@ -79,9 +83,9 @@ public class WorldView {
 	
 	
 	private void drawTerrain() {
-		//Terrain terrain = world.getTerrain();
-		//Matrix4 mat = cam.combined;
-		//terrain.render(mat);
+		Terrain terrain = world.getTerrain();
+		Matrix4 mat = cam.combined;
+		terrain.render(mat);
 	}
 	
 	private void drawTargetAndSkydiver() {
@@ -104,13 +108,13 @@ public class WorldView {
 	
 	private void drawCollectibles() {
 		Collectibles collectibles = world.getCollectibles();
-		//Array<Cloud> clouds = world.getClouds();
+		Array<Cloud> clouds = world.getClouds();
 		for (Node<Collectible> node: collectibles) {
 			decalBatch.add(node.value.getDecal());
 		}
-		//for (Cloud c: clouds) {
-			//decalBatch.add(c.getDecal());
-		//}
+		for (Cloud c: clouds) {
+			decalBatch.add(c.getDecal());
+		}
 		decalBatch.flush();
 		
 	}
