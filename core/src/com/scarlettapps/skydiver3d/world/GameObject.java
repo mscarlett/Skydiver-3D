@@ -3,7 +3,7 @@
 
 package com.scarlettapps.skydiver3d.world;
 
-import com.scarlettapps.skydiver3d.world.gamestate.StatusManager.WorldState;
+import com.scarlettapps.skydiver3d.worldstate.StatusManager.WorldState;
 import com.scarlettapps.skydiver3d.worldview.Renderer;
 
 public abstract class GameObject {

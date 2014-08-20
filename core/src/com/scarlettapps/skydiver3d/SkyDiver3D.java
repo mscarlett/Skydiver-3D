@@ -7,12 +7,14 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.FPSLogger;
-import com.scarlettapps.skydiver3d.resources.Graphics;
-import com.scarlettapps.skydiver3d.resources.Prefs;
+import com.scarlettapps.skydiver3d.resources.AssetFactory;
+import com.scarlettapps.skydiver3d.resources.MusicFactory;
+import com.scarlettapps.skydiver3d.resources.PreferenceFactory;
+import com.scarlettapps.skydiver3d.resources.SoundFactory;
 
 public class SkyDiver3D extends Game {
-	public static final String LOG = "Skydiving3D";
-	public static final boolean DEV_MODE = true;
+	public static final String LOG = "Skydiver3D";
+	public static final boolean DEV_MODE = false;
 	
 	MainMenuScreen mainMenuScreen;
 	WorldPresenter playingScreen;
@@ -22,14 +24,24 @@ public class SkyDiver3D extends Game {
 	HelpScreen helpScreen;
 	OptionsScreen optionsScreen;
 	AchievementsScreen achievementsScreen;
+	SplashScreen splashScreen;
+	GameOptionsScreen gameOptionsScreen;
 	
-	Graphics assets;
-	Prefs preferences;
+	AssetFactory assets;
+	PreferenceFactory preferences;
+	MusicFactory music;
+	SoundFactory sound;
 	
 	private FPSLogger fpsLogger;
 
 	@Override
 	public void create() {
+		// Initialize resources
+		assets = AssetFactory.newInstance();
+		preferences = PreferenceFactory.newInstance();
+		music = MusicFactory.newInstance();
+		sound = SoundFactory.newInstance();
+		
 		// Initialize screens
 		mainMenuScreen = new MainMenuScreen(this);
 		playingScreen = new WorldPresenter(this);
@@ -39,13 +51,11 @@ public class SkyDiver3D extends Game {
 		helpScreen = new HelpScreen(this);
 		optionsScreen = new OptionsScreen(this);
 		achievementsScreen = new AchievementsScreen(this);
-		
-		// Initialize resources
-		assets = new Graphics();
-		preferences = new Prefs();
+		splashScreen = new SplashScreen(this);
+		gameOptionsScreen = new GameOptionsScreen(this);
 		
 		// Set screen to main menu
-		setScreen(mainMenuScreen);
+		setScreen(splashScreen);
 		
 		// Initialize FPS logger if dev mode enabled
 		if (DEV_MODE) {
@@ -56,12 +66,6 @@ public class SkyDiver3D extends Game {
 	@Override
 	public void setScreen(Screen screen) {
 		super.setScreen(screen);
-		
-		// Switch input processor to that of new screen
-		if (screen instanceof DefaultScreen<?>) {
-			DefaultScreen<?> defaultScreen = (DefaultScreen<?>)screen;
-			defaultScreen.setInputProcessor();
-		}
 	}
 	
 	@Override
@@ -84,6 +88,9 @@ public class SkyDiver3D extends Game {
 		helpScreen.dispose();
 		optionsScreen.dispose();
 		achievementsScreen.dispose();
+		splashScreen.dispose();
+		loadingScreen.dispose();
+		gameOptionsScreen.dispose();
 	}
 
 	public void exit() {

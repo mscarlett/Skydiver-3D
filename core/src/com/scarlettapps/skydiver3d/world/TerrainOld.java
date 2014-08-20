@@ -4,7 +4,6 @@
 package com.scarlettapps.skydiver3d.world;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Mesh;
@@ -13,6 +12,7 @@ import com.badlogic.gdx.graphics.VertexAttribute;
 import com.badlogic.gdx.graphics.VertexAttributes;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Matrix4;
 import com.scarlettapps.skydiver3d.SkyDiver3D;
 import com.scarlettapps.skydiver3d.resources.AssetFactory;
 import com.scarlettapps.skydiver3d.resources.AssetFactory.TextureType;
@@ -21,7 +21,7 @@ import com.scarlettapps.skydiver3d.world.utils.PerlinNoise;
 import com.scarlettapps.skydiver3d.worldstate.StatusManager.WorldState;
 import com.scarlettapps.skydiver3d.worldview.Renderer;
 
-public class Terrain extends GameObject { //TODO fix bug that causes parachute to randomly not open // also fix bug in which screen unresponsive
+public class TerrainOld extends GameObject {
 	
 	private static final String GROUND_TEXTURE_0 = TextureType.WATER_TERRAIN;
 	private static final String GROUND_TEXTURE_1 = TextureType.SAND_TERRAIN;
@@ -35,14 +35,11 @@ public class Terrain extends GameObject { //TODO fix bug that causes parachute t
 	private Texture texture2;
 	private Texture texture3;
 	private int u_mvpMatrix;
-	private int u_fogFactor;
 	
-	CustomHeightmap heightmap;
-	
-	public Terrain() {
+	public TerrainOld() {
 		super(false,true);
 		
-		heightmap = new CustomHeightmap(4, MathUtils.random(5,10), MathUtils.random(15,30), 217f, 2, 2790);
+		CustomHeightmap heightmap = new CustomHeightmap(4, MathUtils.random(5,10), MathUtils.random(15,30), 217f, 2, 2790);
 		mesh = heightmap.createMesh();
 		mesh.setVertices(heightmap.vertices);
 		mesh.setIndices(heightmap.indices);
@@ -58,13 +55,13 @@ public class Terrain extends GameObject { //TODO fix bug that causes parachute t
 				+ "varying vec4 v_color;                  \n"
 				+ "varying vec2 v_texCoord0;                  \n"
 				+ "varying float v_height;                  \n"
-				//+ "varying float v_texIntensity;\n"
+				+ "varying float v_texIntensity;\n"
 				+ "void main()                                 \n"
 				+ "{                                           \n"
 				+ "   v_color = a_color;                       \n"
 				+ "   v_height = a_position.z;                       \n"
 				+ "   v_texCoord0 = a_texCoord0;                       \n"
-				//+ "   v_texIntensity = a_texIntensity; \n"
+				+ "   v_texIntensity = a_texIntensity; \n"
 				+ "   vec4 pos = a_position;\n"
 				+ "   pos.z = 0.0;\n"
 				+ "   gl_Position = u_mvpMatrix *pos;  \n"
@@ -72,15 +69,14 @@ public class Terrain extends GameObject { //TODO fix bug that causes parachute t
 		String fragmentShader = "#ifdef GL_ES\n"
 				+ "precision mediump float;\n"
 				+ "#endif\n"
-				//+ "uniform sampler2D u_texture0;           \n"
-				//+ "uniform sampler2D u_texture1;           \n"
-				//+ "uniform sampler2D u_texture2;           \n"
-				//+ "uniform sampler2D u_texture3;           \n"
-				+ "uniform float u_fogFactor;\n"
+				+ "uniform sampler2D u_texture0;           \n"
+				+ "uniform sampler2D u_texture1;           \n"
+				+ "uniform sampler2D u_texture2;           \n"
+				+ "uniform sampler2D u_texture3;           \n"
 				+ "varying vec4 v_color;                  \n"
 				+ "varying vec2 v_texCoord0;                  \n"
 				+ "varying float v_height;                  \n"
-				//+ "varying float v_texIntensity;\n"
+				+ "varying float v_texIntensity;\n"
 				+"\n"
 				+"vec2 truncate(vec2 v)  \n"
 				+"\n{"
@@ -92,28 +88,27 @@ public class Terrain extends GameObject { //TODO fix bug that causes parachute t
 				+ "void main()                                  \n"
 				+ "{                                            \n"
 				+ "float z = gl_FragCoord.z / gl_FragCoord.w;\n"
-				//+ "const float LOG2 = 1.442695;\n"
-				//+ "float fogFactor = clamp(exp2( - 0.00000000005*z*z * LOG2 ),0.0,1.0);\n"
-				+ "const vec4 fogColor = vec4(1.0, 1.0, 1.0, 1.0);\n"
+				+ "const float LOG2 = 1.442695;\n"
+				+ "float fogFactor = clamp(exp2( - 0.00000000005*z*z * LOG2 ),0.0,1.0);\n"
+				+ "vec4 fogColor = vec4(1.0, 1.0, 1.0, 1.0);\n"
 				+ "vec4 texColor;"
 				+ "vec2 newTexCoord = truncate(30.0*v_texCoord0);"
 				+ "float h1 = -5.0;\n"
 				+ "float h2 = 0.0;\n"
 				+ "float h3 = 10.0;\n"
 				+ "float h4 = 75.0;\n"
-				//+ "if (v_height < h1) {"
-				//+ "  texColor = texture2D(u_texture0, newTexCoord);\n"
-				//+ "} else if (v_height < h2) {"
-				//+ "  texColor = mix(texture2D(u_texture0, newTexCoord),texture2D(u_texture1, newTexCoord),(v_height-h1)/(h2-h1));\n"
-				//+ "} else if (v_height < h3) {"
-				//+ "  texColor = mix(texture2D(u_texture1, newTexCoord),texture2D(u_texture2, newTexCoord),(v_height-h2)/(h3-h2));\n"
-				//+ "} else if (v_height < h4) {"
-				//+ "  texColor = mix(texture2D(u_texture2, newTexCoord),texture2D(u_texture3, newTexCoord),(v_height-h3)/(h4-h3));\n"
-				//+ "} else {"
-				//+ "  texColor = texture2D(u_texture3, newTexCoord);\n"
-				//+ "}"
-				//+ "  gl_FragColor = mix( fogColor, mix (v_color, texColor, v_texIntensity), u_fogFactor);\n"
-				+ "  gl_FragColor = mix( fogColor, v_color, u_fogFactor);\n"
+				+ "if (v_height < h1) {"
+				+ "  texColor = texture2D(u_texture0, newTexCoord);\n"
+				+ "} else if (v_height < h2) {"
+				+ "  texColor = mix(texture2D(u_texture0, newTexCoord),texture2D(u_texture1, newTexCoord),(v_height-h1)/(h2-h1));\n"
+				+ "} else if (v_height < h3) {"
+				+ "  texColor = mix(texture2D(u_texture1, newTexCoord),texture2D(u_texture2, newTexCoord),(v_height-h2)/(h3-h2));\n"
+				+ "} else if (v_height < h4) {"
+				+ "  texColor = mix(texture2D(u_texture2, newTexCoord),texture2D(u_texture3, newTexCoord),(v_height-h3)/(h4-h3));\n"
+				+ "} else {"
+				+ "  texColor = texture2D(u_texture3, newTexCoord);\n"
+				+ "}"
+				+ "  gl_FragColor = mix( fogColor, mix (v_color, texColor, v_texIntensity), fogFactor);\n"
 				+ "}";
 
 		shader = new ShaderProgram(vertexShader, fragmentShader);
@@ -135,15 +130,6 @@ public class Terrain extends GameObject { //TODO fix bug that causes parachute t
 		u_texture3 = shader.getUniformLocation("u_texture3");	
 		
 		u_mvpMatrix = shader.getUniformLocation("u_mvpMatrix");
-		u_fogFactor = shader.getUniformLocation("u_fogFactor");
-		
-		for (int i = 1; i < noiseMatrix.length; i++) {
-			noiseMatrix[i] = Math.abs(p.noise1(((float)i)/noiseMatrix.length)) + noiseMatrix[i-1];
-		}
-		float gamma = MathUtils.random(0.3f,0.7f);
-		for (int i = 1; i < noiseMatrix.length; i++) {
-			noiseMatrix[i] = noiseMatrix[i]/noiseMatrix[noiseMatrix.length-1]*gamma;
-		}
 	}
 	
 	private static class CustomHeightmap {
@@ -378,8 +364,8 @@ public class Terrain extends GameObject { //TODO fix bug that causes parachute t
 	int u_texture2;
 	int u_texture3;
 
-	public void render(Camera cam) {
-		/*Gdx.gl.glEnable(GL20.GL_TEXTURE_2D);
+	public void render(Matrix4 mat) {
+		Gdx.gl.glEnable(GL20.GL_TEXTURE_2D);
 		Gdx.gl.glActiveTexture(GL20.GL_TEXTURE0);
 		texture0.bind();
 		Gdx.gl.glActiveTexture(GL20.GL_TEXTURE1);
@@ -387,28 +373,15 @@ public class Terrain extends GameObject { //TODO fix bug that causes parachute t
 		Gdx.gl.glActiveTexture(GL20.GL_TEXTURE2);
 		texture2.bind();
 		Gdx.gl.glActiveTexture(GL20.GL_TEXTURE3);
-		texture3.bind();*/
+		texture3.bind();
 		shader.begin();
-		/*shader.setUniformi(u_texture0, 0);
+		shader.setUniformi(u_texture0, 0);
 		shader.setUniformi(u_texture1, 1);
 		shader.setUniformi(u_texture2, 2);
-		shader.setUniformi(u_texture3, 3);*/
-		shader.setUniformMatrix(u_mvpMatrix, cam.combined);
-		float fogFactor = noise(cam.position.z); 
-		shader.setUniformf(u_fogFactor, 1-fogFactor);
+		shader.setUniformi(u_texture3, 3);
+		shader.setUniformMatrix(u_mvpMatrix, mat);
 		mesh.render(shader, GL20.GL_TRIANGLES);
 		shader.end();
-	}
-	
-	PerlinNoise p = new PerlinNoise(MathUtils.random(1,100000));
-	
-	public static float[] noiseMatrix = new float[Skydiver.STARTING_HEIGHT];
-
-	private float noise(float z) {
-		if (z > 0) {
-			return noiseMatrix[(int)z];
-		}
-		return 0;
 	}
 
 	@Override
@@ -427,16 +400,5 @@ public class Terrain extends GameObject { //TODO fix bug that causes parachute t
 	public void onWorldStateChanged(WorldState worldState) {
 		// TODO Auto-generated method stub
 		
-	}
-
-	public float getAltitude(float x, float y) {
-		int pitch = heightmap.size+1;
-		x = x/heightmap.stretch+pitch/2;
-		y = y/heightmap.stretch+pitch/2;
-		try {
-			return heightmap.vertices[((int)x+(int)y*pitch)*7+2];
-		} catch (Exception e) {
-			return -1000;
-		}
 	}
 }

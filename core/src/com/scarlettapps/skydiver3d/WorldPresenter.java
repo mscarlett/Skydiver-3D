@@ -4,19 +4,23 @@
 package com.scarlettapps.skydiver3d;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g3d.shaders.DefaultShader;
-import com.scarlettapps.skydiver3d.resources.Graphics;
+import com.scarlettapps.skydiver3d.resources.AssetFactory;
+import com.scarlettapps.skydiver3d.resources.AssetFactory.MusicType;
 import com.scarlettapps.skydiver3d.world.World;
-import com.scarlettapps.skydiver3d.world.gamestate.GameController;
-import com.scarlettapps.skydiver3d.world.gamestate.InputManager;
-import com.scarlettapps.skydiver3d.world.gamestate.StatusManager;
-import com.scarlettapps.skydiver3d.world.gamestate.StatusManager.WorldState;
+import com.scarlettapps.skydiver3d.worldstate.GameController;
+import com.scarlettapps.skydiver3d.worldstate.InputManager;
+import com.scarlettapps.skydiver3d.worldstate.SkydiverControls;
+import com.scarlettapps.skydiver3d.worldstate.StatusManager;
+import com.scarlettapps.skydiver3d.worldstate.StatusManager.Score;
+import com.scarlettapps.skydiver3d.worldstate.StatusManager.WorldState;
 import com.scarlettapps.skydiver3d.worldview.WorldView;
 
 
-public class WorldPresenter extends DefaultScreen<SkyDiver3D> {
+public class WorldPresenter extends DefaultScreen<SkyDiver3D> { //TODO bug in which tapping screen while parachuting changes cam position
 	
 	private static final float MAX_DELTA = 0.1f;
 	
@@ -28,19 +32,11 @@ public class WorldPresenter extends DefaultScreen<SkyDiver3D> {
 	
 	public WorldPresenter(SkyDiver3D game) {
 		super(game, false);
-		load();
-	}
-	
-	private void load() {
-		Graphics.load();
-		Graphics.getAssets().finishLoading();
 		gameController = GameController.newGameController();
 		inputManager = new InputManager(gameController);
 		statusManager = new StatusManager(inputManager);
-		world = new World(inputManager, statusManager);
-		worldView = new WorldView(world, statusManager);
 
-		DefaultShader.defaultCullFace = 0; // disable cull face for all models
+		DefaultShader.defaultCullFace = 0;
 	}
 	
 	@Override
@@ -64,6 +60,7 @@ public class WorldPresenter extends DefaultScreen<SkyDiver3D> {
 	protected void updateWorld(float delta) {
 		world.update(delta);
 		worldView.update(delta);
+		inputManager.update(delta);
 	}
 	
 	protected void renderWorld(float delta) {
@@ -72,18 +69,37 @@ public class WorldPresenter extends DefaultScreen<SkyDiver3D> {
 
 	@Override
 	protected InputProcessor getInputProcessor() {
-		return gameController;
+		InputMultiplexer input = new InputMultiplexer();
+		input.addProcessor(worldView.getInputProcessor());
+		input.addProcessor(gameController);
+		return input;
 	}
 
 	@Override
 	public void disposeScreen() {
-		Graphics.dispose();
+		AssetFactory.dispose();
 	}
 
+	boolean load = true;
+	
 	@Override
 	protected void showScreen() {
-		// TODO Auto-generated method stub
+		game.music.stop();
 		
+		if (load) {
+			world = new World(statusManager);
+			worldView = new WorldView(world, statusManager);
+
+			SkydiverControls skydiverControls = new SkydiverControls(world,
+					statusManager);
+			inputManager.addListener(skydiverControls);
+
+			load = false;
+		}
+		
+		game.music.play(MusicType.WIND);
+		
+		statusManager.setPaused(false);
 	}
 
 	@Override
@@ -109,27 +125,26 @@ public class WorldPresenter extends DefaultScreen<SkyDiver3D> {
 	}
 
 	public void restartLevel() { //simply reinitialize objects for now
+		//FIXME avoid recreating everything
 		gameController = GameController.newGameController();
 		inputManager = new InputManager(gameController);
 		statusManager = new StatusManager(inputManager);
-		world = new World(inputManager, statusManager);
+		world = new World(statusManager);
 		worldView = new WorldView(world, statusManager);
+		SkydiverControls skydiverControls = new SkydiverControls(world, statusManager);
+		inputManager.addListener(skydiverControls);
 	}
 	
 	public void nextLevel() {
-		
+		restartLevel(); //XXX temporary hack until this is implemented
+	}
+	
+	public Score scoreSummary() {
+		return statusManager.scoreSummary();
 	}
 
 	public boolean isLoaded() {
-		return Graphics.isLoaded();
-	}
-
-	public void renderScore() {
-		worldView.renderScore();
-	}
-	
-	public int getRating() {
-		return statusManager.rating();
+		return game.assets.isLoaded();
 	}
 
 }

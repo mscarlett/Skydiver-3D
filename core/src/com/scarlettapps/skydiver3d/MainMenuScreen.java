@@ -6,12 +6,19 @@ package com.scarlettapps.skydiver3d;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.scarlettapps.skydiver3d.resources.Graphics;
+import com.badlogic.gdx.utils.Array;
+import com.scarlettapps.skydiver3d.resources.AssetFactory;
+import com.scarlettapps.skydiver3d.resources.AssetFactory.MusicType;
+import com.scarlettapps.skydiver3d.resources.AssetFactory.SoundType;
+import com.scarlettapps.skydiver3d.resources.AssetFactory.TextureType;
+import com.scarlettapps.skydiver3d.resources.FontFactory;
 
 public class MainMenuScreen extends MenuScreen {
 
@@ -27,7 +34,7 @@ public class MainMenuScreen extends MenuScreen {
 		super(game);
 		
 		// Add the title image
-		title = Graphics.title;
+		title = AssetFactory.get(TextureType.TITLE, Texture.class);
 		title.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 		Image titleImage = new Image(title);
 		table.add(titleImage).size(TITLE_WIDTH,TITLE_HEIGHT).uniform().spaceBottom(SPACE_BOTTOM);
@@ -42,12 +49,18 @@ public class MainMenuScreen extends MenuScreen {
 			buttonTable.debug();
         }
 		
+		// Add DistanceFieldFont to fonts and apply to styles
+		//skin.add("DistanceFieldFont", new DistanceFieldFont(1/8f, stage.getBatch()), BitmapFont.class);
+		TextButtonStyle textButtonStyle = skin.get(TextButtonStyle.class);
+		BitmapFont font = FontFactory.generateFont(42);
+		textButtonStyle.font = font;
+		
 		// register the button "start game"
 		TextButton startGameButton = new TextButton("Play", skin);
-		startGameButton.getStyle().font.setScale(2f);
 		startGameButton.addListener(new ClickListener() {
 			@Override
 	        public void clicked(InputEvent event, float x, float y) {
+				MainMenuScreen.this.game.sound.play(SoundType.CLICK);
 	            startGame();
 	        }
 		});
@@ -56,10 +69,10 @@ public class MainMenuScreen extends MenuScreen {
 		
 		// register the button "high scores"
 		TextButton helpButton = new TextButton("Help", skin);
-		helpButton.getStyle().font.setScale(2f);
 		helpButton.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
+				MainMenuScreen.this.game.sound.play(SoundType.CLICK);
 				showHelp();
 			}
 		});
@@ -68,10 +81,10 @@ public class MainMenuScreen extends MenuScreen {
 
 		// register the button "options"
 		TextButton optionsButton = new TextButton("Options", skin);
-		optionsButton.getStyle().font.setScale(2f);
 		optionsButton.addListener(new ClickListener() {
 			@Override
 	        public void clicked(InputEvent event, float x, float y) {
+				MainMenuScreen.this.game.sound.play(SoundType.CLICK);
 	            showOptions();
 	        }
 
@@ -80,11 +93,11 @@ public class MainMenuScreen extends MenuScreen {
 		buttonTable.row();
 
 		// register the button "high scores"
-		TextButton highScoresButton = new TextButton("Achievements", skin);
-		highScoresButton.getStyle().font.setScale(2f);
+		TextButton highScoresButton = new TextButton("Credits", skin);
 		highScoresButton.addListener(new ClickListener() {
 			@Override
 	        public void clicked(InputEvent event, float x, float y) {
+				MainMenuScreen.this.game.sound.play(SoundType.CLICK);
 	            showAchievements();
 	        }
 		});
@@ -113,14 +126,12 @@ public class MainMenuScreen extends MenuScreen {
 
 	@Override
 	public void showScreen() {
-		// TODO Auto-generated method stub
-
+		game.music.play(MusicType.MAIN_MENU);
 	}
 
 	@Override
 	public void hideScreen() {
-		// TODO Auto-generated method stub
-
+		//game.music.play(null);
 	}
 
 	@Override
@@ -138,6 +149,22 @@ public class MainMenuScreen extends MenuScreen {
 	@Override
 	public void disposeScreen() {
 		//title.dispose();
+	}
+
+	String[] dependencies = new String[]{TextureType.RING, TextureType.STAR, SoundType.CLICK, MusicType.MAIN_MENU, TextureType.LIGHTNING};
+	
+	public boolean isLoaded() {
+		Array<String> names = game.assets.getLoaded();
+		outer:
+		for (String d: dependencies) {
+			for (String name: names) {
+				if (d.equals(name)) {
+					continue outer;
+				}
+			}
+			return false;
+		}
+		return true;
 	}
 
 }

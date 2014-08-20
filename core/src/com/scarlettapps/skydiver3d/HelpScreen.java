@@ -3,41 +3,97 @@
 
 package com.scarlettapps.skydiver3d;
 
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.scarlettapps.skydiver3d.resources.AssetFactory.SoundType;
+import com.scarlettapps.skydiver3d.resources.AssetFactory.TextureType;
+import com.scarlettapps.skydiver3d.resources.FontFactory;
 
 public class HelpScreen extends MenuScreen {
 
 	public HelpScreen(SkyDiver3D game) {
 		super(game);
 		
-		Label title = new Label("Help", skin);
-		title.setFontScale(2f);
-		table.add(title).spaceBottom(10);
+		TextButtonStyle textButtonStyle = skin.get(TextButtonStyle.class);
+		BitmapFont font = FontFactory.generateFont(42);
+		textButtonStyle.font = font;
+		
+		LabelStyle labelStyle = skin.get(LabelStyle.class);
+		font = FontFactory.generateFont(28);
+		labelStyle.font = font;
+		font = FontFactory.generateFont(64);
+		skin.add("Title font", font, BitmapFont.class);
+		
+		Label title = new Label("Help", skin, "Title font", Color.WHITE);
+		title.setAlignment(Align.center);
+		table.add(title).fill().center();
 		table.row();
 		
-		Label label = new Label("Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.", skin);
-		//label.setBounds(0,200,0,600);
-		label.setAlignment(Align.left);
-		label.setWrap(true);
-		//label.setWidth(400);
-		//label.setHeight(600);
-		//label.
-		table.add(label).spaceBottom(10).width(500);
+		Label label = new Label("Tilt your phone sideways to drift left or right", skin);
+		label.setAlignment(Align.center);
+		table.add(label).center();
+		table.row();
+		
+		Image phone = new Image(new Texture(TextureType.PHONE_ROTATE));
+		table.add(phone).center();
+		table.row();
+		
+		label = new Label("Earn points by collecting rings and stars.\nPress the lightning bolt button to dive faster and get a speed bonus.", skin);
+		label.setAlignment(Align.center);
+		table.add(label);
+		table.row();
+		
+		Table group = new Table();
+		Image goldRing = new Image(new Texture(TextureType.RING));
+		int s = 75;
+		goldRing.setSize(s,s);
+		group.add(goldRing).size(s, s);
+		Image star = new Image(new Texture(TextureType.STAR));
+		star.setSize(s,s);
+		group.add(star).size(s, s);
+		Image lightning = new Image(new Texture(TextureType.LIGHTNING));
+		lightning.setSize(s,s);
+		group.add(lightning).size(s, s);
+		
+		table.add(group);
+		table.row();
+		
+		label = new Label("Open your parachute with perfect timing and\nland in the center of the target to get bonus points", skin);
+		label.setAlignment(Align.center);
+		table.add(label).center().fill();
+		table.row();
+		
+		Image diving = new Image(new Texture(TextureType.DARTS));
+		table.add(diving).spaceBottom(10).center();
 		table.row();
 		
 		// register the button "resume game"
-		TextButton backToMainButton = new TextButton("Back to Main", skin);
-		backToMainButton.addListener(new ClickListener() {
+		TextButton backButton = new TextButton("Back to Main", skin);
+		backButton.addListener(new ClickListener() {
+			
 			@Override
-			public void clicked(InputEvent event, float x, float y) {
+	        public void clicked(InputEvent event, float x, float y) {
+				backToMainMenu();
+	        }
+			@Override
+			public void touchUp(InputEvent event, float x, float y,
+					int pointer, int button) {
+				super.touchUp(event, x, y, pointer, button);
+				HelpScreen.this.game.sound.play(SoundType.CLICK);
 				backToMainMenu();
 			}
 		});
-		table.add(backToMainButton).size(300, 60);
+		table.add(backButton).fill().center();
 	}
 	
 	private void backToMainMenu() {

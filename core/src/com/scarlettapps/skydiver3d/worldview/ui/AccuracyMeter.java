@@ -4,24 +4,27 @@
 package com.scarlettapps.skydiver3d.worldview.ui;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.scarlettapps.skydiver3d.DefaultScreen;
-import com.scarlettapps.skydiver3d.resources.Graphics;
+import com.scarlettapps.skydiver3d.resources.AssetFactory;
+import com.scarlettapps.skydiver3d.resources.AssetFactory.TextureType;
 
-public class AccuracyMeter { //TODO I can draw this manually, pixel by pixel but for debugging purposes use image
+public class AccuracyMeter extends Actor { //TODO This needs to be resolution independent
 
-	Sprite slider;
-	Sprite bar;
+	Image slider;
+	Image bar;
 	boolean stopped = false;
 	
 	public AccuracyMeter() {
-		Texture sliderTex = Graphics.get("data/slider2.png", Texture.class);
-		Texture barTex = Graphics.get("data/sliderbar.png", Texture.class);
-		slider = new Sprite(sliderTex);
-		bar = new Sprite(barTex);
+		Texture sliderTex = AssetFactory.get(TextureType.SLIDER, Texture.class);
+		Texture barTex = AssetFactory.get(TextureType.SLIDERBAR, Texture.class);
+		slider = new Image(new Sprite(sliderTex));
+		bar = new Image(new Sprite(barTex));
 		bar.setScale(0.5f, 1);
-		slider.setPosition(DefaultScreen.width()/2-slider.getWidth()/2,DefaultScreen.height()/2-slider.getHeight()/2-75);
+		slider.setPosition(DefaultScreen.VIRTUAL_WIDTH/2-slider.getWidth()/2,DefaultScreen.VIRTUAL_HEIGHT/2-slider.getHeight()/2-75);
 		bar.setPosition(slider.getX()-bar.getWidth()/2,slider.getY()+(slider.getHeight()-bar.getHeight())/2);
 		barX = bar.getX();
 	}
@@ -31,7 +34,8 @@ public class AccuracyMeter { //TODO I can draw this manually, pixel by pixel but
 	boolean right = true;
 	float epsilon = 0;
 	
-	public void update(float delta) {
+	@Override
+	public void act(float delta) {
 		float minX = slider.getX();
 		float maxX = minX + slider.getWidth();
 		float barPos = barX-(minX-bar.getWidth()/2);
@@ -39,31 +43,22 @@ public class AccuracyMeter { //TODO I can draw this manually, pixel by pixel but
 			if (minX+barPos>maxX) {
 				right = false;
 			} else {
-				//barPos += barVelocity*delta;
-				//bar.translateX(barVelocity*delta);
 				barX=barX+barVelocity*delta;
-				//bar.setBounds(bar.getX(), bar.getY(), bar.getWidth(), bar.getHeight());
 			}
 		} else {
 			if (barPos<=0) {
 				right = true;
 			} else {
-				//barPos -= barVelocity*delta;
-				//bar.translateX(-barVelocity*delta);
 				barX=barX-barVelocity*delta;
-				//bar.setBounds(bar.getX(), bar.getY(), bar.getWidth(), bar.getHeight());
 			}
 		}
-		//barX = bar.getX();
 		bar.setX(barX);
 	}
 	
-	public void render(SpriteBatch spriteBatch) {
-		//bar.setX(barX);
-		slider.draw(spriteBatch);
-		//bar.setX(barX);
-		bar.draw(spriteBatch);
-		//bar.setX(barX);
+	@Override
+	public void draw(Batch batch, float parentAlpha) {
+		slider.draw(batch, parentAlpha);
+		bar.draw(batch, parentAlpha);
 	}
 
 	public void stop() {

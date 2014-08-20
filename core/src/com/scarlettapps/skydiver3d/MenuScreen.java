@@ -20,7 +20,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 
 public abstract class MenuScreen extends DefaultScreen<SkyDiver3D> {
 
-	private static final String BACKGROUND_FILE = "data/Menu3Background.png";
+	private static final String BACKGROUND_FILE = "data/textures/Menu3Background.png";
 	private static final String SKIN_FILE = "skin/uiskin.json";
 	
 	protected final Stage stage;
@@ -39,7 +39,7 @@ public abstract class MenuScreen extends DefaultScreen<SkyDiver3D> {
 		stage = new Stage(viewport);
 		skin = new Skin(Gdx.files.internal(SKIN_FILE));
 		
-		// Set font to use linear texture filter
+		// Set default font to use linear texture filter
 		BitmapFont font = skin.getFont("default-font");
 		font.getRegion().getTexture().setFilter(TextureFilter.Linear, TextureFilter.Linear);
 		

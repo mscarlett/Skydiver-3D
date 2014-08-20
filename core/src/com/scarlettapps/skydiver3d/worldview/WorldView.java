@@ -6,7 +6,7 @@ package com.scarlettapps.skydiver3d.worldview;
 import java.util.Comparator;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.graphics.g3d.ModelBatch;
 import com.badlogic.gdx.graphics.g3d.decals.CameraGroupStrategy;
@@ -27,8 +27,9 @@ import com.scarlettapps.skydiver3d.world.Skydiver;
 import com.scarlettapps.skydiver3d.world.Target;
 import com.scarlettapps.skydiver3d.world.Terrain;
 import com.scarlettapps.skydiver3d.world.World;
-import com.scarlettapps.skydiver3d.world.gamestate.StatusManager;
+import com.scarlettapps.skydiver3d.worldstate.StatusManager;
 import com.scarlettapps.skydiver3d.worldview.ui.AccuracyMeter;
+import com.scarlettapps.skydiver3d.worldview.ui.StatusView;
 
 /**
  * The WorldView displays the World on the screen. It also allows
@@ -75,17 +76,18 @@ public class WorldView {
 			switchState();
 		}
 		controller.update(delta);
+		statusView.update(delta);
 	}
 	
 	public void render(float delta) {
 		controller.render(delta);
+		statusView.render(delta);
 	}
 	
 	
 	private void drawTerrain() {
 		Terrain terrain = world.getTerrain();
-		Matrix4 mat = cam.combined;
-		terrain.render(mat);
+		terrain.render(cam);
 	}
 	
 	private void drawTargetAndSkydiver() {
@@ -113,7 +115,7 @@ public class WorldView {
 			decalBatch.add(node.value.getDecal());
 		}
 		for (Cloud c: clouds) {
-			decalBatch.add(c.getDecal());
+			//decalBatch.add(c.getDecal());
 		}
 		decalBatch.flush();
 		
@@ -169,6 +171,7 @@ public class WorldView {
 	        cam.update();
 	        statusManager.position().x = (Skydiver.MIN_X+Skydiver.MAX_X)/2;
 	        statusManager.position().y = (Skydiver.MIN_Y+Skydiver.MAX_Y)/2;
+	        statusView.showSpeedIcon(true);
 		}
 		
 		@Override
@@ -191,14 +194,29 @@ public class WorldView {
 			drawTargetAndSkydiver();
 			drawCollectibles();
 			
-			statusView.drawCollected(cam, delta);
-			
+			if (statusManager.collected()) {
+				float displayScoreTime = statusManager.displayScoreTime();
+				if (displayScoreTime < 1) {
+					Vector3 intersectPoint = statusManager.intersectPoint();
+					if (displayScoreTime == 0) {
+						intersectPoint.set(statusManager.position());
+						cam.project(intersectPoint);
+						statusManager.addToScore(1000);
+					}
+					statusView.drawCollected();
+	        	} else {
+	        		statusManager.setDisplayScoreTime(0);
+	        		statusManager.setCollected(false);
+	        	}
+			}
 			statusView.drawHud();
 		}
 		
 	}
 	
 	private class ParachutingStateController implements WorldViewController {
+		
+		boolean switchCam = false;
 		
 		@Override
 		public void update(float delta) {
@@ -208,14 +226,15 @@ public class WorldView {
 			if (touched) {
 				accuracyMeter.stop();
 				statusManager.setAccuracy(accuracyMeter.getAccuracy());
+				switchCam = touched;
 			}
-			if (touched) {
+			if (switchCam) {
 				cam.position.x = statusManager.position().x + 0.5f;
 				cam.position.y = statusManager.position().y;
 				cam.position.z = statusManager.position().z + CAM_OFFSET;
 				cam.direction.set(0,0,-1);
 				cam.up.set(Vector3.Y);
-				
+				cam.near = 0.1f;
 			} else {
 				cam.position.x = statusManager.position().x;
 				cam.position.y = statusManager.position().y+4f;
@@ -224,24 +243,22 @@ public class WorldView {
 				cam.up.set(Vector3.Z);
 			}
 			cam.update();
-			accuracyMeter.update(delta);
+			accuracyMeter.act(delta);
 			skydiver.parachuting = true;
 		}
-		
-		
-		private String successString;
 
 		@Override
 		public void render(float delta) {
 			drawTerrain();
 			drawTargetAndSkydiver();
-			statusView.drawParachuteCaption(world.getSkydiver(), delta);
+			statusView.drawParachuteCaption();
 			statusView.drawHud();
 		}
 
 		@Override
 		public void initialize() {
 			cam.near = 1f;
+			statusView.showSpeedIcon(false);
 		}
 	}
 	
@@ -286,6 +303,10 @@ public class WorldView {
 		public void initialize() {
 			statusManager.calculateTimeBonus();
 			statusManager.calculateLandingBonus();
+			if (SkyDiver3D.DEV_MODE) {
+				Gdx.app.log(SkyDiver3D.LOG, "Loanded at position " + statusManager.position());
+			}
+			statusView.hidePause();
 		}
 		
 	}
@@ -295,22 +316,14 @@ public class WorldView {
 		float dx = 10.245517f, dy = 3.8138173f, dz = -1.71019554f;
 		float totalTime = 0;
 		
-		Color white = Color.WHITE.cpy();
-		Color fontColor = white.cpy();
-		Color tmp = new Color();
-		
-		float elapsedTime = 0.5f;
-		
 		Vector3 camOffset = new Vector3(-0.3f*CAM_OFFSET+dx,-0.1f*CAM_OFFSET+dy,Skydiver.STARTING_HEIGHT+0.4f*CAM_OFFSET+dz);
 		Vector3 tmp2 = new Vector3();
-		
 		
 		@Override
 		public void update(float delta) {
 			Skydiver skydiver = world.getSkydiver();
 
 			if (skydiver.jumpedOffAirplane) {
-				fontColor.set(Color.WHITE);
 				totalTime += delta;
 				dz -= Math.signum(dz)*delta*0.1f;
 				dy -= Math.signum(dy)*delta*0.1f;
@@ -325,11 +338,7 @@ public class WorldView {
 			} else {
 		        cam.position.set(camOffset);
 		        cam.lookAt(statusManager.position().x,statusManager.position().y,statusManager.position().z+0.2f*CAM_OFFSET);
-		        elapsedTime = (elapsedTime + 0.1f*delta) % 1f;
-				tmp.set(white);
-				fontColor.set(white.lerp(Color.RED, 0.5f*Math.abs(elapsedTime-0.5f) % 1f));
-				statusView.font.setColor(fontColor);
-				white.set(tmp);
+		        
 			}
 			cam.update();
 		}
@@ -358,8 +367,8 @@ public class WorldView {
 		switchState();
 	}
 
-	public void renderScore() {
-		statusView.renderScore();
+	public InputProcessor getInputProcessor() {
+		return statusView.getInputProcessor();
 	}
 
 }

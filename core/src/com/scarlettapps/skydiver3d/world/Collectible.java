@@ -6,7 +6,7 @@ package com.scarlettapps.skydiver3d.world;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g3d.decals.Decal;
 
-public class Collectible {
+public abstract class Collectible {
 	
 	private Decal decal;
 	boolean collected;
@@ -30,5 +30,7 @@ public class Collectible {
 	public void rotate(float delta) {
 		decal.rotateZ(delta);
 	}
+	
+	public abstract int getPoints();
 
 }

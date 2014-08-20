@@ -7,6 +7,7 @@ import java.util.Locale;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.Texture;
@@ -33,12 +34,12 @@ import com.scarlettapps.skydiver3d.resources.AssetFactory.SoundType;
 import com.scarlettapps.skydiver3d.resources.FontFactory;
 import com.scarlettapps.skydiver3d.worldstate.GameController;
 
-public class OptionsScreen extends MenuScreen {
+public class GameOptionsScreen extends MenuScreen {
 
 	private Label volumeValue;
 	private Label sensitivityValue;
 	
-	public OptionsScreen(final SkyDiver3D game) {
+	public GameOptionsScreen(final SkyDiver3D game) {
 		super(game);
 		
 		TextButtonStyle textButtonStyle = skin.get(TextButtonStyle.class);
@@ -46,7 +47,7 @@ public class OptionsScreen extends MenuScreen {
 		textButtonStyle.font = font;
 		
 		LabelStyle labelStyle = skin.get(LabelStyle.class);
-		font = FontFactory.generateFont(48);
+		font = FontFactory.generateFont(20);
 		labelStyle.font = font;
 		font = FontFactory.generateFont(64);
 		skin.add("Title font", font, BitmapFont.class);
@@ -59,7 +60,7 @@ public class OptionsScreen extends MenuScreen {
 
 		// create the labels widgets
 		final CheckBox soundEffectsCheckbox = new CheckBox("", skin);
-		soundEffectsCheckbox.setScale(5);
+		soundEffectsCheckbox.setScale(2);
 		soundEffectsCheckbox.setChecked(game.preferences.isSoundEnabledValue());
 		soundEffectsCheckbox.addListener(new ChangeListener() {
 			@Override
@@ -78,7 +79,7 @@ public class OptionsScreen extends MenuScreen {
 		table.add(soundEffectsCheckbox).colspan(2).left();
 
 		final CheckBox musicCheckbox = new CheckBox("", skin);
-		musicCheckbox.setScale(5);
+		musicCheckbox.setScale(2);
 		musicCheckbox.setChecked(game.preferences.getMusicEnabled());
 		musicCheckbox.addListener(new ChangeListener() {
 			@Override
@@ -89,7 +90,7 @@ public class OptionsScreen extends MenuScreen {
 
 				// if the music is now enabled, start playing the menu music
 				if (enabled)
-					game.music.play(MusicType.MAIN_MENU);
+					game.music.play(MusicType.WIND);
 				else
 					game.music.stop();
 				
@@ -108,8 +109,8 @@ public class OptionsScreen extends MenuScreen {
 		pixmap.setColor(Color.WHITE);
 		pixmap.fill();
 		sliderStyle.knob = new TextureRegionDrawable(new TextureRegion(new Texture(pixmap)));
-		Slider volumeSlider = new Slider(0f, 1f, 0.1f, false, sliderStyle);
-		volumeSlider.setScaleY(6);
+		Slider volumeSlider = new Slider(0f, 1f, 0.1f, true, sliderStyle);
+		volumeSlider.setScaleX(6);
 		volumeSlider.setValue(game.preferences.getVolumeValue());
 		volumeSlider.addListener(new ChangeListener() {
 			@Override
@@ -131,8 +132,8 @@ public class OptionsScreen extends MenuScreen {
 		table.add(volumeSlider);
 		table.add(volumeValue).width(40);
 		
-		Slider sensitivitySlider = new Slider(0.5f, 1.5f, 0.1f, false, sliderStyle);
-		sensitivitySlider.setScaleY(6);
+		Slider sensitivitySlider = new Slider(0.5f, 1.5f, 0.1f, true, sliderStyle);
+		sensitivitySlider.setScaleX(6);
 		sensitivitySlider.setValue(game.preferences.getSensitivityValue());
 		sensitivitySlider.addListener(new ChangeListener() {
 			@Override
@@ -182,7 +183,7 @@ public class OptionsScreen extends MenuScreen {
 		table.add(sensitivityValue).width(40);
 
 		// register the back button
-		TextButton backButton = new TextButton("Back to Main", skin);
+		TextButton backButton = new TextButton("Back to Game", skin);
 		backButton.addListener(new ClickListener() {
 			
 			@Override
@@ -198,7 +199,7 @@ public class OptionsScreen extends MenuScreen {
 			}
 		});
 		table.row();
-		table.add(backButton).colspan(2).fill().width(400).center();
+		table.add(backButton).fill().width(400).center();
 	}
 	
 	/**
@@ -245,7 +246,10 @@ public class OptionsScreen extends MenuScreen {
 	}
 	
 	private void backToMainMenu() {
-		game.setScreen(game.mainMenuScreen);
+		Gdx.gl.glClearColor(0.5f, 0.5f, 1.0f, 1.0f);
+		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
+		game.playingScreen.renderWorld(0);
+		game.setScreen(game.pauseScreen);
 	}
 
 }

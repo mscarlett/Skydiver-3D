@@ -19,9 +19,10 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.scarlettapps.skydiver3d.DefaultScreen;
-import com.scarlettapps.skydiver3d.resources.Graphics;
-import com.scarlettapps.skydiver3d.world.gamestate.StatusManager.WorldState;
+import com.scarlettapps.skydiver3d.resources.AssetFactory;
+import com.scarlettapps.skydiver3d.resources.AssetFactory.ModelType;
 import com.scarlettapps.skydiver3d.world.utils.AnimationController;
+import com.scarlettapps.skydiver3d.worldstate.StatusManager.WorldState;
 import com.scarlettapps.skydiver3d.worldview.Renderer;
 
 public class Skydiver extends GameObject {
@@ -49,24 +50,25 @@ public class Skydiver extends GameObject {
 	
 	private final Environment environment;
 	
-	private Vector3 axis = new Vector3();
-	private Vector3 angle = new Vector3();
-	Vector2 skydiverAngle = new Vector2();
-	boolean landing = false;
+	private final Vector3 axis = new Vector3();
+	private final Vector3 angle = new Vector3();
+	public final Vector2 skydiverAngle = new Vector2();
+	
+	public boolean landing = false;
 	public boolean parachuting = false;
 	boolean parachuteDeployed = false;
 	float timeSinceParachuteDeployed = 0f;
 	public boolean jumpedOffAirplane = false;
 	public float timeSinceJumpedOffAirplane = 0f;
-	boolean finalState = false;
+	public boolean finalState = false;
 	float timeSinceFinalState = 0f;
 	
 	public Skydiver() {
 		super(true,true);
 		
-		String filename = "data/human_with_parachute_and_backpack_and_helmet_a8.g3db";
+		String filename = ModelType.SKYDIVER;
 		
-		Model model = Graphics.get(filename, Model.class);
+		Model model = AssetFactory.get(filename, Model.class);
 		instance = new ModelInstance(model);
 		instance.materials.get(0).set(
 				new BlendingAttribute(GL20.GL_SRC_ALPHA,
@@ -92,7 +94,7 @@ public class Skydiver extends GameObject {
 	
 	@Override
 	public void updateObject(float delta) {
-		if (getPositionZ() < 4400) {
+		if (getPositionZ() < WorldState.INITIAL.minAltitude) {
 			if (!landing) {
 				checkBounds();
 			}
@@ -206,7 +208,9 @@ public class Skydiver extends GameObject {
 	}
 	
 	public void render(ModelBatch modelBatch) {
-		modelBatch.render(instance, environment);
+		if (render) {
+			modelBatch.render(instance, environment);
+		}
 	}
 	
 	public void jumpOffAirplane() {
@@ -340,5 +344,9 @@ public class Skydiver extends GameObject {
 			case FINAL:
 				break;
 		}
+	}
+
+	public void setRender(boolean b) {
+		this.render = false;
 	}
 }

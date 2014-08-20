@@ -7,6 +7,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
@@ -15,47 +16,78 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.SnapshotArray;
-import com.scarlettapps.skydiver3d.resources.Graphics;
+import com.esotericsoftware.tablelayout.Cell;
+import com.scarlettapps.skydiver3d.resources.AssetFactory;
+import com.scarlettapps.skydiver3d.resources.AssetFactory.TextureType;
+import com.scarlettapps.skydiver3d.resources.FontFactory;
+import com.scarlettapps.skydiver3d.worldstate.StatusManager.Score;
 
 public class LevelCompletedScreen extends MenuScreen {
 	
-	private static final String GOLD_STAR = "data/goldstar.png";
-	private static final String EMPTY_STAR = "data/emptystar.png";
-	private final Group stars;
-	private final Drawable goldTextureDrawable;
-	private final Drawable emptyTextureDrawable;
+	private static final String GOLD_STAR = TextureType.GOLD_STAR;
+	private static final String EMPTY_STAR = TextureType.EMPTY_STAR;
+	private final Table stars;
+	private Drawable goldTextureDrawable;
+	private Drawable emptyTextureDrawable;
 	
-	public LevelCompletedScreen(SkyDiver3D game) { //TODO rate how well the user did using stars animation
+	private Label ringScore;
+	private Label parachutingScore;
+	private Label landingScore;
+	private Label totalScore;
+	
+	public LevelCompletedScreen(SkyDiver3D game) {
 		super(game, false);
 		
-		stars = new Group();
+		TextButtonStyle textButtonStyle = skin.get(TextButtonStyle.class);
+		BitmapFont font = FontFactory.generateFont(42);
+		textButtonStyle.font = font;
 		
-		goldTextureDrawable = new TextureRegionDrawable(new TextureRegion(Graphics.get(GOLD_STAR, Texture.class))); //TODO load with asset loader
-		emptyTextureDrawable = new TextureRegionDrawable(new TextureRegion(Graphics.get(EMPTY_STAR, Texture.class)));
+		LabelStyle labelStyle = skin.get(LabelStyle.class);
+		font = FontFactory.generateFont(36);
+		labelStyle.font = font;
 		
-		final int y = 350;
+		ringScore = new Label("Ring Score: 0", skin);
+		table.add(ringScore).size(300, 40);
+		table.row();
+		parachutingScore = new Label("Parachuting Score: 0", skin);
+		table.add(parachutingScore).size(300, 40);
+		table.row();
+		landingScore = new Label("Landing Score: 0", skin);
+		table.add(landingScore).size(300, 40);
+		table.row();
+		totalScore = new Label("Total Score: 0", skin);
+		table.add(totalScore).size(300, 40);
+		table.row();
+		
+		stars = new Table();
+				
 		final int size = 75;
 		final int offset = 25;
-		int x = DefaultScreen.VIRTUAL_WIDTH/2-size/2-2*size-2*offset;
 		
 		// Add stars to stage
 		for (int i = 0; i < 5; i++) {
 			Image image = new Image();
-			image.setBounds(x, y, size, size);
-			stars.addActor(image);
-			x += size + offset;
+			image.setVisible(true);
+			image.setSize(size, size);
+			Cell<Image> cell = stars.add(image).size(size,size);
+			if (i != 4) {
+				cell.spaceRight(offset);
+			}
 		}
 		
-		stage.addActor(stars);
-		
-		table.align(Align.bottom);
+		table.add(stars).size(300, 100).spaceBottom(10);
+		stars.setVisible(true);
+		table.row();
 		
 		// register the button "Next Level"
 		TextButton nextLevelButton = new TextButton("Next Level", skin);
@@ -65,7 +97,8 @@ public class LevelCompletedScreen extends MenuScreen {
 				nextLevel();
 			}
 		});
-		table.add(nextLevelButton).size(300, 60).uniform().spaceBottom(10);
+		table.align(Align.bottom);
+		table.add(nextLevelButton).size(400, 60).uniform().spaceBottom(10);
 		table.row();
 
 		// register the button "Try Again"
@@ -77,10 +110,10 @@ public class LevelCompletedScreen extends MenuScreen {
 			}
 
 		});
-		table.add(tryAgainButton).uniform().fill().spaceBottom(10);
+		table.add(tryAgainButton).size(400, 60).uniform().fill().spaceBottom(10);
 		table.row();
 
-		// register the button "Main MEnu"
+		// register the button "Main Menu"
 		TextButton optionsButton = new TextButton("Main Menu", skin);
 		optionsButton.addListener(new ClickListener() {
 			@Override
@@ -88,7 +121,7 @@ public class LevelCompletedScreen extends MenuScreen {
 				backToMainMenu();
 			}
 		});
-		table.add(optionsButton).uniform().fill().spaceBottom(10);
+		table.add(optionsButton).size(400, 60).uniform().fill().spaceBottom(10);
 		table.row();
 
 		// register the button "Quit"
@@ -99,9 +132,12 @@ public class LevelCompletedScreen extends MenuScreen {
 				quitGame();
 			}
 		});
-		table.add(quitButton).uniform().fill();
+		table.add(quitButton).size(400, 60).uniform().fill();
 		
 		table.padBottom(50);
+		
+		stage.addActor(table);
+		table.debug();
 		
 		shapeRenderer = new ShapeRenderer();
 	}
@@ -130,8 +166,6 @@ public class LevelCompletedScreen extends MenuScreen {
 		shapeRenderer.rect(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 		shapeRenderer.end();
 		Gdx.gl.glDisable(GL20.GL_BLEND);
-		
-		game.playingScreen.renderScore();
 		
 		// Update visibility of buttons
 		SnapshotArray<Actor> children = table.getChildren();
@@ -171,7 +205,7 @@ public class LevelCompletedScreen extends MenuScreen {
 		game.setScreen(game.mainMenuScreen);
 	}
 
-	private void nextLevel() {
+	private void nextLevel() { //TODO make this a transition screen that shows next level
 		if (SkyDiver3D.DEV_MODE) {
 			Gdx.app.log(SkyDiver3D.LOG, "Creating Next level");
 		}
@@ -199,12 +233,20 @@ public class LevelCompletedScreen extends MenuScreen {
 
 	@Override
 	protected void showScreen() {
-		final int rating = game.playingScreen.getRating();
+		goldTextureDrawable = new TextureRegionDrawable(new TextureRegion(AssetFactory.get(GOLD_STAR, Texture.class))); //TODO load with asset loader
+		emptyTextureDrawable = new TextureRegionDrawable(new TextureRegion(AssetFactory.get(EMPTY_STAR, Texture.class)));
+		
+		Score score = game.playingScreen.scoreSummary();
+		
+		ringScore.setText("Ring Score: " + score.ringScore);
+		parachutingScore.setText("Parachuting Score: " + score.parachutingScore);
+		landingScore.setText("Landing Score: " + score.landingScore);
+		totalScore.setText("Total Score: " + score.totalScore);
 		
 		SnapshotArray<Actor> children = stars.getChildren();
 		
 		for (int i = 0; i < 5; i++) {
-			Drawable drawable = i < rating ? goldTextureDrawable : emptyTextureDrawable;	
+			Drawable drawable = i < score.rating ? goldTextureDrawable : emptyTextureDrawable;	
 			Image image = (Image)children.get(i);
 			image.setDrawable(drawable);
 		}

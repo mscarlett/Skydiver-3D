@@ -9,19 +9,21 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar;
+import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar.ProgressBarStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TiledDrawable;
 import com.scarlettapps.skydiver3d.resources.AssetFactory;
 import com.scarlettapps.skydiver3d.resources.FontFactory;
 
-public class LoadingScreen extends MenuScreen {
+public class SplashScreen extends MenuScreen {
 
 	private static final float LOADING_MIN = 0;
 	private static final float LOADING_MAX = 1f;
@@ -30,7 +32,7 @@ public class LoadingScreen extends MenuScreen {
 	
 	private ProgressBar progressBar;
 	
-	public LoadingScreen(SkyDiver3D game) {
+	public SplashScreen(SkyDiver3D game) {
 		super(game);
 		
 		LabelStyle labelStyle = skin.get(LabelStyle.class);
@@ -60,18 +62,18 @@ public class LoadingScreen extends MenuScreen {
 	
 	@Override
 	public void render(float delta) {
-		if (game.playingScreen.isLoaded()) {
-			startGame();
+		if (game.mainMenuScreen.isLoaded()) {
+			showMainMenu();
 		} else {
-			float progress = LOADING_MAX*AssetFactory.getProgress()+LOADING_MIN;
+			float progress = LOADING_MAX*(game.assets.getLoadedAssets()/6f)+LOADING_MIN;
 			progressBar.setValue(progress);
 			super.render(delta);
 			AssetFactory.update(50);
 		}
 	}
 	
-	private void startGame() {
-		game.setScreen(game.playingScreen);
+	private void showMainMenu() {
+		game.setScreen(game.mainMenuScreen);
 	}
 
 	@Override

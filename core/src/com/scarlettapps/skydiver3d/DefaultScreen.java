@@ -65,6 +65,7 @@ public abstract class DefaultScreen<T extends Game> implements Screen {
 			Gdx.app.log(SkyDiver3D.LOG, "Showing screen: " + getName());
 		}
 		showScreen();
+		setInputProcessor();
 	}
 	
 	protected abstract void showScreen();

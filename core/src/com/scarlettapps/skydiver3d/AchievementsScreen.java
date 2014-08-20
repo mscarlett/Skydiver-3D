@@ -3,39 +3,67 @@
 
 package com.scarlettapps.skydiver3d;
 
+import java.util.Calendar;
+
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.scarlettapps.skydiver3d.resources.FontFactory;
+import com.scarlettapps.skydiver3d.resources.AssetFactory.SoundType;
 
 public class AchievementsScreen extends MenuScreen {
 
 	public AchievementsScreen(SkyDiver3D game) {
 		super(game);
 		
-		Label title = new Label("Achievements", skin);
-		title.setFontScale(2f);
+		TextButtonStyle textButtonStyle = skin.get(TextButtonStyle.class);
+		BitmapFont font = FontFactory.generateFont(42);
+		textButtonStyle.font = font;
+		
+		LabelStyle labelStyle = skin.get(LabelStyle.class);
+		font = FontFactory.generateFont(48);
+		labelStyle.font = font;
+		font = FontFactory.generateFont(64);
+		skin.add("Title font", font, BitmapFont.class);
+		
+		Label title = new Label("Credits", skin, "Title font", Color.WHITE);
 		table.add(title);
 		table.row();
 		
-		Label label = new Label("Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.", skin);
+		Calendar now = Calendar.getInstance();
+		int year = now.get(Calendar.YEAR);
+		String yearInString = String.valueOf(year);
+		Label label = new Label("Developed by Michael Scarlett\n\nCopyright (c) "+yearInString+" Michael Scarlett\n\nMain menu music \"Local Forecast\" by\nKevin MacLeod (incompetech.com)", skin);
 		ScrollPane scrollPane = new ScrollPane(label);
-		scrollPane.setWidth(500);
-		scrollPane.setHeight(100);
+		scrollPane.setWidth(VIRTUAL_WIDTH*0.75f);
+		scrollPane.setHeight(VIRTUAL_HEIGHT*0.9f);
 		scrollPane.setScrollingDisabled(true, false);
-		table.add(scrollPane).width(500).height(100);
+		table.add(scrollPane).fill().spaceBottom(20);
 		table.row();
 		
 		// register the button "resume game"
-		TextButton backToMainButton = new TextButton("Back to Main", skin);
-		backToMainButton.addListener(new ClickListener() {
+		TextButton backButton = new TextButton("Back to Main", skin);
+		backButton.addListener(new ClickListener() {
+			
 			@Override
-			public void clicked(InputEvent event, float x, float y) {
+	        public void clicked(InputEvent event, float x, float y) {
+				backToMainMenu();
+	        }
+			@Override
+			public void touchUp(InputEvent event, float x, float y,
+					int pointer, int button) {
+				super.touchUp(event, x, y, pointer, button);
+				AchievementsScreen.this.game.sound.play(SoundType.CLICK);
 				backToMainMenu();
 			}
 		});
-		table.add(backToMainButton).size(300, 60);
+		table.add(backButton).size(300, 60);
 	}
 	
 	private void backToMainMenu() {
