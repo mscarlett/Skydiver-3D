@@ -1,5 +1,4 @@
 # Skydiver-3D
-My first attempt at a 3D video game using libgdx.
 
 <img src="http://michaelscarlett.blog.com/files/2014/09/ss1.png">
 
