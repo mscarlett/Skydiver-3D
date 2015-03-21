@@ -19,22 +19,27 @@ import com.scarlettapps.skydiver3d.resources.AssetFactory.MusicType;
 import com.scarlettapps.skydiver3d.resources.AssetFactory.SoundType;
 import com.scarlettapps.skydiver3d.resources.AssetFactory.TextureType;
 import com.scarlettapps.skydiver3d.resources.FontFactory;
+import com.scarlettapps.skydiver3d.resources.MusicFactory;
+import com.scarlettapps.skydiver3d.resources.SoundFactory;
 
 public class MainMenuScreen extends MenuScreen {
 
 	private static final float TITLE_WIDTH = DefaultScreen.VIRTUAL_WIDTH*(9/10f);
 	private static final float TITLE_HEIGHT = DefaultScreen.VIRTUAL_HEIGHT*(9/10f)/2f;
 	private static final float BUTTONS_WIDTH = DefaultScreen.VIRTUAL_WIDTH*(6/10f);
-	private static final float BUTTONS_HEIGHT = 65;
-	private static final float SPACE_BOTTOM = 10;
+	private static final float BUTTONS_HEIGHT = DefaultScreen.VIRTUAL_HEIGHT/10;
+	private static final float SPACE_BOTTOM = DefaultScreen.VIRTUAL_HEIGHT/64;
 	
 	private final Texture title;
 
-	public MainMenuScreen(SkyDiver3D game) {
+	public MainMenuScreen(Skydiver3D game) {
 		super(game);
 		
+		AssetFactory assetFactory = AssetFactory.getInstance();
+		final SoundFactory sound = SoundFactory.getInstance();
+		
 		// Add the title image
-		title = AssetFactory.get(TextureType.TITLE, Texture.class);
+		title = assetFactory.get(TextureType.TITLE, Texture.class);
 		title.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 		Image titleImage = new Image(title);
 		table.add(titleImage).size(TITLE_WIDTH,TITLE_HEIGHT).uniform().spaceBottom(SPACE_BOTTOM);
@@ -45,14 +50,16 @@ public class MainMenuScreen extends MenuScreen {
 		final float buttonsPaddingSide = (TITLE_WIDTH-BUTTONS_WIDTH)/2;
 		buttonTable.pad(0, buttonsPaddingSide, 0, buttonsPaddingSide);
 		
-		if (SkyDiver3D.DEV_MODE) {
+		if (Skydiver3D.DEV_MODE) {
 			buttonTable.debug();
         }
+		
+		FontFactory fontFactory = FontFactory.getInstance();
 		
 		// Add DistanceFieldFont to fonts and apply to styles
 		//skin.add("DistanceFieldFont", new DistanceFieldFont(1/8f, stage.getBatch()), BitmapFont.class);
 		TextButtonStyle textButtonStyle = skin.get(TextButtonStyle.class);
-		BitmapFont font = FontFactory.generateFont(42);
+		BitmapFont font = fontFactory.generateFont(42);
 		textButtonStyle.font = font;
 		
 		// register the button "start game"
@@ -60,7 +67,7 @@ public class MainMenuScreen extends MenuScreen {
 		startGameButton.addListener(new ClickListener() {
 			@Override
 	        public void clicked(InputEvent event, float x, float y) {
-				MainMenuScreen.this.game.sound.play(SoundType.CLICK);
+				sound.play(SoundType.CLICK);
 	            startGame();
 	        }
 		});
@@ -72,7 +79,7 @@ public class MainMenuScreen extends MenuScreen {
 		helpButton.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
-				MainMenuScreen.this.game.sound.play(SoundType.CLICK);
+				sound.play(SoundType.CLICK);
 				showHelp();
 			}
 		});
@@ -84,7 +91,7 @@ public class MainMenuScreen extends MenuScreen {
 		optionsButton.addListener(new ClickListener() {
 			@Override
 	        public void clicked(InputEvent event, float x, float y) {
-				MainMenuScreen.this.game.sound.play(SoundType.CLICK);
+				sound.play(SoundType.CLICK);
 	            showOptions();
 	        }
 
@@ -97,7 +104,7 @@ public class MainMenuScreen extends MenuScreen {
 		highScoresButton.addListener(new ClickListener() {
 			@Override
 	        public void clicked(InputEvent event, float x, float y) {
-				MainMenuScreen.this.game.sound.play(SoundType.CLICK);
+				sound.play(SoundType.CLICK);
 	            showAchievements();
 	        }
 		});
@@ -126,7 +133,7 @@ public class MainMenuScreen extends MenuScreen {
 
 	@Override
 	public void showScreen() {
-		game.music.play(MusicType.MAIN_MENU);
+		MusicFactory.getInstance().play(MusicType.MAIN_MENU);
 	}
 
 	@Override
@@ -151,10 +158,10 @@ public class MainMenuScreen extends MenuScreen {
 		//title.dispose();
 	}
 
-	String[] dependencies = new String[]{TextureType.RING, TextureType.STAR, SoundType.CLICK, MusicType.MAIN_MENU, TextureType.LIGHTNING};
+	String[] dependencies = new String[]{TextureType.RING, TextureType.STAR, SoundType.CLICK, MusicType.MAIN_MENU};
 	
 	public boolean isLoaded() {
-		Array<String> names = game.assets.getLoaded();
+		Array<String> names = AssetFactory.getInstance().getLoaded();
 		outer:
 		for (String d: dependencies) {
 			for (String name: names) {

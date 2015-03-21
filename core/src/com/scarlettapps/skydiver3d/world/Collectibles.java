@@ -12,7 +12,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.SortedIntList;
 import com.badlogic.gdx.utils.SortedIntList.Node;
 import com.scarlettapps.skydiver3d.DefaultScreen;
-import com.scarlettapps.skydiver3d.worldstate.StatusManager.WorldState;
+import com.scarlettapps.skydiver3d.worldstate.WorldState;
 import com.scarlettapps.skydiver3d.worldview.Renderer;
 
 public class Collectibles extends GameObject  implements Iterable<Node<Collectible>> {
@@ -110,6 +110,12 @@ public class Collectibles extends GameObject  implements Iterable<Node<Collectib
 		return null;
 	}
 
+	/**
+	 * Check whether the skydiver is close enough that we should test for
+	 * intersection between the skydiver and the next Collectible
+	 * @param skydiverZ
+	 * @return
+	 */
 	public boolean checkIntersect(float skydiverZ) {
 		Collectible first = getClosest();
 		if (first == null) {

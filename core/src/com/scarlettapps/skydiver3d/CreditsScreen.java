@@ -16,20 +16,23 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.scarlettapps.skydiver3d.resources.FontFactory;
 import com.scarlettapps.skydiver3d.resources.AssetFactory.SoundType;
+import com.scarlettapps.skydiver3d.resources.SoundFactory;
 
-public class AchievementsScreen extends MenuScreen {
+public class CreditsScreen extends MenuScreen {
 
-	public AchievementsScreen(SkyDiver3D game) {
+	public CreditsScreen(Skydiver3D game) {
 		super(game);
 		
+		FontFactory fontFactory = FontFactory.getInstance();
+		
 		TextButtonStyle textButtonStyle = skin.get(TextButtonStyle.class);
-		BitmapFont font = FontFactory.generateFont(42);
+		BitmapFont font = fontFactory.generateFont(42);
 		textButtonStyle.font = font;
 		
 		LabelStyle labelStyle = skin.get(LabelStyle.class);
-		font = FontFactory.generateFont(48);
+		font = fontFactory.generateFont(20);
 		labelStyle.font = font;
-		font = FontFactory.generateFont(64);
+		font = fontFactory.generateFont(64);
 		skin.add("Title font", font, BitmapFont.class);
 		
 		Label title = new Label("Credits", skin, "Title font", Color.WHITE);
@@ -39,7 +42,7 @@ public class AchievementsScreen extends MenuScreen {
 		Calendar now = Calendar.getInstance();
 		int year = now.get(Calendar.YEAR);
 		String yearInString = String.valueOf(year);
-		Label label = new Label("Developed by Michael Scarlett\n\nCopyright (c) "+yearInString+" Michael Scarlett\n\nMain menu music \"Local Forecast\" by\nKevin MacLeod (incompetech.com)", skin);
+		Label label = new Label("Developed by Michael Scarlett\n\nCopyright (c) "+yearInString+" Michael Scarlett\n\nMain menu music \"Local Forecast\" by Kevin MacLeod\nWebsite: incompetech.com\n\nThis game is purely fictional and is provided to amuse\nor entertain, not to inform. Seriously, don't\nget yourself injured because of a video game!", skin);
 		ScrollPane scrollPane = new ScrollPane(label);
 		scrollPane.setWidth(VIRTUAL_WIDTH*0.75f);
 		scrollPane.setHeight(VIRTUAL_HEIGHT*0.9f);
@@ -59,7 +62,7 @@ public class AchievementsScreen extends MenuScreen {
 			public void touchUp(InputEvent event, float x, float y,
 					int pointer, int button) {
 				super.touchUp(event, x, y, pointer, button);
-				AchievementsScreen.this.game.sound.play(SoundType.CLICK);
+				SoundFactory.getInstance().play(SoundType.CLICK);
 				backToMainMenu();
 			}
 		});

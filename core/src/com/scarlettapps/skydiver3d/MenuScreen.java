@@ -18,7 +18,7 @@ import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.viewport.ScalingViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
-public abstract class MenuScreen extends DefaultScreen<SkyDiver3D> {
+public abstract class MenuScreen extends DefaultScreen<Skydiver3D> {
 
 	private static final String BACKGROUND_FILE = "data/textures/Menu3Background.png";
 	private static final String SKIN_FILE = "skin/uiskin.json";
@@ -27,11 +27,11 @@ public abstract class MenuScreen extends DefaultScreen<SkyDiver3D> {
 	protected final Table table;
 	protected final Skin skin;
 	
-	public MenuScreen(SkyDiver3D game) {
+	public MenuScreen(Skydiver3D game) {
 		this(game, true);
 	}
 	
-	public MenuScreen(SkyDiver3D game, boolean useDefaultBackground) {
+	public MenuScreen(Skydiver3D game, boolean useDefaultBackground) {
 		super(game);
 		
 		// Initialize stage and skin
@@ -56,7 +56,7 @@ public abstract class MenuScreen extends DefaultScreen<SkyDiver3D> {
         }
         
         // Turn on debug lines if we are in dev mode
-        if (SkyDiver3D.DEV_MODE) {
+        if (Skydiver3D.DEV_MODE) {
         	table.debug();
         }
 	}
@@ -74,7 +74,7 @@ public abstract class MenuScreen extends DefaultScreen<SkyDiver3D> {
 		stage.draw();
 		
 		// Draw debug lines if we are in dev mode
-		if (SkyDiver3D.DEV_MODE) {
+		if (Skydiver3D.DEV_MODE) {
 			Table.drawDebug(stage);
 		}
 	}

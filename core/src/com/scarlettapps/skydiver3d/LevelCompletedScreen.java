@@ -13,7 +13,6 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -30,12 +29,10 @@ import com.esotericsoftware.tablelayout.Cell;
 import com.scarlettapps.skydiver3d.resources.AssetFactory;
 import com.scarlettapps.skydiver3d.resources.AssetFactory.TextureType;
 import com.scarlettapps.skydiver3d.resources.FontFactory;
-import com.scarlettapps.skydiver3d.worldstate.StatusManager.Score;
+import com.scarlettapps.skydiver3d.worldstate.Score;
 
 public class LevelCompletedScreen extends MenuScreen {
 	
-	private static final String GOLD_STAR = TextureType.GOLD_STAR;
-	private static final String EMPTY_STAR = TextureType.EMPTY_STAR;
 	private final Table stars;
 	private Drawable goldTextureDrawable;
 	private Drawable emptyTextureDrawable;
@@ -45,15 +42,25 @@ public class LevelCompletedScreen extends MenuScreen {
 	private Label landingScore;
 	private Label totalScore;
 	
-	public LevelCompletedScreen(SkyDiver3D game) {
+    private ShapeRenderer shapeRenderer;
+	
+	private float elapsedTime;
+	private static final float MAX_ALPHA = 0.8f;
+	private static final float TRANSITION_TIME = 5f;
+	private static final float DELAY = 2f;
+	private static final float VISIBILITY_THRESHOLD = 0.3f;
+	
+	public LevelCompletedScreen(Skydiver3D game) {
 		super(game, false);
 		
+		FontFactory fontFactory = FontFactory.getInstance();
+		
 		TextButtonStyle textButtonStyle = skin.get(TextButtonStyle.class);
-		BitmapFont font = FontFactory.generateFont(42);
+		BitmapFont font = fontFactory.generateFont(42);
 		textButtonStyle.font = font;
 		
 		LabelStyle labelStyle = skin.get(LabelStyle.class);
-		font = FontFactory.generateFont(36);
+		font = fontFactory.generateFont(36);
 		labelStyle.font = font;
 		
 		ringScore = new Label("Ring Score: 0", skin);
@@ -141,14 +148,6 @@ public class LevelCompletedScreen extends MenuScreen {
 		
 		shapeRenderer = new ShapeRenderer();
 	}
-
-	private ShapeRenderer shapeRenderer;
-	
-	private float elapsedTime;
-	private static final float MAX_ALPHA = 0.8f;
-	private static final float TRANSITION_TIME = 5f;
-	private static final float DELAY = 2f;
-	private static final float VISIBILITY_THRESHOLD = 0.3f;
 	
 	@Override
 	public void render(float delta) {
@@ -188,7 +187,7 @@ public class LevelCompletedScreen extends MenuScreen {
 		stage.draw();
 			
 		// Draw debug lines if we are in dev mode
-		if (SkyDiver3D.DEV_MODE) {
+		if (Skydiver3D.DEV_MODE) {
 			Table.drawDebug(stage);
 		}
 		
@@ -197,8 +196,8 @@ public class LevelCompletedScreen extends MenuScreen {
 	}
 
 	private void backToMainMenu() {
-		if (SkyDiver3D.DEV_MODE) {
-			Gdx.app.log(SkyDiver3D.LOG, "");
+		if (Skydiver3D.DEV_MODE) {
+			Gdx.app.log(Skydiver3D.LOG, "");
 		}
 		
 		game.playingScreen.restartLevel();
@@ -206,8 +205,8 @@ public class LevelCompletedScreen extends MenuScreen {
 	}
 
 	private void nextLevel() { //TODO make this a transition screen that shows next level
-		if (SkyDiver3D.DEV_MODE) {
-			Gdx.app.log(SkyDiver3D.LOG, "Creating Next level");
+		if (Skydiver3D.DEV_MODE) {
+			Gdx.app.log(Skydiver3D.LOG, "Creating Next level");
 		}
 		
 		game.playingScreen.nextLevel();
@@ -215,8 +214,8 @@ public class LevelCompletedScreen extends MenuScreen {
 	}
 
 	private void restartLevel() {
-		if (SkyDiver3D.DEV_MODE) {
-			Gdx.app.log(SkyDiver3D.LOG, "Restarting level");
+		if (Skydiver3D.DEV_MODE) {
+			Gdx.app.log(Skydiver3D.LOG, "Restarting level");
 		}
 		
 		game.playingScreen.restartLevel();
@@ -224,8 +223,8 @@ public class LevelCompletedScreen extends MenuScreen {
 	}
 	
 	private void quitGame() {
-		if (SkyDiver3D.DEV_MODE) {
-			Gdx.app.log(SkyDiver3D.LOG, "Quitting game");
+		if (Skydiver3D.DEV_MODE) {
+			Gdx.app.log(Skydiver3D.LOG, "Quitting game");
 		}
 		
 		game.exit();
@@ -233,8 +232,9 @@ public class LevelCompletedScreen extends MenuScreen {
 
 	@Override
 	protected void showScreen() {
-		goldTextureDrawable = new TextureRegionDrawable(new TextureRegion(AssetFactory.get(GOLD_STAR, Texture.class))); //TODO load with asset loader
-		emptyTextureDrawable = new TextureRegionDrawable(new TextureRegion(AssetFactory.get(EMPTY_STAR, Texture.class)));
+		AssetFactory assetFactory = AssetFactory.getInstance();
+		goldTextureDrawable = new TextureRegionDrawable(new TextureRegion(assetFactory.get(TextureType.GOLD_STAR, Texture.class))); //TODO load with asset loader
+		emptyTextureDrawable = new TextureRegionDrawable(new TextureRegion(assetFactory.get(TextureType.EMPTY_STAR, Texture.class)));
 		
 		Score score = game.playingScreen.scoreSummary();
 		

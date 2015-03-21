@@ -36,17 +36,17 @@ import com.scarlettapps.skydiver3d.worldstate.StatusManager;
 
 public class StatusView {
 
-	private Stage stage;
-	private Table table;
-	private Skin skin;
+	private final Stage stage;
+	private final Table table;
+	private final Skin skin;
 	
-	private Group initial;
-	private Group hud;
-	private Group parachute;
-	private Group scoreSummary;
-	private Group collected;
+	private final Group initial;
+	private final Group hud;
+	private final Group parachute;
+	private final Group scoreSummary;
+	private final Group collected;
 	
-	private PooledLinkedList<Group> visibleQueue;
+	private final PooledLinkedList<Group> visibleQueue;
 
 	private final Image pauseIcon;
 	private final Image speedIcon;
@@ -65,7 +65,7 @@ public class StatusView {
 		stage.addActor(table);
 		
 		LabelStyle textButtonStyle = skin.get(LabelStyle.class);
-		BitmapFont font = FontFactory.generateFont(36);
+		BitmapFont font = FontFactory.getInstance().generateFont(36);
 		textButtonStyle.font = font;
 		
 		initial = new Group();
@@ -301,13 +301,13 @@ public class StatusView {
 		
 		this.statusManager = statusManager;
 
-		pauseIcon = new Image(AssetFactory.get(TextureType.PAUSE, Texture.class));
+		pauseIcon = new Image(AssetFactory.getInstance().get(TextureType.PAUSE, Texture.class));
 		pauseIcon.setPosition(DefaultScreen.VIRTUAL_WIDTH-pauseIcon.getWidth()-10, 10);
 		pauseIcon.addListener(new ClickListener() {
 
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
-				SoundFactory.playSound(SoundType.CLICK);
+				SoundFactory.getInstance().play(SoundType.CLICK);
 				StatusView.this.statusManager.setPaused(true);
 			}
 			
@@ -315,7 +315,7 @@ public class StatusView {
 		pauseIcon.setVisible(true);
 		stage.addActor(pauseIcon);
 		
-		speedIcon = new Image(AssetFactory.get(TextureType.LIGHTNING, Texture.class));
+		speedIcon = new Image(AssetFactory.getInstance().get(TextureType.LIGHTNING, Texture.class));
 		speedIcon.setPosition(10, 10);
 		speedIcon.addListener(new ClickListener() {
 
@@ -387,7 +387,7 @@ public class StatusView {
 		float x = DefaultScreen.VIRTUAL_WIDTH/2;
 		float y = DefaultScreen.VIRTUAL_HEIGHT/2;
 		LabelStyle style = new LabelStyle();
-		style.font = FontFactory.generateFont(64);
+		style.font = FontFactory.getInstance().generateFont(64);
 		style.fontColor = Color.WHITE;
 		label.setStyle(style);
 		TextBounds bounds = label.getTextBounds();
@@ -400,7 +400,7 @@ public class StatusView {
 		float x = DefaultScreen.VIRTUAL_WIDTH/2;
 		float y = DefaultScreen.VIRTUAL_HEIGHT/4;
 		LabelStyle style = new LabelStyle();
-		style.font = FontFactory.generateFont(64);
+		style.font = FontFactory.getInstance().generateFont(64);
 		style.fontColor = Color.WHITE;
 		label.setStyle(style);
 		TextBounds bounds = label.getTextBounds();

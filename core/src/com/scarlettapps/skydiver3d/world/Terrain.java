@@ -8,32 +8,20 @@ import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Mesh;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.VertexAttribute;
 import com.badlogic.gdx.graphics.VertexAttributes;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.MathUtils;
-import com.scarlettapps.skydiver3d.SkyDiver3D;
-import com.scarlettapps.skydiver3d.resources.AssetFactory;
-import com.scarlettapps.skydiver3d.resources.AssetFactory.TextureType;
+import com.scarlettapps.skydiver3d.Skydiver3D;
 import com.scarlettapps.skydiver3d.world.utils.DSAlgorithm;
 import com.scarlettapps.skydiver3d.world.utils.PerlinNoise;
-import com.scarlettapps.skydiver3d.worldstate.StatusManager.WorldState;
+import com.scarlettapps.skydiver3d.worldstate.WorldState;
 import com.scarlettapps.skydiver3d.worldview.Renderer;
 
 public class Terrain extends GameObject { //TODO fix bug that causes parachute to randomly not open // also fix bug in which screen unresponsive
 	
-	private static final String GROUND_TEXTURE_0 = TextureType.WATER_TERRAIN;
-	private static final String GROUND_TEXTURE_1 = TextureType.SAND_TERRAIN;
-	private static final String GROUND_TEXTURE_2 = TextureType.FOLIAGE_TERRAIN;
-	private static final String GROUND_TEXTURE_3 = TextureType.GRASS_TERRAIN;
-
 	private Mesh mesh;
 	private ShaderProgram shader;
-	private Texture texture0;
-	private Texture texture1;
-	private Texture texture2;
-	private Texture texture3;
 	private int u_mvpMatrix;
 	private int u_fogFactor;
 	
@@ -58,13 +46,11 @@ public class Terrain extends GameObject { //TODO fix bug that causes parachute t
 				+ "varying vec4 v_color;                  \n"
 				+ "varying vec2 v_texCoord0;                  \n"
 				+ "varying float v_height;                  \n"
-				//+ "varying float v_texIntensity;\n"
 				+ "void main()                                 \n"
 				+ "{                                           \n"
 				+ "   v_color = a_color;                       \n"
 				+ "   v_height = a_position.z;                       \n"
 				+ "   v_texCoord0 = a_texCoord0;                       \n"
-				//+ "   v_texIntensity = a_texIntensity; \n"
 				+ "   vec4 pos = a_position;\n"
 				+ "   pos.z = 0.0;\n"
 				+ "   gl_Position = u_mvpMatrix *pos;  \n"
@@ -72,15 +58,10 @@ public class Terrain extends GameObject { //TODO fix bug that causes parachute t
 		String fragmentShader = "#ifdef GL_ES\n"
 				+ "precision mediump float;\n"
 				+ "#endif\n"
-				//+ "uniform sampler2D u_texture0;           \n"
-				//+ "uniform sampler2D u_texture1;           \n"
-				//+ "uniform sampler2D u_texture2;           \n"
-				//+ "uniform sampler2D u_texture3;           \n"
 				+ "uniform float u_fogFactor;\n"
 				+ "varying vec4 v_color;                  \n"
 				+ "varying vec2 v_texCoord0;                  \n"
 				+ "varying float v_height;                  \n"
-				//+ "varying float v_texIntensity;\n"
 				+"\n"
 				+"vec2 truncate(vec2 v)  \n"
 				+"\n{"
@@ -101,38 +82,16 @@ public class Terrain extends GameObject { //TODO fix bug that causes parachute t
 				+ "float h2 = 0.0;\n"
 				+ "float h3 = 10.0;\n"
 				+ "float h4 = 75.0;\n"
-				//+ "if (v_height < h1) {"
-				//+ "  texColor = texture2D(u_texture0, newTexCoord);\n"
-				//+ "} else if (v_height < h2) {"
-				//+ "  texColor = mix(texture2D(u_texture0, newTexCoord),texture2D(u_texture1, newTexCoord),(v_height-h1)/(h2-h1));\n"
-				//+ "} else if (v_height < h3) {"
-				//+ "  texColor = mix(texture2D(u_texture1, newTexCoord),texture2D(u_texture2, newTexCoord),(v_height-h2)/(h3-h2));\n"
-				//+ "} else if (v_height < h4) {"
-				//+ "  texColor = mix(texture2D(u_texture2, newTexCoord),texture2D(u_texture3, newTexCoord),(v_height-h3)/(h4-h3));\n"
-				//+ "} else {"
-				//+ "  texColor = texture2D(u_texture3, newTexCoord);\n"
-				//+ "}"
-				//+ "  gl_FragColor = mix( fogColor, mix (v_color, texColor, v_texIntensity), u_fogFactor);\n"
-				+ "  gl_FragColor = mix( fogColor, v_color, u_fogFactor);\n"
+				+ "gl_FragColor = mix( fogColor, v_color, u_fogFactor);\n"
 				+ "}";
 
 		shader = new ShaderProgram(vertexShader, fragmentShader);
 		
-		if (SkyDiver3D.DEV_MODE) {
+		if (Skydiver3D.DEV_MODE) {
 			if (!shader.isCompiled()) {
-				Gdx.app.log(SkyDiver3D.LOG, shader.getLog());
+				Gdx.app.log(Skydiver3D.LOG, shader.getLog());
 			}
 		}
-		
-		texture0 = AssetFactory.get(GROUND_TEXTURE_0, Texture.class);
-		texture1 = AssetFactory.get(GROUND_TEXTURE_1, Texture.class);
-		texture2 = AssetFactory.get(GROUND_TEXTURE_2, Texture.class);
-		texture3 = AssetFactory.get(GROUND_TEXTURE_3, Texture.class);
-		
-		u_texture0 = shader.getUniformLocation("u_texture0");
-		u_texture1 = shader.getUniformLocation("u_texture1");
-		u_texture2 = shader.getUniformLocation("u_texture2");
-		u_texture3 = shader.getUniformLocation("u_texture3");	
 		
 		u_mvpMatrix = shader.getUniformLocation("u_mvpMatrix");
 		u_fogFactor = shader.getUniformLocation("u_fogFactor");

@@ -14,13 +14,16 @@ import com.scarlettapps.skydiver3d.resources.AssetFactory.TextureType;
 
 public class AccuracyMeter extends Actor { //TODO This needs to be resolution independent
 
-	Image slider;
-	Image bar;
-	boolean stopped = false;
+	private Image slider;
+	private Image bar;
+	private float barX;
+	private float barVelocity = 200;
+	private boolean right = true;
 	
 	public AccuracyMeter() {
-		Texture sliderTex = AssetFactory.get(TextureType.SLIDER, Texture.class);
-		Texture barTex = AssetFactory.get(TextureType.SLIDERBAR, Texture.class);
+		AssetFactory assetFactory = AssetFactory.getInstance();
+		Texture sliderTex = assetFactory.get(TextureType.SLIDER, Texture.class);
+		Texture barTex = assetFactory.get(TextureType.SLIDERBAR, Texture.class);
 		slider = new Image(new Sprite(sliderTex));
 		bar = new Image(new Sprite(barTex));
 		bar.setScale(0.5f, 1);
@@ -28,11 +31,6 @@ public class AccuracyMeter extends Actor { //TODO This needs to be resolution in
 		bar.setPosition(slider.getX()-bar.getWidth()/2,slider.getY()+(slider.getHeight()-bar.getHeight())/2);
 		barX = bar.getX();
 	}
-	
-	float barX;
-	float barVelocity = 200;
-	boolean right = true;
-	float epsilon = 0;
 	
 	@Override
 	public void act(float delta) {

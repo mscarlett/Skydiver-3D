@@ -1,11 +1,10 @@
 package com.scarlettapps.skydiver3d.resources;
 
 import com.badlogic.gdx.audio.Music;
-import com.badlogic.gdx.utils.GdxRuntimeException;
 
-public class MusicFactory {
+public final class MusicFactory {
 	
-	private static MusicFactory musicFactory;
+	private static MusicFactory instance;
 
 	private Music current;
 	//private Music ambient;
@@ -17,7 +16,8 @@ public class MusicFactory {
 	}
 	
 	public void play(String fileName, boolean isLooping) {
-		play(AssetFactory.get(fileName, Music.class), isLooping);
+		AssetFactory assetFactory = AssetFactory.getInstance();
+		play(assetFactory.get(fileName, Music.class), isLooping);
 	}
 	
 	public void play(Music music) {
@@ -25,7 +25,8 @@ public class MusicFactory {
 	}
 	
 	public void play(Music music, boolean isLooping) {
-		if (PreferenceFactory.isMusicEnabled()) {
+		PreferenceFactory preferenceFactory = PreferenceFactory.getInstance();
+		if (preferenceFactory.isMusicEnabled()) {
 			if (current != null) {
 				if (current == music) {
 					return;
@@ -34,7 +35,7 @@ public class MusicFactory {
 				}
 			}
 			music.setLooping(isLooping);
-			music.setVolume(PreferenceFactory.getVolume());
+			music.setVolume(preferenceFactory.getVolume());
 			music.play();
 			current = music;
 		}
@@ -65,24 +66,19 @@ public class MusicFactory {
 		}
 	}
 	
-	public static MusicFactory newInstance() {
-		if (musicFactory != null) {
-			throw new GdxRuntimeException("Only one MusicFactory can be instantiated.");
-		}
-		musicFactory = new MusicFactory();
-		return musicFactory;
-	}
-	
-	public static void fadeOut(Music music, float gamma) {
+	public void fadeOut(Music music, float gamma) {
 		music.setVolume(gamma);
 	}
 
-	public static void interpolate(Music first, Music second, float gamma) {
+	public void interpolate(Music first, Music second, float gamma) {
 		first.setVolume(1-gamma);
 		second.setVolume(gamma);
 	}
-
-	public static void stopSound() {
-		musicFactory.stop();
+	
+	public static MusicFactory getInstance() {
+		if (instance == null) {
+			instance = new MusicFactory();
+		}
+		return instance;
 	}
 }

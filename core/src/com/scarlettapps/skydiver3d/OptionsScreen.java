@@ -12,11 +12,9 @@ import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Slider;
@@ -24,13 +22,15 @@ import com.badlogic.gdx.scenes.scene2d.ui.Slider.SliderStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
-import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.scarlettapps.skydiver3d.resources.AssetFactory.MusicType;
 import com.scarlettapps.skydiver3d.resources.AssetFactory.SoundType;
 import com.scarlettapps.skydiver3d.resources.FontFactory;
+import com.scarlettapps.skydiver3d.resources.MusicFactory;
+import com.scarlettapps.skydiver3d.resources.PreferenceFactory;
+import com.scarlettapps.skydiver3d.resources.SoundFactory;
 import com.scarlettapps.skydiver3d.worldstate.GameController;
 
 public class OptionsScreen extends MenuScreen {
@@ -38,17 +38,22 @@ public class OptionsScreen extends MenuScreen {
 	private Label volumeValue;
 	private Label sensitivityValue;
 	
-	public OptionsScreen(final SkyDiver3D game) {
+	public OptionsScreen(final Skydiver3D game) {
 		super(game);
 		
+		FontFactory fontFactory = FontFactory.getInstance();
+		final PreferenceFactory preferences = PreferenceFactory.getInstance();
+		final SoundFactory sound = SoundFactory.getInstance();
+		final MusicFactory music = MusicFactory.getInstance();
+		
 		TextButtonStyle textButtonStyle = skin.get(TextButtonStyle.class);
-		BitmapFont font = FontFactory.generateFont(42);
+		BitmapFont font = fontFactory.generateFont(42);
 		textButtonStyle.font = font;
 		
 		LabelStyle labelStyle = skin.get(LabelStyle.class);
-		font = FontFactory.generateFont(48);
+		font = fontFactory.generateFont(20);
 		labelStyle.font = font;
-		font = FontFactory.generateFont(64);
+		font = fontFactory.generateFont(64);
 		skin.add("Title font", font, BitmapFont.class);
 
 		Table table = this.table;
@@ -59,17 +64,17 @@ public class OptionsScreen extends MenuScreen {
 
 		// create the labels widgets
 		final CheckBox soundEffectsCheckbox = new CheckBox("", skin);
-		soundEffectsCheckbox.setScale(5);
-		soundEffectsCheckbox.setChecked(game.preferences.isSoundEnabledValue());
+		soundEffectsCheckbox.setScale(2);
+		soundEffectsCheckbox.setChecked(preferences.isSoundEnabled());
 		soundEffectsCheckbox.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
 				boolean enabled = soundEffectsCheckbox.isChecked();
-				game.preferences.setSoundEnabled(enabled);
-				game.sound.play(SoundType.CLICK);
+				preferences.setSoundEnabled(enabled);
+				sound.play(SoundType.CLICK);
 				
-				if (SkyDiver3D.DEV_MODE) {
-					Gdx.app.log(SkyDiver3D.LOG, "Changing sound effects checkbox");
+				if (Skydiver3D.DEV_MODE) {
+					Gdx.app.log(Skydiver3D.LOG, "Changing sound effects checkbox");
 				}
 			}
 		});
@@ -78,23 +83,23 @@ public class OptionsScreen extends MenuScreen {
 		table.add(soundEffectsCheckbox).colspan(2).left();
 
 		final CheckBox musicCheckbox = new CheckBox("", skin);
-		musicCheckbox.setScale(5);
-		musicCheckbox.setChecked(game.preferences.getMusicEnabled());
+		musicCheckbox.setScale(2);
+		musicCheckbox.setChecked(preferences.isMusicEnabled());
 		musicCheckbox.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
 				boolean enabled = musicCheckbox.isChecked();
-				game.preferences.setMusicEnabled(enabled);
-				game.sound.play(SoundType.CLICK);
+				preferences.setMusicEnabled(enabled);
+				sound.play(SoundType.CLICK);
 
 				// if the music is now enabled, start playing the menu music
 				if (enabled)
-					game.music.play(MusicType.MAIN_MENU);
+					music.play(MusicType.MAIN_MENU);
 				else
-					game.music.stop();
+					music.stop();
 				
-				if (SkyDiver3D.DEV_MODE) {
-					Gdx.app.log(SkyDiver3D.LOG, "Changing music checkbox");
+				if (Skydiver3D.DEV_MODE) {
+					Gdx.app.log(Skydiver3D.LOG, "Changing music checkbox");
 				}
 			}
 		});
@@ -108,15 +113,15 @@ public class OptionsScreen extends MenuScreen {
 		pixmap.setColor(Color.WHITE);
 		pixmap.fill();
 		sliderStyle.knob = new TextureRegionDrawable(new TextureRegion(new Texture(pixmap)));
-		Slider volumeSlider = new Slider(0f, 1f, 0.1f, false, sliderStyle);
-		volumeSlider.setScaleY(6);
-		volumeSlider.setValue(game.preferences.getVolumeValue());
+		Slider volumeSlider = new Slider(0f, 1f, 0.1f, true, sliderStyle);
+		volumeSlider.setScaleX(6);
+		volumeSlider.setValue(preferences.getVolume());
 		volumeSlider.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
 				float value = ((Slider) actor).getValue();
-				game.preferences.setVolume(value);
-				game.music.updateVolume(value);
+				preferences.setVolume(value);
+				music.updateVolume(value);
 				updateVolumeLabel();
 			}
 		});
@@ -131,14 +136,14 @@ public class OptionsScreen extends MenuScreen {
 		table.add(volumeSlider);
 		table.add(volumeValue).width(40);
 		
-		Slider sensitivitySlider = new Slider(0.5f, 1.5f, 0.1f, false, sliderStyle);
-		sensitivitySlider.setScaleY(6);
-		sensitivitySlider.setValue(game.preferences.getSensitivityValue());
+		Slider sensitivitySlider = new Slider(0.5f, 1.5f, 0.1f, true, sliderStyle);
+		sensitivitySlider.setScaleX(6);
+		sensitivitySlider.setValue(preferences.getSensitivity());
 		sensitivitySlider.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
 				float value = ((Slider) actor).getValue();
-				game.preferences.setSensitivity(value);
+				preferences.setSensitivity(value);
 				GameController.setSensitivity(value);
 				updateSensitivityLabel();
 			}
@@ -193,24 +198,24 @@ public class OptionsScreen extends MenuScreen {
 			public void touchUp(InputEvent event, float x, float y,
 					int pointer, int button) {
 				super.touchUp(event, x, y, pointer, button);
-				game.sound.play(SoundType.CLICK);
+				sound.play(SoundType.CLICK);
 				backToMainMenu();
 			}
 		});
 		table.row();
-		table.add(backButton).colspan(2).fill().width(400).center();
+		table.add(backButton).fill().width(400).center();
 	}
 	
 	/**
 	 * Updates the volume label next to the slider.
 	 */
 	private void updateVolumeLabel() {
-		float volume = (game.preferences.getVolumeValue() * 100);
+		float volume = (PreferenceFactory.getInstance().getVolume() * 100);
 		volumeValue.setText(String.format(Locale.US, "%1.0f%%", volume));
 	}
 	
 	private void updateSensitivityLabel() {
-		float sensitivity = (game.preferences.getSensitivityValue() * 100);
+		float sensitivity = (PreferenceFactory.getInstance().getSensitivity() * 100);
 		sensitivityValue.setText(String.format(Locale.US, "%1.0f%%", sensitivity));
 	}
 

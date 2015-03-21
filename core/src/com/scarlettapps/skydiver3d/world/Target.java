@@ -15,7 +15,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.BoundingBox;
 import com.scarlettapps.skydiver3d.resources.AssetFactory;
 import com.scarlettapps.skydiver3d.resources.AssetFactory.ModelType;
-import com.scarlettapps.skydiver3d.worldstate.StatusManager.WorldState;
+import com.scarlettapps.skydiver3d.worldstate.WorldState;
 import com.scarlettapps.skydiver3d.worldview.Renderer;
 
 public class Target extends GameObject {
@@ -24,11 +24,12 @@ public class Target extends GameObject {
 	private BoundingBox bounds;
 	
 	private Environment environment;
+	private Attribute attribute;
 	
 	public Target() {
 		super(false,true);
 		
-		Model model = AssetFactory.get(ModelType.TARGET, Model.class);
+		Model model = AssetFactory.getInstance().get(ModelType.TARGET, Model.class);
 		instance = new ModelInstance(model);
 		instance.transform.setToTranslation(0,0,0);
 		instance.transform.scale(10, 10, 10);
@@ -39,12 +40,12 @@ public class Target extends GameObject {
 		environment = new Environment();
 		environment.set(new ColorAttribute(ColorAttribute.AmbientLight, 0.7f, 0.7f, 0.7f, 1.0f));
         environment.add(new DirectionalLight().set(0.8f, 0.8f, 0.8f, -1f, -0.8f, -0.2f));
+        
+        attribute = new BlendingAttribute(0.5f);
+        instance.materials.get(0).set(attribute);
 	}
 	
-	Attribute attribute = new BlendingAttribute(0.5f);
-	
 	public void render(ModelBatch modelBatch) {
-		instance.materials.get(0).set(attribute);
 		modelBatch.render(instance, environment);
 	}
 	
@@ -54,20 +55,17 @@ public class Target extends GameObject {
 
 	@Override
 	protected void updateObject(float delta) {
-		// TODO Auto-generated method stub
-		
+		// TODO Auto-generated method stub	
 	}
 
 	@Override
 	protected void renderObject(Renderer renderer) {
 		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
 	public void onWorldStateChanged(WorldState worldState) {
 		// TODO Auto-generated method stub
-		
 	}
 
 }

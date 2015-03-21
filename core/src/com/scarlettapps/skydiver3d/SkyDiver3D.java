@@ -8,39 +8,56 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.FPSLogger;
 import com.scarlettapps.skydiver3d.resources.AssetFactory;
-import com.scarlettapps.skydiver3d.resources.MusicFactory;
-import com.scarlettapps.skydiver3d.resources.PreferenceFactory;
-import com.scarlettapps.skydiver3d.resources.SoundFactory;
 
-public class SkyDiver3D extends Game {
+/**
+ * Class that stores the current instance of the game and the current screen,
+ * and provides a way to switch between screens.
+ * 
+ * @author Michael Scarlett
+ *
+ */
+public class Skydiver3D extends Game {
+	/** Constant variables for debugging */
+	// Title of the game displayed in logging messages
 	public static final String LOG = "Skydiver3D";
+	// Whether or not the game should be run in dev mode, which enables
+    // advanced debugging options
 	public static final boolean DEV_MODE = false;
 	
-	MainMenuScreen mainMenuScreen;
-	WorldPresenter playingScreen;
-	LoadingScreen loadingScreen;
-	PauseScreen pauseScreen;
-	LevelCompletedScreen levelCompletedScreen;
-	HelpScreen helpScreen;
-	OptionsScreen optionsScreen;
-	AchievementsScreen achievementsScreen;
+	/** Screens displayed when browsing the main menu */
+	// Splash screen for main menu that is displayed while loading
 	SplashScreen splashScreen;
+	// Main menu screen which allows navigation to all other screens
+	MainMenuScreen mainMenuScreen;
+	// Help screen for main menu
+	HelpScreen helpScreen;
+	// Options screen for changing the settings from the main menu
+	OptionsScreen optionsScreen;
+	// Credits screen
+	CreditsScreen achievementsScreen;
+	
+	/** Screens displayed when playing game */
+	// Loading screen for game
+	LoadingScreen loadingScreen;
+	// Game screen which displays the current game state
+	WorldPresenter playingScreen;
+	// Pause screen for game
+	PauseScreen pauseScreen;
+	// Level completed screen which displays once the skydiver has landed
+	LevelCompletedScreen levelCompletedScreen;
+	// Options screen for changing the settings during a game
 	GameOptionsScreen gameOptionsScreen;
 	
-	AssetFactory assets;
-	PreferenceFactory preferences;
-	MusicFactory music;
-	SoundFactory sound;
-	
+	// FPS logger for debugging the frame rate
 	private FPSLogger fpsLogger;
 
+	/**
+	 * Instantiate game resources and screens, then display the initial screen
+	 */
 	@Override
 	public void create() {
 		// Initialize resources
-		assets = AssetFactory.newInstance();
-		preferences = PreferenceFactory.newInstance();
-		music = MusicFactory.newInstance();
-		sound = SoundFactory.newInstance();
+		AssetFactory.getInstance().load();
 		
 		// Initialize screens
 		mainMenuScreen = new MainMenuScreen(this);
@@ -50,11 +67,11 @@ public class SkyDiver3D extends Game {
 		levelCompletedScreen = new LevelCompletedScreen(this);
 		helpScreen = new HelpScreen(this);
 		optionsScreen = new OptionsScreen(this);
-		achievementsScreen = new AchievementsScreen(this);
+		achievementsScreen = new CreditsScreen(this);
 		splashScreen = new SplashScreen(this);
 		gameOptionsScreen = new GameOptionsScreen(this);
 		
-		// Set screen to main menu
+		// Set screen to splash screen
 		setScreen(splashScreen);
 		
 		// Initialize FPS logger if dev mode enabled
@@ -63,14 +80,20 @@ public class SkyDiver3D extends Game {
 		}
 	}
 	
+	/**
+	 * Set the current screen
+	 */
 	@Override
 	public void setScreen(Screen screen) {
 		super.setScreen(screen);
 	}
 	
+	/**
+	 * Render the current screen
+	 */
 	@Override
 	public void render() {
-		// Render the current screen
+		// Calls the rendering method for the current screen
 		super.render();
 		
 		// Display FPS if dev mode enabled
@@ -79,6 +102,9 @@ public class SkyDiver3D extends Game {
 		}
 	}
 	
+	/**
+	 * Dispose of this game by disposing of all screens and assets
+	 */
 	@Override
 	public void dispose() {
 		mainMenuScreen.dispose();
@@ -93,6 +119,9 @@ public class SkyDiver3D extends Game {
 		gameOptionsScreen.dispose();
 	}
 
+	/**
+	 * Exit the application
+	 */
 	public void exit() {
 		Gdx.app.exit();
 	}

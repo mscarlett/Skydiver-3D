@@ -3,7 +3,7 @@ package com.scarlettapps.skydiver3d.client;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.backends.gwt.GwtApplication;
 import com.badlogic.gdx.backends.gwt.GwtApplicationConfiguration;
-import com.scarlettapps.skydiver3d.SkyDiver3D;
+import com.scarlettapps.skydiver3d.Skydiver3D;
 
 public class HtmlLauncher extends GwtApplication {
 
@@ -14,6 +14,6 @@ public class HtmlLauncher extends GwtApplication {
 
         @Override
         public ApplicationListener getApplicationListener () {
-                return new SkyDiver3D();
+                return new Skydiver3D();
         }
 }

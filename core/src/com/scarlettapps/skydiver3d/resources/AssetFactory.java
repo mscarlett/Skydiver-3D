@@ -3,15 +3,16 @@
 
 package com.scarlettapps.skydiver3d.resources;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.GdxRuntimeException;
+import com.scarlettapps.skydiver3d.Skydiver3D;
 
-public class AssetFactory {
+public final class AssetFactory {
 	
 	public static class TextureType {
 		public static final String TITLE = "data/textures/title.png";
@@ -53,36 +54,43 @@ public class AssetFactory {
 		public static final String TARGET = "data/models/target_raft_5.g3db";
 	}
 	
-	private static AssetManager assets;
+	private static AssetFactory instance;
 	
-	public static <T> T get(String fileName, Class<T> type) {
-		return assets.get(fileName, type);
-	}
-
-	public static void update(int millis) {
-		assets.update(millis);
-	}
-
-	public static boolean isLoaded(String fileName, Class<?> type) {
-		return assets.isLoaded(fileName, type);
-	}
-	
-	public static AssetManager getAssets() {
-		return assets;
-	}
-	
-	public static float getProgress() {
-		return assets.getProgress();
-	}
-	
-	public static void dispose() {
-		assets.dispose();
-	}
-	
-	private static AssetFactory assetFactory;
+	private AssetManager assets;
 	
 	private AssetFactory() {
 		assets = new AssetManager();
+	}
+	
+	public <T> T get(String fileName, Class<T> type) {
+		return assets.get(fileName, type);
+	}
+
+	public void update(int millis) {
+		assets.update(millis);
+	}
+
+	public boolean isLoaded(String fileName, Class<?> type) {
+		return assets.isLoaded(fileName, type);
+	}
+	
+	public AssetManager getAssets() {
+		return assets;
+	}
+	
+	public float getProgress() {
+		return assets.getProgress();
+	}
+	
+	public void dispose() {
+		assets.dispose();
+		instance = null;
+	}
+	
+	public void load() {
+		if (Skydiver3D.DEV_MODE) {
+		    Gdx.app.log(Skydiver3D.LOG, "Start loading assets");
+		}
 		
 		// Assets needed for splash screen
 		assets.load(TextureType.TITLE, Texture.class);
@@ -92,7 +100,6 @@ public class AssetFactory {
 		assets.load(TextureType.RING, Texture.class);
 		assets.load(TextureType.STAR, Texture.class);
 		assets.load(SoundType.CLICK, Sound.class);
-		assets.load(TextureType.LIGHTNING, Texture.class);
 		assets.load(MusicType.MAIN_MENU, Music.class);
 		
 		// Assets needed for game
@@ -105,6 +112,7 @@ public class AssetFactory {
 		assets.load(TextureType.SLIDER, Texture.class);
 		assets.load(TextureType.SLIDERBAR, Texture.class);
 		assets.load(TextureType.PAUSE, Texture.class);
+		assets.load(TextureType.LIGHTNING, Texture.class);
 		assets.load(TextureType.GOLD_STAR, Texture.class);
 		assets.load(TextureType.EMPTY_STAR, Texture.class);
 		assets.load(TextureType.WATER_TERRAIN, Texture.class);
@@ -117,19 +125,18 @@ public class AssetFactory {
 		return assets.getAssetNames();
 	}
 	
-	public static AssetFactory newInstance() {
-		if (assetFactory != null) {
-			throw new GdxRuntimeException("Only one AssetFactory can be instantiated.");
-		}
-		assetFactory = new AssetFactory();
-		return assetFactory;
-	}
-
 	public boolean isLoaded() {
 		return getLoadedAssets() == 22;
 	}
 	
 	public int getLoadedAssets() {
 		return assets.getLoadedAssets();
+	}
+	
+	public static AssetFactory getInstance() {
+		if (instance == null) {
+			instance = new AssetFactory();
+		}
+		return instance;
 	}
 }

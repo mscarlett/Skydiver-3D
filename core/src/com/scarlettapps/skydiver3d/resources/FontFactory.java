@@ -9,23 +9,25 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
 import com.scarlettapps.skydiver3d.resources.AssetFactory.FontType;
 
-public class FontFactory {
+public final class FontFactory {
 	
 	public enum FontStyle {
 		REGULAR, BOLD, ITALIC
 	}
-	
-	private static final String FONT_FILE = FontType.TUFFY;
 
-	public static BitmapFont generateFont(int size) {
+	private static FontFactory instance = null;
+	
+	private FontFactory() {};
+	
+	public BitmapFont generateFont(int size) {
 		return generateFont(size, false);
 	}
 	
-	public static BitmapFont generateFont(int size, boolean genMipMaps) {
+	public BitmapFont generateFont(int size, boolean genMipMaps) {
 		return generateFont(size, genMipMaps, TextureFilter.Nearest, TextureFilter.Nearest);
 	}
 	
-	public static BitmapFont generateFont(int size, boolean genMipMaps, TextureFilter minFilter, TextureFilter magFilter) {
+	public BitmapFont generateFont(int size, boolean genMipMaps, TextureFilter minFilter, TextureFilter magFilter) {
 		FreeTypeFontParameter parameter = new FreeTypeFontParameter();
 		parameter.size = size;
 		parameter.genMipMaps = genMipMaps;
@@ -34,10 +36,17 @@ public class FontFactory {
 		return generateFont(parameter);
 	}
 	
-	public static BitmapFont generateFont(FreeTypeFontParameter parameter) {
-		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal(FONT_FILE));
+	public BitmapFont generateFont(FreeTypeFontParameter parameter) {
+		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal(FontType.TUFFY));
 		BitmapFont font = generator.generateFont(parameter);
 		generator.dispose();
 		return font;
+	}
+	
+	public static FontFactory getInstance() {
+		if (instance == null) {
+			instance = new FontFactory();
+		}
+		return instance;
 	}
 }

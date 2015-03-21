@@ -40,8 +40,9 @@ public class World {
 		terrain = new Terrain();
 		target = new Target();
 		
-		bell = AssetFactory.get(SoundType.BELL, Sound.class);
-		wind = AssetFactory.get(MusicType.WIND, Music.class);
+		AssetFactory assetFactory = AssetFactory.getInstance();
+		bell = assetFactory.get(SoundType.BELL, Sound.class);
+		wind = assetFactory.get(MusicType.WIND, Music.class);
 		wind.setLooping(true);
 		
 		statusManager.syncSkydiver(skydiver);

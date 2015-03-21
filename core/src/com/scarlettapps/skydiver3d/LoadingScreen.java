@@ -30,11 +30,13 @@ public class LoadingScreen extends MenuScreen {
 	
 	private ProgressBar progressBar;
 	
-	public LoadingScreen(SkyDiver3D game) {
+	public LoadingScreen(Skydiver3D game) {
 		super(game);
 		
+		FontFactory fontFactory = FontFactory.getInstance();
+		
 		LabelStyle labelStyle = skin.get(LabelStyle.class);
-		BitmapFont font = FontFactory.generateFont(42);
+		BitmapFont font = fontFactory.generateFont(42);
 		labelStyle.font = font;
 		
 		Label label = new Label("Loading", skin);
@@ -60,13 +62,14 @@ public class LoadingScreen extends MenuScreen {
 	
 	@Override
 	public void render(float delta) {
+		AssetFactory assetFactory = AssetFactory.getInstance();
 		if (game.playingScreen.isLoaded()) {
 			startGame();
 		} else {
-			float progress = LOADING_MAX*AssetFactory.getProgress()+LOADING_MIN;
+			float progress = LOADING_MAX*assetFactory.getProgress()+LOADING_MIN;
 			progressBar.setValue(progress);
 			super.render(delta);
-			AssetFactory.update(50);
+			assetFactory.update(50);
 		}
 	}
 	

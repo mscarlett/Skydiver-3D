@@ -5,11 +5,10 @@ package com.scarlettapps.skydiver3d.resources;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
-import com.badlogic.gdx.utils.GdxRuntimeException;
 
-public class PreferenceFactory {
+public final class PreferenceFactory {
 	
-	private static PreferenceFactory preferenceFactory;
+	private static PreferenceFactory instance;
 
 	private final Preferences preferences;
 	
@@ -28,23 +27,15 @@ public class PreferenceFactory {
 		preferences.flush();
 	}
 	
-	public boolean isSoundEnabledValue() {
+	public boolean isSoundEnabled() {
 		return preferences.getBoolean("Sound", true);
 	}
 
-	public float getVolumeValue() {
+	public float getVolume() {
 		return preferences.getFloat("Volume", 0.5f);
 	}
 	
-	public static PreferenceFactory newInstance() {
-		if (preferenceFactory != null) {
-			throw new GdxRuntimeException("Only one PreferenceFactory can be instantiated.");
-		}
-		preferenceFactory = new PreferenceFactory();
-		return preferenceFactory;
-	}
-
-	public boolean getMusicEnabled() {
+	public boolean isMusicEnabled() {
 		return preferences.getBoolean("Music", true);
 	}
 
@@ -53,7 +44,7 @@ public class PreferenceFactory {
 		preferences.flush();
 	}
 	
-	public float getSensitivityValue() {
+	public float getSensitivity() {
 		return preferences.getFloat("Sensitivity", 1f);
 	}
 
@@ -61,19 +52,10 @@ public class PreferenceFactory {
 		preferences.putFloat("Sensitivity", value);
 	}
 	
-	public static boolean isMusicEnabled() {
-		return preferenceFactory.getMusicEnabled();
-	}
-
-	public static boolean isSoundEnabled() {
-		return preferenceFactory.isSoundEnabledValue();
-	}
-
-	public static float getVolume() {
-		return preferenceFactory.getVolumeValue();
-	}
-	
-	public static float getSensitivity() {
-		return preferenceFactory.getSensitivityValue();
+	public static PreferenceFactory getInstance() {
+		if (instance == null) {
+			instance = new PreferenceFactory();
+		}
+		return instance;
 	}
 }

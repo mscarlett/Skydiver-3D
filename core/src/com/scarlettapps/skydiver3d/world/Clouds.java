@@ -5,7 +5,7 @@ package com.scarlettapps.skydiver3d.world;
 
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.Array;
-import com.scarlettapps.skydiver3d.worldstate.StatusManager.WorldState;
+import com.scarlettapps.skydiver3d.worldstate.WorldState;
 import com.scarlettapps.skydiver3d.worldview.Renderer;
 
 public class Clouds extends GameObject {

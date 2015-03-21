@@ -18,15 +18,17 @@ import com.scarlettapps.skydiver3d.resources.AssetFactory.SoundType;
 
 public class PauseScreen extends MenuScreen { // PAUSE the game if pause button or menu button pressed
 
-	public PauseScreen(SkyDiver3D game) {
+	public PauseScreen(Skydiver3D game) {
 		super(game, false);
 		
+		FontFactory fontFactory = FontFactory.getInstance();
+		
 		TextButtonStyle textButtonStyle = skin.get(TextButtonStyle.class);
-		BitmapFont font = FontFactory.generateFont(42);
+		BitmapFont font = fontFactory.generateFont(42);
 		textButtonStyle.font = font;
 		
 		LabelStyle labelStyle = skin.get(LabelStyle.class);
-		font = FontFactory.generateFont(42);
+		font = fontFactory.generateFont(42);
 		labelStyle.font = font;
 		
 		table.setColor(BACKGROUND_BRIGHTNESS, BACKGROUND_BRIGHTNESS, BACKGROUND_BRIGHTNESS, 1);
@@ -39,7 +41,7 @@ public class PauseScreen extends MenuScreen { // PAUSE the game if pause button 
 		resumeButton.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
-				SoundFactory.playSound(SoundType.CLICK);
+				SoundFactory.getInstance().play(SoundType.CLICK);
 				resumeGame();
 			}
 		});
@@ -51,7 +53,7 @@ public class PauseScreen extends MenuScreen { // PAUSE the game if pause button 
 		restartButton.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
-				SoundFactory.playSound(SoundType.CLICK);
+				SoundFactory.getInstance().play(SoundType.CLICK);
 				restartGame();
 			}
 
@@ -64,7 +66,7 @@ public class PauseScreen extends MenuScreen { // PAUSE the game if pause button 
 		optionsButton.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
-				SoundFactory.playSound(SoundType.CLICK);
+				SoundFactory.getInstance().play(SoundType.CLICK);
 				showOptions();
 			}
 		});
@@ -76,7 +78,7 @@ public class PauseScreen extends MenuScreen { // PAUSE the game if pause button 
 		mainMenuButton.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
-				SoundFactory.playSound(SoundType.CLICK);
+				SoundFactory.getInstance().play(SoundType.CLICK);
 				mainMenu();
 			}
 		});
@@ -90,7 +92,7 @@ public class PauseScreen extends MenuScreen { // PAUSE the game if pause button 
 	
 	@Override
 	public void showScreen() {
-		MusicFactory.stopSound();
+		MusicFactory.getInstance().stop();
 		if (takeScreenshot) {
 			screenShot = new TextureRegionDrawable(ScreenUtils.getFrameBufferTexture());
 			table.setBackground(screenShot);

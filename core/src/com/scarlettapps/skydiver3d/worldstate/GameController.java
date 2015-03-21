@@ -11,7 +11,7 @@ import com.scarlettapps.skydiver3d.resources.PreferenceFactory;
 
 public abstract class GameController implements InputProcessor {
 	
-	protected static float sensitivity = PreferenceFactory.getSensitivity();
+	protected static float sensitivity = PreferenceFactory.getInstance().getSensitivity();
 	
 	protected Vector2 touchPosition;
 	protected float ax = 0;

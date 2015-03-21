@@ -1,35 +1,31 @@
 package com.scarlettapps.skydiver3d.resources;
 
 import com.badlogic.gdx.audio.Sound;
-import com.badlogic.gdx.utils.GdxRuntimeException;
 
-public class SoundFactory {
+public final class SoundFactory {
 	
-	private static SoundFactory soundFactory;
+	private static SoundFactory instance;
 	
 	private SoundFactory() {
 		
 	}
 
 	public void play(String fileName) {
-		play(AssetFactory.get(fileName, Sound.class));
+		AssetFactory assetFactory = AssetFactory.getInstance();
+		play(assetFactory.get(fileName, Sound.class));
 	}
 	
 	public void play(Sound sound) {
-		if (PreferenceFactory.isSoundEnabled()) {
-			sound.play(PreferenceFactory.getVolume());
+		PreferenceFactory preferenceFactory = PreferenceFactory.getInstance();
+		if (preferenceFactory.isSoundEnabled()) {
+			sound.play(preferenceFactory.getVolume());
 		}
 	}
 	
-	public static void playSound(String fileName) {
-		soundFactory.play(fileName);
-	}
-	
-	public static SoundFactory newInstance() {
-		if (soundFactory != null) {
-			throw new GdxRuntimeException("Only one SoundFactory can be instantiated.");
+	public static SoundFactory getInstance() {
+		if (instance == null) {
+			instance = new SoundFactory();
 		}
-		soundFactory = new SoundFactory();
-		return soundFactory;
+		return instance;
 	}
 }

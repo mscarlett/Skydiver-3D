@@ -8,7 +8,6 @@ import com.scarlettapps.skydiver3d.resources.SoundFactory;
 import com.scarlettapps.skydiver3d.world.Skydiver;
 import com.scarlettapps.skydiver3d.world.Terrain;
 import com.scarlettapps.skydiver3d.world.World;
-import com.scarlettapps.skydiver3d.worldstate.StatusManager.WorldState;
 
 public class SkydiverControls implements InputListener {
 
@@ -96,7 +95,7 @@ public class SkydiverControls implements InputListener {
 							}
 							statusManager.velocity().z = 0;
 							statusManager.setState(WorldState.FINAL);
-							SoundFactory.playSound(SoundType.LAUGH);
+							SoundFactory.getInstance().play(SoundType.LAUGH);
 						}
 					}
 				}

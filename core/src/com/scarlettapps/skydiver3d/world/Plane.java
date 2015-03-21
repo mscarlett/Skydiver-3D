@@ -15,7 +15,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.scarlettapps.skydiver3d.resources.AssetFactory;
 import com.scarlettapps.skydiver3d.resources.AssetFactory.ModelType;
 import com.scarlettapps.skydiver3d.world.utils.AnimationController;
-import com.scarlettapps.skydiver3d.worldstate.StatusManager.WorldState;
+import com.scarlettapps.skydiver3d.worldstate.WorldState;
 import com.scarlettapps.skydiver3d.worldview.Renderer;
 
 public class Plane extends GameObject {
@@ -28,7 +28,7 @@ public class Plane extends GameObject {
 		super(false,true);
 		
 		String filename = ModelType.PLANE;
-		Model model = AssetFactory.get(filename, Model.class);
+		Model model = AssetFactory.getInstance().get(filename, Model.class);
 		instance = new ModelInstance(model);
 		instance.materials.get(0).set(
 				new BlendingAttribute(GL20.GL_SRC_ALPHA,

@@ -18,25 +18,28 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.scarlettapps.skydiver3d.resources.AssetFactory.SoundType;
 import com.scarlettapps.skydiver3d.resources.AssetFactory.TextureType;
 import com.scarlettapps.skydiver3d.resources.FontFactory;
+import com.scarlettapps.skydiver3d.resources.SoundFactory;
 
 public class HelpScreen extends MenuScreen {
 
-	public HelpScreen(SkyDiver3D game) {
+	public HelpScreen(Skydiver3D game) {
 		super(game);
 		
+		FontFactory fontFactory = FontFactory.getInstance();
+		
 		TextButtonStyle textButtonStyle = skin.get(TextButtonStyle.class);
-		BitmapFont font = FontFactory.generateFont(42);
+		BitmapFont font = fontFactory.generateFont(42);
 		textButtonStyle.font = font;
 		
 		LabelStyle labelStyle = skin.get(LabelStyle.class);
-		font = FontFactory.generateFont(28);
+		font = fontFactory.generateFont(20);
 		labelStyle.font = font;
-		font = FontFactory.generateFont(64);
+		font = fontFactory.generateFont(64);
 		skin.add("Title font", font, BitmapFont.class);
 		
 		Label title = new Label("Help", skin, "Title font", Color.WHITE);
 		title.setAlignment(Align.center);
-		table.add(title).fill().center();
+		table.add(title).spaceBottom(10).fill().center();
 		table.row();
 		
 		Label label = new Label("Tilt your phone sideways to drift left or right", skin);
@@ -45,10 +48,10 @@ public class HelpScreen extends MenuScreen {
 		table.row();
 		
 		Image phone = new Image(new Texture(TextureType.PHONE_ROTATE));
-		table.add(phone).center();
+		table.add(phone).spaceBottom(10).center();
 		table.row();
 		
-		label = new Label("Earn points by collecting rings and stars.\nPress the lightning bolt button to dive faster and get a speed bonus.", skin);
+		label = new Label("Earn points by collecting rings and stars", skin);
 		label.setAlignment(Align.center);
 		table.add(label);
 		table.row();
@@ -61,11 +64,8 @@ public class HelpScreen extends MenuScreen {
 		Image star = new Image(new Texture(TextureType.STAR));
 		star.setSize(s,s);
 		group.add(star).size(s, s);
-		Image lightning = new Image(new Texture(TextureType.LIGHTNING));
-		lightning.setSize(s,s);
-		group.add(lightning).size(s, s);
 		
-		table.add(group);
+		table.add(group).spaceBottom(10);
 		table.row();
 		
 		label = new Label("Open your parachute with perfect timing and\nland in the center of the target to get bonus points", skin);
@@ -89,7 +89,7 @@ public class HelpScreen extends MenuScreen {
 			public void touchUp(InputEvent event, float x, float y,
 					int pointer, int button) {
 				super.touchUp(event, x, y, pointer, button);
-				HelpScreen.this.game.sound.play(SoundType.CLICK);
+				SoundFactory.getInstance().play(SoundType.CLICK);
 				backToMainMenu();
 			}
 		});

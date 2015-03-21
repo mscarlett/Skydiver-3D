@@ -10,17 +10,18 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g3d.shaders.DefaultShader;
 import com.scarlettapps.skydiver3d.resources.AssetFactory;
 import com.scarlettapps.skydiver3d.resources.AssetFactory.MusicType;
+import com.scarlettapps.skydiver3d.resources.MusicFactory;
 import com.scarlettapps.skydiver3d.world.World;
 import com.scarlettapps.skydiver3d.worldstate.GameController;
 import com.scarlettapps.skydiver3d.worldstate.InputManager;
+import com.scarlettapps.skydiver3d.worldstate.Score;
 import com.scarlettapps.skydiver3d.worldstate.SkydiverControls;
 import com.scarlettapps.skydiver3d.worldstate.StatusManager;
-import com.scarlettapps.skydiver3d.worldstate.StatusManager.Score;
-import com.scarlettapps.skydiver3d.worldstate.StatusManager.WorldState;
+import com.scarlettapps.skydiver3d.worldstate.WorldState;
 import com.scarlettapps.skydiver3d.worldview.WorldView;
 
 
-public class WorldPresenter extends DefaultScreen<SkyDiver3D> { //TODO bug in which tapping screen while parachuting changes cam position
+public class WorldPresenter extends DefaultScreen<Skydiver3D> { //TODO bug in which tapping screen while parachuting changes cam position
 	
 	private static final float MAX_DELTA = 0.1f;
 	
@@ -30,7 +31,11 @@ public class WorldPresenter extends DefaultScreen<SkyDiver3D> { //TODO bug in wh
 	private InputManager inputManager;
 	private StatusManager statusManager;
 	
-	public WorldPresenter(SkyDiver3D game) {
+	/**
+	 * 
+	 * @param game the instance of this game
+	 */
+	public WorldPresenter(Skydiver3D game) {
 		super(game, false);
 		gameController = GameController.newGameController();
 		inputManager = new InputManager(gameController);
@@ -77,14 +82,16 @@ public class WorldPresenter extends DefaultScreen<SkyDiver3D> { //TODO bug in wh
 
 	@Override
 	public void disposeScreen() {
-		AssetFactory.dispose();
+		AssetFactory.getInstance().dispose();
 	}
 
 	boolean load = true;
 	
 	@Override
 	protected void showScreen() {
-		game.music.stop();
+		MusicFactory music = MusicFactory.getInstance();
+		
+		music.stop();
 		
 		if (load) {
 			world = new World(statusManager);
@@ -97,7 +104,7 @@ public class WorldPresenter extends DefaultScreen<SkyDiver3D> { //TODO bug in wh
 			load = false;
 		}
 		
-		game.music.play(MusicType.WIND);
+		music.play(MusicType.WIND);
 		
 		statusManager.setPaused(false);
 	}
@@ -144,7 +151,7 @@ public class WorldPresenter extends DefaultScreen<SkyDiver3D> { //TODO bug in wh
 	}
 
 	public boolean isLoaded() {
-		return game.assets.isLoaded();
+		return AssetFactory.getInstance().isLoaded();
 	}
 
 }
