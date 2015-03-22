@@ -21,8 +21,8 @@ public class Skydiver3D extends Game {
 	// Title of the game displayed in logging messages
 	public static final String LOG = "Skydiver3D";
 	// Whether or not the game should be run in dev mode, which enables
-    // advanced debugging options
-	public static final boolean DEV_MODE = false;
+    // advanced debugging options for game logic and gui testing
+	public static final boolean DEV_MODE = true;
 	
 	/** Screens displayed when browsing the main menu */
 	// Splash screen for main menu that is displayed while loading
@@ -85,6 +85,10 @@ public class Skydiver3D extends Game {
 	 */
 	@Override
 	public void setScreen(Screen screen) {
+		if (DEV_MODE) {
+			Gdx.app.log(LOG, "Setting screen to " + screen.getClass().getSimpleName());
+		}
+		
 		super.setScreen(screen);
 	}
 	

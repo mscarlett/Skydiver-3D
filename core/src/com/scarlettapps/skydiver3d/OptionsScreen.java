@@ -51,13 +51,13 @@ public class OptionsScreen extends MenuScreen {
 		textButtonStyle.font = font;
 		
 		LabelStyle labelStyle = skin.get(LabelStyle.class);
-		font = fontFactory.generateFont(20);
+		font = fontFactory.generateFont(36);
 		labelStyle.font = font;
 		font = fontFactory.generateFont(64);
 		skin.add("Title font", font, BitmapFont.class);
 
 		Table table = this.table;
-		table.defaults().spaceBottom(30);
+		table.defaults().spaceBottom(20);
 		table.columnDefaults(0).padRight(20);
 		Label title = new Label("Options", skin, "Title font", Color.WHITE);
 		table.add(title).colspan(3);

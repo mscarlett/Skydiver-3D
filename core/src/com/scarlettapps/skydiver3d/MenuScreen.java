@@ -14,8 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.badlogic.gdx.utils.Scaling;
-import com.badlogic.gdx.utils.viewport.ScalingViewport;
+import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 public abstract class MenuScreen extends DefaultScreen<Skydiver3D> {
@@ -26,6 +25,7 @@ public abstract class MenuScreen extends DefaultScreen<Skydiver3D> {
 	protected final Stage stage;
 	protected final Table table;
 	protected final Skin skin;
+	protected final Viewport viewport;
 	
 	public MenuScreen(Skydiver3D game) {
 		this(game, true);
@@ -35,7 +35,7 @@ public abstract class MenuScreen extends DefaultScreen<Skydiver3D> {
 		super(game);
 		
 		// Initialize stage and skin
-		Viewport viewport = new ScalingViewport(Scaling.fill, VIRTUAL_WIDTH, VIRTUAL_HEIGHT);
+		viewport = new StretchViewport(VIRTUAL_WIDTH, VIRTUAL_HEIGHT);
 		stage = new Stage(viewport);
 		skin = new Skin(Gdx.files.internal(SKIN_FILE));
 		
@@ -82,6 +82,11 @@ public abstract class MenuScreen extends DefaultScreen<Skydiver3D> {
 	@Override
 	protected InputProcessor getInputProcessor() {
 		return stage;
+	}
+	
+	@Override
+	protected void resizeScreen(int width, int height) {
+		//viewport.update(width, height);
 	}
 
 }

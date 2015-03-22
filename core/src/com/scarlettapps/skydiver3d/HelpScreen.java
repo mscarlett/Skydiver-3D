@@ -32,14 +32,14 @@ public class HelpScreen extends MenuScreen {
 		textButtonStyle.font = font;
 		
 		LabelStyle labelStyle = skin.get(LabelStyle.class);
-		font = fontFactory.generateFont(20);
+		font = fontFactory.generateFont(32);
 		labelStyle.font = font;
 		font = fontFactory.generateFont(64);
 		skin.add("Title font", font, BitmapFont.class);
 		
 		Label title = new Label("Help", skin, "Title font", Color.WHITE);
 		title.setAlignment(Align.center);
-		table.add(title).spaceBottom(10).fill().center();
+		table.add(title).spaceBottom(5).fill().center();
 		table.row();
 		
 		Label label = new Label("Tilt your phone sideways to drift left or right", skin);
@@ -48,7 +48,7 @@ public class HelpScreen extends MenuScreen {
 		table.row();
 		
 		Image phone = new Image(new Texture(TextureType.PHONE_ROTATE));
-		table.add(phone).spaceBottom(10).center();
+		table.add(phone).spaceBottom(5).center();
 		table.row();
 		
 		label = new Label("Earn points by collecting rings and stars", skin);
@@ -65,7 +65,7 @@ public class HelpScreen extends MenuScreen {
 		star.setSize(s,s);
 		group.add(star).size(s, s);
 		
-		table.add(group).spaceBottom(10);
+		table.add(group).spaceBottom(5);
 		table.row();
 		
 		label = new Label("Open your parachute with perfect timing and\nland in the center of the target to get bonus points", skin);
@@ -74,7 +74,7 @@ public class HelpScreen extends MenuScreen {
 		table.row();
 		
 		Image diving = new Image(new Texture(TextureType.DARTS));
-		table.add(diving).spaceBottom(10).center();
+		table.add(diving).spaceBottom(5).center();
 		table.row();
 		
 		// register the button "resume game"

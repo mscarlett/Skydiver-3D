@@ -181,4 +181,8 @@ public class WorldView {
 		return statusView;
 	}
 
+	public void resize(int width, int height) {
+		statusView.resize(width, height);
+	}
+
 }

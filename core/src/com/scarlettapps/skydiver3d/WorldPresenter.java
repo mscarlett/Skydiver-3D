@@ -31,6 +31,8 @@ public class WorldPresenter extends DefaultScreen<Skydiver3D> { //TODO bug in wh
 	private InputManager inputManager;
 	private StatusManager statusManager;
 	
+	private boolean load = true;
+	
 	/**
 	 * 
 	 * @param game the instance of this game
@@ -84,8 +86,6 @@ public class WorldPresenter extends DefaultScreen<Skydiver3D> { //TODO bug in wh
 	public void disposeScreen() {
 		AssetFactory.getInstance().dispose();
 	}
-
-	boolean load = true;
 	
 	@Override
 	protected void showScreen() {
@@ -152,6 +152,11 @@ public class WorldPresenter extends DefaultScreen<Skydiver3D> { //TODO bug in wh
 
 	public boolean isLoaded() {
 		return AssetFactory.getInstance().isLoaded();
+	}
+	
+	@Override
+	protected void resizeScreen(int width, int height) {
+		//worldView.resize(width, height);
 	}
 
 }

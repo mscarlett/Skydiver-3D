@@ -22,11 +22,13 @@ import com.scarlettapps.skydiver3d.DefaultScreen;
 import com.scarlettapps.skydiver3d.resources.AssetFactory;
 import com.scarlettapps.skydiver3d.resources.AssetFactory.ModelType;
 import com.scarlettapps.skydiver3d.world.utils.AnimationController;
+import com.scarlettapps.skydiver3d.world.utils.IntersectUtil;
 import com.scarlettapps.skydiver3d.worldstate.WorldState;
 import com.scarlettapps.skydiver3d.worldview.Renderer;
 
 public class Skydiver extends GameObject {
 	
+	// Bounds for skydiver x and y positions
 	public static final float MIN_X = -4.5f;
 	public static final float MIN_Y = -3.3f;
 	public static final float MAX_X = 4.1f;
@@ -61,6 +63,9 @@ public class Skydiver extends GameObject {
 	public float timeSinceJumpedOffAirplane = 0f;
 	public boolean finalState = false;
 	float timeSinceFinalState = 0f;
+	private Vector3 minCpy;
+	private Vector3 maxCpy;
+	
 	
 	public Skydiver() {
 		super(true,true);
@@ -94,99 +99,109 @@ public class Skydiver extends GameObject {
 	@Override
 	public void updateObject(float delta) {
 		if (getPositionZ() < WorldState.INITIAL.minAltitude) {
-			if (!landing) {
-				checkBounds();
+			updateSkydiving(delta);
+		} else {
+			updateBefore(delta);
+		}
+		
+	}
+	
+	private void updateSkydiving(float delta) {
+		if (!landing) {
+			checkBounds();
+		}
+		
+		final float dx = velocity.x*delta;
+		final float dy = velocity.y*delta;
+		final float dz = velocity.z*delta;
+		
+		setToTranslation(position.x+dx, position.y+dy, position.z+dz);
+		
+		float pose = (-velocity.z-MIN_TERMINAL_SPEED)/(MAX_TERMINAL_SPEED-MIN_TERMINAL_SPEED);
+		
+		if (landing) {
+			skydiverAngle.y = -90;
+		} else {
+			if (!parachuting) {
+			    skydiverAngle.y = pose*90;
+			} else {
+			    skydiverAngle.y -= (skydiverAngle.y+90)*delta;
 			}
+		}
+		
+		axis.set(skydiverAngle.y, skydiverAngle.x, 0);
+		angle.set(skydiverAngle.y, skydiverAngle.x, 0);
+		
+		rotate(axis.nor(), angle.len());
+		
+		if (finalState) {
+			final float totalTime = 4f;
+			if (timeSinceFinalState < totalTime) {
+				timeSinceFinalState += delta;
+				controller.update(delta, 7.06801311f+(8.266682f-7.06801311f)*timeSinceFinalState/totalTime);
+			} else {
+				controller.update(delta, 8.266682f);
+			}
+		} else if (landing) {
+			controller.update(delta, 6.32401173f);
+		} else if (parachuting) {
+			final float totalTime = 1f;
+			if (parachuteDeployed) {
+				if (timeSinceParachuteDeployed < totalTime) {
+					timeSinceParachuteDeployed += delta;
+					controller.update(delta, 4.133341f+(6.32401173f-4.133341f)*timeSinceParachuteDeployed/totalTime);
+				} else {
+					controller.update(delta, 6.32401173f);
+				}
+			} else {
+				controller.update(delta, 4.133341f);
+			}
+		} else {
+			controller.update(delta, (1-pose)*3.3066728f);
+		}
+		
+		skydiverAngle.x = Math.signum(skydiverAngle.x)
+				* (Math.abs(skydiverAngle.x) - 100 * delta / 2);
+		velocity.z += delta*20f*pose;
+	}
+	
+	private void updateBefore(float delta) {
+		if (jumpedOffAirplane) {
+			float jumpTime = 5f;
+			
+			if (timeSinceJumpedOffAirplane < jumpTime) {
+				timeSinceJumpedOffAirplane += delta;
+				controller.update(delta, STARTING_POSE+(3.3066728f-STARTING_POSE)*timeSinceJumpedOffAirplane/jumpTime);
+			}
+			
+			float vx = 0;
+			float vy = 0;
+			float vz = -Math.min(MIN_TERMINAL_SPEED,MIN_TERMINAL_SPEED*(2*timeSinceJumpedOffAirplane)/jumpTime*(2*timeSinceJumpedOffAirplane)/jumpTime);
+			
+			velocity.set(vx,vy,vz);
 			
 			final float dx = velocity.x*delta;
 			final float dy = velocity.y*delta;
 			final float dz = velocity.z*delta;
 			
-			setToTranslation(position.x+dx, position.y+dy, position.z+dz);
+			setToTranslation(position.x+dx, position.y+dy+Math.min(4*0.005f*(timeSinceJumpedOffAirplane),5), position.z+dz+Math.max(0.05f-16*0.05f*(timeSinceJumpedOffAirplane-0.25f)*(timeSinceJumpedOffAirplane-0.25f),0));
 			
-			float pose = (-velocity.z-MIN_TERMINAL_SPEED)/(MAX_TERMINAL_SPEED-MIN_TERMINAL_SPEED);
-			
-			if (!landing && !parachuting) {
-				skydiverAngle.y = pose*90;
-			} else if (!landing) {
-				skydiverAngle.y -= (skydiverAngle.y+90)*delta;
-			} else {
-				skydiverAngle.y = -90;
-			}
-			
-			axis.set(skydiverAngle.y, skydiverAngle.x, 0);
-			angle.set(skydiverAngle.y, skydiverAngle.x, 0);
-			
-			rotate(axis.nor(), angle.len());
-			
-			if (finalState) {
-				final float totalTime = 4f;
-				if (timeSinceFinalState < totalTime) {
-					timeSinceFinalState += delta;
-					controller.update(delta, 7.06801311f+(8.266682f-7.06801311f)*timeSinceFinalState/totalTime);
-				} else {
-					controller.update(delta, 8.266682f);
-				}
-			} else if (landing) {
-				controller.update(delta, 6.32401173f);
-			} else if (parachuting) {
-				final float totalTime = 1f;
-				if (parachuteDeployed) {
-					if (timeSinceParachuteDeployed < totalTime) {
-						timeSinceParachuteDeployed += delta;
-						controller.update(delta, 4.133341f+(6.32401173f-4.133341f)*timeSinceParachuteDeployed/totalTime);
-					} else {
-						controller.update(delta, 6.32401173f);
-					}
-				} else {
-					controller.update(delta, 4.133341f);
-				}
-			} else {
-				controller.update(delta, (1-pose)*3.3066728f);
-			}
-			
-			skydiverAngle.x = Math.signum(skydiverAngle.x)
-					* (Math.abs(skydiverAngle.x) - 100 * delta / 2);
-			velocity.z += delta*20f*pose;
-		} else {
-			if (jumpedOffAirplane) {
-				float jumpTime = 5f;
-				
-				if (timeSinceJumpedOffAirplane < jumpTime) {
-					timeSinceJumpedOffAirplane += delta;
-					controller.update(delta, STARTING_POSE+(3.3066728f-STARTING_POSE)*timeSinceJumpedOffAirplane/jumpTime);
-				}
-				
-				float vx = 0;
-				float vy = 0;
-				float vz = -Math.min(MIN_TERMINAL_SPEED,MIN_TERMINAL_SPEED*(2*timeSinceJumpedOffAirplane)/jumpTime*(2*timeSinceJumpedOffAirplane)/jumpTime);
-				
-				velocity.set(vx,vy,vz);
-				
-				final float dx = velocity.x*delta;
-				final float dy = velocity.y*delta;
-				final float dz = velocity.z*delta;
-				
-				setToTranslation(position.x+dx, position.y+dy+Math.min(4*0.005f*(timeSinceJumpedOffAirplane),5), position.z+dz+Math.max(0.05f-16*0.05f*(timeSinceJumpedOffAirplane-0.25f)*(timeSinceJumpedOffAirplane-0.25f),0));
-				
-				if (timeSinceJumpedOffAirplane < jumpTime) {
-					skydiverAngle.set(0,(float) (-88*(1-Math.sqrt(timeSinceJumpedOffAirplane)/jumpTime)));
-					axis.set(skydiverAngle.y, skydiverAngle.x, 0);
-					angle.set(skydiverAngle.y, skydiverAngle.x, 0);
-					rotate(axis.nor(), angle.len());
-				}
-				
-			} else {
-				setToTranslation(position.x, position.y, position.z);
-				
-				skydiverAngle.set(0,-88);
+			if (timeSinceJumpedOffAirplane < jumpTime) {
+				skydiverAngle.set(0,(float) (-88*(1-Math.sqrt(timeSinceJumpedOffAirplane)/jumpTime)));
 				axis.set(skydiverAngle.y, skydiverAngle.x, 0);
 				angle.set(skydiverAngle.y, skydiverAngle.x, 0);
 				rotate(axis.nor(), angle.len());
-				controller.update(delta, STARTING_POSE);
 			}
+			
+		} else {
+			setToTranslation(position.x, position.y, position.z);
+			
+			skydiverAngle.set(0,-88);
+			axis.set(skydiverAngle.y, skydiverAngle.x, 0);
+			angle.set(skydiverAngle.y, skydiverAngle.x, 0);
+			rotate(axis.nor(), angle.len());
+			controller.update(delta, STARTING_POSE);
 		}
-		
 	}
 	
 	private void checkBounds() {
@@ -268,51 +283,8 @@ public class Skydiver extends GameObject {
 		return position.z;
 	}
 	
-	Rectangle rectangle = new Rectangle();
-	Circle circle = new Circle();
-	
-	public boolean intersects(Collectible collectible, PerspectiveCamera perspective) {
-		Decal decal = collectible.getDecal();
-		if (Math.abs(decal.getZ()-position.z) > 20f) {
-			return false;
-		}
-		final float[] circlePosCpy = {decal.getPosition().x, decal.getPosition().y, decal.getPosition().z};
-		final float[] circleSizeCpy = {decal.getWidth(), decal.getHeight(), 0};
-		
-		circlePos.set(circlePosCpy);
-		circleSize.set(circleSizeCpy);
-		perspective.project(circlePos);
-		perspective.project(circleSize);
-		circlePos.sub(DefaultScreen.width()/2,DefaultScreen.height()/2,0);
-		circleSize.sub(DefaultScreen.width()/2,DefaultScreen.height()/2,0);
-		circle.set(circlePos.x+Math.abs(circleSize.x)/2,
-				circlePos.y+Math.abs(circleSize.y)/2,
-				Math.abs(circleSize.y)/2+30f);
-		
-		final float[] minCpyTemp = {minCpy.x,minCpy.y,minCpy.z};
-	    final float[] maxCpyTemp = {maxCpy.x,maxCpy.y,maxCpy.z};
-	    
-	    perspective.project(minCpy.mul(instance.transform));
-	    perspective.project(maxCpy.mul(instance.transform));
-	    minCpy.sub(DefaultScreen.width()/2,DefaultScreen.height()/2,0);
-	    maxCpy.sub(DefaultScreen.width()/2,DefaultScreen.height()/2,0);
-	    float x = Math.min(maxCpy.x, minCpy.x);
-	    float y = Math.min(maxCpy.y, minCpy.y);
-	    float width = Math.abs(maxCpy.x-minCpy.x);
-	    float height = Math.abs(maxCpy.y-minCpy.y);
-	    rectangle.set(x,y,width,height);
-	    minCpy.set(minCpyTemp);
-	    maxCpy.set(maxCpyTemp);
-	    return Intersector.overlaps(circle,rectangle);
-	}
-
-	Vector3 minCpy = new Vector3();
-	Vector3 maxCpy = new Vector3();
-	Vector3 circlePos = new Vector3();
-	Vector3 circleSize = new Vector3();
-	
 	public boolean intersects(Collectible collectible) { //offset collectible position up and to right
-		return intersects(collectible, cam);
+		return IntersectUtil.intersects(this, collectible, cam, minCpy, maxCpy);
 	}
 
 	public Vector3 getPosition() {
@@ -326,7 +298,6 @@ public class Skydiver extends GameObject {
 	@Override
 	protected void renderObject(Renderer renderer) {
 		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
@@ -346,6 +317,10 @@ public class Skydiver extends GameObject {
 	}
 
 	public void setRender(boolean b) {
-		this.render = false;
+		this.render = b;
+	}
+	
+	public ModelInstance getInstance() {
+		return instance;
 	}
 }

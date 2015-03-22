@@ -21,9 +21,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.PooledLinkedList;
-import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.SnapshotArray;
-import com.badlogic.gdx.utils.viewport.ScalingViewport;
+import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.scarlettapps.skydiver3d.DefaultScreen;
 import com.scarlettapps.skydiver3d.resources.AssetFactory;
@@ -54,12 +53,13 @@ public class StatusView {
 	private final StatusManager statusManager;
 	
 	private final AccuracyMeter accuracyMeter;
+	private final Viewport viewport;
 
 	public StatusView(StatusManager statusManager) {
 		visibleQueue = new PooledLinkedList<Group>(6);
 		
 		skin = new Skin(Gdx.files.internal("skin/uiskin.json"));
-		Viewport viewport = new ScalingViewport(Scaling.fill, DefaultScreen.VIRTUAL_WIDTH, DefaultScreen.VIRTUAL_HEIGHT);
+		viewport = new StretchViewport(DefaultScreen.VIRTUAL_WIDTH, DefaultScreen.VIRTUAL_HEIGHT);
 		stage = new Stage(viewport);
 		table = new Table();
 		stage.addActor(table);
@@ -356,6 +356,7 @@ public class StatusView {
 			g.setVisible(true);
 		}
 		stage.draw();
+		
 		visibleQueue.iter();
 		while ((g = visibleQueue.next()) != null) {
 			g.setVisible(false);
@@ -419,6 +420,10 @@ public class StatusView {
 	
 	public void showSpeedIcon(boolean visible) {
 		speedIcon.setVisible(visible);
+	}
+	
+	public void resize(int width, int height) {
+		viewport.update(width, height);
 	}
 
 }

@@ -56,11 +56,14 @@ public abstract class DefaultScreen<T extends Game> implements Screen {
 	public void resize(int width, int height) {
 		DefaultScreen.width = width;
 		DefaultScreen.height = height;
+		resizeScreen(width, height);
 		
 		if (Skydiver3D.DEV_MODE) {
 			Gdx.app.log(Skydiver3D.LOG, "Resizing screen " + getName() + " to (" + width + ", " + height + ")");
 		}
 	}
+	
+	protected abstract void resizeScreen(int width, int height);
 
 	/**
 	 * Set the InputProcessor which handles user input for this screen.

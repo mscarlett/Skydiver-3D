@@ -30,7 +30,7 @@ public class CreditsScreen extends MenuScreen {
 		textButtonStyle.font = font;
 		
 		LabelStyle labelStyle = skin.get(LabelStyle.class);
-		font = fontFactory.generateFont(20);
+		font = fontFactory.generateFont(36);
 		labelStyle.font = font;
 		font = fontFactory.generateFont(64);
 		skin.add("Title font", font, BitmapFont.class);

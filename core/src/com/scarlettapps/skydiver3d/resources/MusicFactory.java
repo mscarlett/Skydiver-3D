@@ -1,6 +1,8 @@
 package com.scarlettapps.skydiver3d.resources;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
+import com.scarlettapps.skydiver3d.Skydiver3D;
 
 public final class MusicFactory {
 	
@@ -25,6 +27,10 @@ public final class MusicFactory {
 	}
 	
 	public void play(Music music, boolean isLooping) {
+		if (Skydiver3D.DEV_MODE) {
+			Gdx.app.log(Skydiver3D.LOG, "Playing music " + music);
+		}
+		
 		PreferenceFactory preferenceFactory = PreferenceFactory.getInstance();
 		if (preferenceFactory.isMusicEnabled()) {
 			if (current != null) {
@@ -43,18 +49,27 @@ public final class MusicFactory {
 	
 	public void pause() {
 		if (current != null) {
+			if (Skydiver3D.DEV_MODE) {
+				Gdx.app.log(Skydiver3D.LOG, "Pausing music " + current);
+			}
 			current.pause();
 		}
 	}
 	
 	public void resume() {
 		if (current != null) {
+			if (Skydiver3D.DEV_MODE) {
+				Gdx.app.log(Skydiver3D.LOG, "Resuming music " + current);
+			}
 			current.play();
 		}
 	}
 	
 	public void stop() {
 		if (current != null) {
+			if (Skydiver3D.DEV_MODE) {
+				Gdx.app.log(Skydiver3D.LOG, "Stopping music " + current);
+			}
 			current.stop();
 			current = null;
 		}

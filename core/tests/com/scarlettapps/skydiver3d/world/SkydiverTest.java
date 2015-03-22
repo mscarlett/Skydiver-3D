@@ -12,6 +12,10 @@ public class SkydiverTest extends TestCase {
 		skydiver = new Skydiver();
 	}
 	
+	public void testInitialPosition() {
+		assertEquals(skydiver.getPositionZ(), Skydiver.STARTING_HEIGHT);
+	}
+	
 	public void testJumpsOffPlane() {
     	assertFalse(skydiver.jumpedOffAirplane);
 		skydiver.jumpOffAirplane();
