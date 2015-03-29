@@ -36,7 +36,10 @@ public class Collectibles extends GameObject  implements Iterable<Node<Collectib
 		preRender = new SortedIntList<Collectible>();
 		toRender = new SortedIntList<Collectible>();
 		postRender = new SortedIntList<Collectible>();
-
+	}
+	
+	@Override
+	public void initialize() {
 		int z = Skydiver.STARTING_HEIGHT-STARTING_OFFSET;
 
 		for (int i = 0; i < NUM_OBJECTS; i++) {

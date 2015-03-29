@@ -23,6 +23,8 @@ class SkydivingStateController implements WorldViewController {
 		StatusView statusView = worldView.getStatusView();
 		cam.position.set(0, 0.5f,statusManager.position().z + WorldView.CAM_OFFSET);
         cam.direction.set(0,0,-1);
+        cam.near = 1f;
+        cam.far = 9000f;
         cam.update();
         statusManager.position().x = (Skydiver.MIN_X+Skydiver.MAX_X)/2;
         statusManager.position().y = (Skydiver.MIN_Y+Skydiver.MAX_Y)/2;

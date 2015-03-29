@@ -3,6 +3,7 @@ package com.scarlettapps.skydiver3d.worldview;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.math.Vector3;
 import com.scarlettapps.skydiver3d.world.Skydiver;
+import com.scarlettapps.skydiver3d.world.Target;
 import com.scarlettapps.skydiver3d.world.World;
 import com.scarlettapps.skydiver3d.worldstate.StatusManager;
 import com.scarlettapps.skydiver3d.worldview.ui.AccuracyMeter;
@@ -10,7 +11,7 @@ import com.scarlettapps.skydiver3d.worldview.ui.StatusView;
 
 class ParachutingStateController implements WorldViewController {
 	
-	private boolean switchCam = false;
+	private boolean switchCam;
 	private final WorldView worldView;
 	
 	public ParachutingStateController(WorldView worldView) {
@@ -48,7 +49,7 @@ class ParachutingStateController implements WorldViewController {
 		}
 		cam.update();
 		accuracyMeter.act(delta);
-		skydiver.parachuting = true;
+		skydiver.setParachuting(true);
 	}
 
 	@Override
@@ -62,9 +63,14 @@ class ParachutingStateController implements WorldViewController {
 
 	@Override
 	public void initialize() {
+		switchCam = false;
 		PerspectiveCamera cam = worldView.getCam();
 		StatusView statusView = worldView.getStatusView();
-		cam.near = 1f;
+		cam.near = 2f;
+		cam.far = 800f;
 		statusView.showSpeedIcon(false);
+		World world = worldView.getWorld();
+		Target target = world.getTarget();
+        target.setRender(true);
 	}
 }

@@ -2,7 +2,7 @@ package com.scarlettapps.skydiver3d.worldstate;
 
 public class StickyListener implements InputListener {
 
-	private StatusManager status;
+	private final StatusManager status;
 	
 	public StickyListener(StatusManager status) {
 		this.status = status;
@@ -19,5 +19,10 @@ public class StickyListener implements InputListener {
 			status.setStickyTime(stickyTime);
 		}
 		return false;
+	}
+
+	@Override
+	public void reset() {
+		// TODO Auto-generated method stub
 	}
 }

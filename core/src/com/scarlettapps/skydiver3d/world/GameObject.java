@@ -30,4 +30,5 @@ public abstract class GameObject {
 	
 	public abstract void onWorldStateChanged(WorldState worldState);
 	
+	public abstract void initialize();
 }

@@ -12,13 +12,11 @@ import com.badlogic.gdx.graphics.g3d.ModelBatch;
 import com.badlogic.gdx.graphics.g3d.decals.CameraGroupStrategy;
 import com.badlogic.gdx.graphics.g3d.decals.Decal;
 import com.badlogic.gdx.graphics.g3d.decals.DecalBatch;
-import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.graphics.g3d.shaders.DefaultShader;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.SortedIntList.Node;
 import com.scarlettapps.skydiver3d.DefaultScreen;
 import com.scarlettapps.skydiver3d.Skydiver3D;
-import com.scarlettapps.skydiver3d.world.Cloud;
 import com.scarlettapps.skydiver3d.world.Collectible;
 import com.scarlettapps.skydiver3d.world.Collectibles;
 import com.scarlettapps.skydiver3d.world.Plane;
@@ -27,7 +25,6 @@ import com.scarlettapps.skydiver3d.world.Target;
 import com.scarlettapps.skydiver3d.world.Terrain;
 import com.scarlettapps.skydiver3d.world.World;
 import com.scarlettapps.skydiver3d.worldstate.StatusManager;
-import com.scarlettapps.skydiver3d.worldview.ui.AccuracyMeter;
 import com.scarlettapps.skydiver3d.worldview.ui.StatusView;
 
 /**
@@ -41,17 +38,22 @@ public class WorldView {
 	
 	private final World world;
 	private final StatusManager statusManager;
-	private final PerspectiveCamera cam;
-	private final DecalBatch decalBatch;
-	private final ModelBatch modelBatch;
+	
+	private PerspectiveCamera cam;
+	private DecalBatch decalBatch;
+	private ModelBatch modelBatch;
 	private WorldViewController controller;	
 	private StatusView statusView;
 		
-	public WorldView(World world, StatusManager statusManager) { //create fade effect for decals
+	public WorldView(World world, StatusManager statusManager) {
 		this.world = world;
-		this.statusManager = statusManager;
-        
-        cam = new PerspectiveCamera(67,DefaultScreen.width(),DefaultScreen.height());
+		this.statusManager = statusManager;  
+		
+		DefaultShader.defaultCullFace = 0;
+	}
+	
+	public void initialize() {
+		cam = new PerspectiveCamera(67, DefaultScreen.width(), DefaultScreen.height());
         Skydiver.cam = cam;
         
         decalBatch = new DecalBatch(new CameraGroupStrategy(cam, new Comparator<Decal>(){
@@ -66,8 +68,6 @@ public class WorldView {
 		statusView = new StatusView(statusManager);
 		
         switchState();
-        
-        
 	}
 	
 	public void update(float delta) {
@@ -155,10 +155,10 @@ public class WorldView {
 	}
 
 	public void reset() {
-		if (statusManager.jumpedOffAirplane()) {
+		if (statusManager.jumpedOffAirplane()) { //XXX another hack
 			throw new GdxRuntimeException("Need to call reset() on statusManager first.");
 		}
-		switchState();
+		initialize();
 	}
 
 	public InputProcessor getInputProcessor() {
@@ -179,10 +179,6 @@ public class WorldView {
 	
 	StatusView getStatusView() {
 		return statusView;
-	}
-
-	public void resize(int width, int height) {
-		statusView.resize(width, height);
 	}
 
 }

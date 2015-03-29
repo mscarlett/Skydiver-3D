@@ -421,9 +421,5 @@ public class StatusView {
 	public void showSpeedIcon(boolean visible) {
 		speedIcon.setVisible(visible);
 	}
-	
-	public void resize(int width, int height) {
-		viewport.update(width, height);
-	}
 
 }

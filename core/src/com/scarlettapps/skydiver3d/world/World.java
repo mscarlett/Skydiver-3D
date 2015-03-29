@@ -21,14 +21,14 @@ public class World {
 	private final StatusManager statusManager;
 	private final Array<GameObject> objects;
 	
-	private final Skydiver skydiver;
-	private final Target target;
-	private final Terrain terrain;
-	private final Collectibles collectibles;
-	private final Clouds clouds;
-	private final Sound bell;
-	private final Music wind;
-	private final Plane plane;
+	private Skydiver skydiver;
+	private Target target;
+	private Terrain terrain;
+	private Collectibles collectibles;
+	private Clouds clouds;
+	private Sound bell;
+	private Music wind;
+	private Plane plane;
 	
 	public World(StatusManager statusManager) {
 		this.statusManager = statusManager;
@@ -40,13 +40,6 @@ public class World {
 		terrain = new Terrain();
 		target = new Target();
 		
-		AssetFactory assetFactory = AssetFactory.getInstance();
-		bell = assetFactory.get(SoundType.BELL, Sound.class);
-		wind = assetFactory.get(MusicType.WIND, Music.class);
-		wind.setLooping(true);
-		
-		statusManager.syncSkydiver(skydiver);
-		
 		objects = new Array<GameObject>();
 		objects.add(skydiver);
 		objects.add(terrain);
@@ -54,8 +47,20 @@ public class World {
 		objects.add(clouds);
 		objects.add(plane);
 		objects.add(target);
+	}
+	
+	public void initialize() {
+		AssetFactory assetFactory = AssetFactory.getInstance();
 		
-		reset();
+		bell = assetFactory.get(SoundType.BELL, Sound.class);
+		wind = assetFactory.get(MusicType.WIND, Music.class);
+		wind.setLooping(true);
+		
+		for (GameObject o: objects) {
+			o.initialize();
+		}
+		
+		statusManager.syncSkydiver(skydiver);
 	}
 	
 	public void playWind() {
@@ -65,10 +70,14 @@ public class World {
 	public void update(float delta) {
 		if (!statusManager.isPaused()) {
 			updatePositions(delta);
-			wind.setVolume((0.2f-statusManager.velocity().z/Skydiver.MAX_TERMINAL_SPEED)/1.2f);
+			wind.setVolume(getWindVolume());
 		}
 		
 		statusManager.update(delta, this);
+	}
+	
+	private float getWindVolume() {
+		return (0.2f-statusManager.velocity().z/Skydiver.MAX_TERMINAL_SPEED)/1.2f;
 	}
 	
 	private void updatePositions(float delta) {
@@ -77,8 +86,7 @@ public class World {
 	}
 
 	public void reset() {
-		statusManager.reset();
-		skydiver.getPosition().z = Skydiver.STARTING_HEIGHT;
+		initialize();
 	}
 	
 	public void pause() {

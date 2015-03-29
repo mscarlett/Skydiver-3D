@@ -7,7 +7,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.g3d.shaders.DefaultShader;
 import com.scarlettapps.skydiver3d.resources.AssetFactory;
 import com.scarlettapps.skydiver3d.resources.AssetFactory.MusicType;
 import com.scarlettapps.skydiver3d.resources.MusicFactory;
@@ -21,17 +20,17 @@ import com.scarlettapps.skydiver3d.worldstate.WorldState;
 import com.scarlettapps.skydiver3d.worldview.WorldView;
 
 
-public class WorldPresenter extends DefaultScreen<Skydiver3D> { //TODO bug in which tapping screen while parachuting changes cam position
+public class WorldPresenter extends DefaultScreen<Skydiver3D> {
 	
 	private static final float MAX_DELTA = 0.1f;
 	
-	private World world;
-	private WorldView worldView;
-	private GameController gameController;
-	private InputManager inputManager;
-	private StatusManager statusManager;
+	private final World world;
+	private final WorldView worldView;
+	private final GameController gameController;
+	private final InputManager inputManager;
+	private final StatusManager statusManager;
 	
-	private boolean load = true;
+	private boolean initialize = true;
 	
 	/**
 	 * 
@@ -42,8 +41,13 @@ public class WorldPresenter extends DefaultScreen<Skydiver3D> { //TODO bug in wh
 		gameController = GameController.newGameController();
 		inputManager = new InputManager(gameController);
 		statusManager = new StatusManager(inputManager);
+		
+		world = new World(statusManager);
+		worldView = new WorldView(world, statusManager);
 
-		DefaultShader.defaultCullFace = 0;
+		SkydiverControls skydiverControls = new SkydiverControls(world,
+				statusManager);
+		inputManager.addListener(skydiverControls);
 	}
 	
 	@Override
@@ -93,15 +97,14 @@ public class WorldPresenter extends DefaultScreen<Skydiver3D> { //TODO bug in wh
 		
 		music.stop();
 		
-		if (load) {
-			world = new World(statusManager);
-			worldView = new WorldView(world, statusManager);
-
-			SkydiverControls skydiverControls = new SkydiverControls(world,
-					statusManager);
-			inputManager.addListener(skydiverControls);
-
-			load = false;
+		if (initialize) {
+			if (Skydiver3D.DEV_MODE) {
+				Gdx.app.log(Skydiver3D.LOG, "Initializing world");
+			}
+			
+			world.initialize();
+			worldView.initialize();
+			initialize = false;
 		}
 		
 		music.play(MusicType.WIND);
@@ -131,15 +134,12 @@ public class WorldPresenter extends DefaultScreen<Skydiver3D> { //TODO bug in wh
 		worldView.reset();
 	}
 
-	public void restartLevel() { //simply reinitialize objects for now
-		//FIXME avoid recreating everything
-		gameController = GameController.newGameController();
-		inputManager = new InputManager(gameController);
-		statusManager = new StatusManager(inputManager);
-		world = new World(statusManager);
-		worldView = new WorldView(world, statusManager);
-		SkydiverControls skydiverControls = new SkydiverControls(world, statusManager);
-		inputManager.addListener(skydiverControls);
+	public void restartLevel() {
+		gameController.reset();
+		inputManager.reset();
+		statusManager.reset();
+		world.reset();
+		worldView.reset();
 	}
 	
 	public void nextLevel() {
@@ -156,7 +156,7 @@ public class WorldPresenter extends DefaultScreen<Skydiver3D> { //TODO bug in wh
 	
 	@Override
 	protected void resizeScreen(int width, int height) {
-		//worldView.resize(width, height);
+		
 	}
 
 }

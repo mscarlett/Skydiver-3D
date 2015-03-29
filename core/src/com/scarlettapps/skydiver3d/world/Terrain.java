@@ -29,7 +29,10 @@ public class Terrain extends GameObject { //TODO fix bug that causes parachute t
 	
 	public Terrain() {
 		super(false,true);
-		
+	}
+	
+	@Override
+	public void initialize() {
 		heightmap = new CustomHeightmap(4, MathUtils.random(5,10), MathUtils.random(15,30), 217f, 2, 2790);
 		mesh = heightmap.createMesh();
 		mesh.setVertices(heightmap.vertices);

@@ -3,15 +3,17 @@ package com.scarlettapps.skydiver3d.worldview;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.math.Vector3;
 import com.scarlettapps.skydiver3d.world.Skydiver;
+import com.scarlettapps.skydiver3d.world.Target;
 import com.scarlettapps.skydiver3d.world.World;
 import com.scarlettapps.skydiver3d.worldstate.StatusManager;
 
 class InitialStateController implements WorldViewController {
 
-	private float dx = 10.245517f, dy = 3.8138173f, dz = -1.71019554f;
-	private float totalTime = 0;
+	private float dx, dy, dz;
+	private float totalTime;
 	
-	private Vector3 camOffset = new Vector3(-0.3f*WorldView.CAM_OFFSET+dx,-0.1f*WorldView.CAM_OFFSET+dy,Skydiver.STARTING_HEIGHT+0.4f*WorldView.CAM_OFFSET+dz);
+	private Vector3 camOffset;
+	
 	private Vector3 tmp2 = new Vector3();
 	
 	private final WorldView worldView;
@@ -28,7 +30,7 @@ class InitialStateController implements WorldViewController {
 		
 		Skydiver skydiver = world.getSkydiver();
 
-		if (skydiver.jumpedOffAirplane) {
+		if (skydiver.jumpedOffAirplane()) {
 			totalTime += delta;
 			dz -= Math.signum(dz)*delta*0.1f;
 			dy -= Math.signum(dy)*delta*0.1f;
@@ -57,12 +59,20 @@ class InitialStateController implements WorldViewController {
 
 	@Override
 	public void initialize() {
+		dx = 10.245517f;
+		dy = 3.8138173f;
+		dz = -1.71019554f;
+		totalTime = 0;
+		camOffset = new Vector3(-0.3f*WorldView.CAM_OFFSET+dx,-0.1f*WorldView.CAM_OFFSET+dy,Skydiver.STARTING_HEIGHT+0.4f*WorldView.CAM_OFFSET+dz);
 		PerspectiveCamera cam = worldView.getCam();
         cam.direction.set(0,0,-1);
         cam.up.set(Vector3.Z);
         cam.near = 1f;
         cam.far = 9000f;
         cam.update();
+        World world = worldView.getWorld();
+        Target target = world.getTarget();
+        target.setRender(false);
 	}
 	
 }

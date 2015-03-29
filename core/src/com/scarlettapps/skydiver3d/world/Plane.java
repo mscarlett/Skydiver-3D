@@ -24,9 +24,16 @@ public class Plane extends GameObject {
 	private Environment environment;
 	private AnimationController controller;
 	
+	private float animationTime;
+	private float pose;
+	private float rps = 36f;
+	
 	public Plane() {
 		super(false,true);
-		
+	}
+	
+	@Override
+	public void initialize() {
 		String filename = ModelType.PLANE;
 		Model model = AssetFactory.getInstance().get(filename, Model.class);
 		instance = new ModelInstance(model);
@@ -48,10 +55,6 @@ public class Plane extends GameObject {
 		rotate(Vector3.X, 90);
 		rotate(Vector3.Y, 90);
 	}
-	
-	private float animationTime;
-	private float pose;
-	private float rps = 36f;
 	
 	@Override
 	public void updateObject(float delta) {

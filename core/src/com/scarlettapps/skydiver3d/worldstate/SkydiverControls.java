@@ -12,13 +12,19 @@ import com.scarlettapps.skydiver3d.world.World;
 public class SkydiverControls implements InputListener {
 
 	private static final float PARACHUTING_TIME_LIMIT = 8f;
-	private float elapsedTime = 0f;
+	private float elapsedTime;
 	private World world;
 	private StatusManager statusManager;
 	
 	public SkydiverControls(World world, StatusManager statusManager) {
 		this.world = world;
 		this.statusManager = statusManager;
+		reset();
+	}
+	
+	@Override
+	public void reset() {
+		elapsedTime = 0f;
 	}
 	
 	@Override
@@ -27,7 +33,7 @@ public class SkydiverControls implements InputListener {
 		switch (statusManager.worldState()) {
 			case INITIAL:
 				Skydiver skydiver = world.getSkydiver();
-				if (gameController.justTouched() && !skydiver.jumpedOffAirplane) {
+				if (gameController.justTouched() && !skydiver.jumpedOffAirplane()) {
 					skydiver.jumpOffAirplane();
 					statusManager.setJumpedOffAirplane(true);
 				}
@@ -38,7 +44,7 @@ public class SkydiverControls implements InputListener {
 					skydiver.addToVelocity(0, 0, -25 * delta);
 				}
 				skydiver.addToVelocity(delta*gameController.getAx(), delta*gameController.getAy(), 0);
-				skydiver.skydiverAngle.x += 10 * delta*gameController.getAx();
+				skydiver.skydiverAngle().x += 10 * delta*gameController.getAx();
 				break;
 			case PARACHUTING:
 				if (!statusManager.justOpenedParachute()) {
@@ -72,7 +78,7 @@ public class SkydiverControls implements InputListener {
 				if (Gdx.app.getType() != ApplicationType.Android) {
 					statusManager.velocity().y += 3*(Math.signum(statusManager.velocity().y) == 0 ? Math.random() : Math.signum(statusManager.velocity().y))*Math.abs(Math.random()*delta);
 				}
-				skydiver.landing = true;
+				skydiver.setLanding(true);
 				Vector3 pos = statusManager.position();
 				float dist2 = pos.x*pos.x+pos.y*pos.y;
 				if (dist2 < 2027) {
@@ -103,7 +109,7 @@ public class SkydiverControls implements InputListener {
 			case FINAL:
 				skydiver = world.getSkydiver();
 				statusManager.velocity().set(0,0,0);
-				skydiver.finalState = true;
+				skydiver.setFinalState(true);
 				break;
 		}
 		return false;

@@ -14,12 +14,20 @@ public abstract class GameController implements InputProcessor {
 	protected static float sensitivity = PreferenceFactory.getInstance().getSensitivity();
 	
 	protected Vector2 touchPosition;
-	protected float ax = 0;
-	protected float ay = 0;
-	protected boolean faster = false;
+	protected float ax;
+	protected float ay;
+	protected boolean faster;
 	protected boolean justTouched;
 
-	protected boolean sticky = false;
+	protected boolean sticky;
+	
+	public void reset() {
+		ax = 0;
+		ay = 0;
+		faster = false;
+		justTouched = false;
+		sticky = false;
+	}
 	
 	public final float getAx() {
 		return ax*sensitivity;
@@ -60,14 +68,19 @@ public abstract class GameController implements InputProcessor {
 	}
 
 	public static final GameController newGameController() {
+		GameController controller;
 		switch (Gdx.app.getType()) {
 			case Android:
-				return new AndroidGameController();
+				controller = new AndroidGameController();
+				break;
 			case Desktop:
-				return new DesktopGameController();
+				controller = new DesktopGameController();
+				break;
 			default:
 				throw new GdxRuntimeException("Unknown app type");
 		}
+		controller.reset();
+		return controller;
 	}
 
 	public abstract void update(float delta);

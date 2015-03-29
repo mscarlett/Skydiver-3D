@@ -10,10 +10,19 @@ public class DesktopGameController extends GameController {
 	private static final float VX = 10;
 	private static final float VY = 10;
 
-	private boolean left = false;
-	private boolean right = false;
-	private boolean up = false;
-	private boolean down = false;
+	private boolean left;
+	private boolean right;
+	private boolean up;
+	private boolean down;
+	
+	@Override
+	public void reset() {
+		super.reset();
+		left = false;
+		right = false;
+		up = false;
+		down = false;
+	}
 
 	@Override
 	public boolean keyDown(int keycode) {
@@ -34,12 +43,6 @@ public class DesktopGameController extends GameController {
 			faster = true;
 			break;
 		}
-		/*
-		 * right = keycode == Keys.RIGHT || right; left = keycode == Keys.LEFT
-		 * || left; up = keycode == Keys.UP || up; down = keycode == Keys.DOWN
-		 * || down; vx = (right ? VX : 0)-(left ? VX : 0); vy = (up ? VY :
-		 * 0)-(down ? VY : 0); faster = faster || (keycode == Keys.A);
-		 */
 		ax = (right ? VX : 0) - (left ? VX : 0);
 		ay = (up ? VY : 0) - (down ? VY : 0);
 		return false;
@@ -64,12 +67,6 @@ public class DesktopGameController extends GameController {
 			faster = false;
 			break;
 		}
-		/*
-		 * right = keycode != Keys.RIGHT && right; left = keycode != Keys.LEFT
-		 * && left; up = keycode != Keys.UP && up; down = keycode != Keys.DOWN
-		 * && down; vx = (right ? VX : 0)-(left ? VX : 0); vy = (up ? VY :
-		 * 0)-(down ? VY : 0); faster = faster && (keycode != Keys.A);
-		 */
 		ax = (right ? VX : 0) - (left ? VX : 0);
 		ay = (up ? VY : 0) - (down ? VY : 0);
 		return false;

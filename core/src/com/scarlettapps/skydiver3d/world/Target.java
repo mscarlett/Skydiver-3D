@@ -28,7 +28,10 @@ public class Target extends GameObject {
 	
 	public Target() {
 		super(false,true);
-		
+	}
+	
+	@Override
+	public void initialize() {
 		Model model = AssetFactory.getInstance().get(ModelType.TARGET, Model.class);
 		instance = new ModelInstance(model);
 		instance.transform.setToTranslation(0,0,0);
@@ -46,7 +49,9 @@ public class Target extends GameObject {
 	}
 	
 	public void render(ModelBatch modelBatch) {
-		modelBatch.render(instance, environment);
+		if (render) {
+		    modelBatch.render(instance, environment);
+		}
 	}
 	
 	public int getPoints(float x, float y) {
@@ -66,6 +71,10 @@ public class Target extends GameObject {
 	@Override
 	public void onWorldStateChanged(WorldState worldState) {
 		// TODO Auto-generated method stub
+	}
+	
+	public void setRender(boolean render) {
+		this.render = render;
 	}
 
 }

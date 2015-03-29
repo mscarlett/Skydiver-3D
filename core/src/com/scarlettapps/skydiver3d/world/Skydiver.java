@@ -11,11 +11,7 @@ import com.badlogic.gdx.graphics.g3d.ModelBatch;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.graphics.g3d.attributes.BlendingAttribute;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
-import com.badlogic.gdx.graphics.g3d.decals.Decal;
 import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
-import com.badlogic.gdx.math.Circle;
-import com.badlogic.gdx.math.Intersector;
-import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.scarlettapps.skydiver3d.DefaultScreen;
@@ -43,34 +39,49 @@ public class Skydiver extends GameObject {
 	
 	public static PerspectiveCamera cam;
 
-	private final ModelInstance instance;
-	private final AnimationController controller;
+	private ModelInstance instance;
+	private AnimationController controller;
 	
-	private final Vector3 position;
-	private final Vector3 velocity;
+	private Vector3 position;
+	private Vector3 velocity;
 	
-	private final Environment environment;
+	private Environment environment;
 	
-	private final Vector3 axis = new Vector3();
-	private final Vector3 angle = new Vector3();
-	public final Vector2 skydiverAngle = new Vector2();
+	private Vector3 axis;
+	private Vector3 angle;
+	private Vector2 skydiverAngle;
 	
-	public boolean landing = false;
-	public boolean parachuting = false;
-	boolean parachuteDeployed = false;
-	float timeSinceParachuteDeployed = 0f;
-	public boolean jumpedOffAirplane = false;
-	public float timeSinceJumpedOffAirplane = 0f;
-	public boolean finalState = false;
-	float timeSinceFinalState = 0f;
+	private boolean landing;
+	private boolean parachuting;
+	private boolean parachuteDeployed;
+	private float timeSinceParachuteDeployed;
+	private boolean jumpedOffAirplane;
+	private float timeSinceJumpedOffAirplane;
+	private boolean finalState;
+	private float timeSinceFinalState;
 	private Vector3 minCpy;
 	private Vector3 maxCpy;
 	
-	
 	public Skydiver() {
 		super(true,true);
+	}
+	
+	@Override
+	public void initialize() {
+		landing = false;
+		parachuting = false;
+		parachuteDeployed = false;
+		timeSinceParachuteDeployed = 0f;
+		jumpedOffAirplane = false;
+		timeSinceJumpedOffAirplane = 0f;
+		finalState = false;
+		timeSinceFinalState = 0f;
 		
-		String filename = ModelType.SKYDIVER;
+		axis = new Vector3();
+		angle = new Vector3();
+		skydiverAngle = new Vector2();
+		
+        String filename = ModelType.SKYDIVER;
 		
 		Model model = AssetFactory.getInstance().get(filename, Model.class);
 		instance = new ModelInstance(model);
@@ -322,5 +333,25 @@ public class Skydiver extends GameObject {
 	
 	public ModelInstance getInstance() {
 		return instance;
+	}
+
+	public Vector2 skydiverAngle() {
+		return skydiverAngle;
+	}
+
+	public void setLanding(boolean b) {
+		landing = b;
+	}
+
+	public void setParachuting(boolean b) {
+		parachuting = b;
+	}
+
+	public boolean jumpedOffAirplane() {
+		return jumpedOffAirplane;
+	}
+
+	public void setFinalState(boolean b) {
+		finalState = b;
 	}
 }

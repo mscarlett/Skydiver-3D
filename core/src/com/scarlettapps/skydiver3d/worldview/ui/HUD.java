@@ -7,6 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 public class HUD {
 	
 	private Stage stage;
+	
 	private Group initial;
 	private Group main;
 	private Group parachuting;
