@@ -22,9 +22,17 @@ public class SkydiverTest extends TestCase {
 		assertTrue(skydiver.jumpedOffAirplane());
 	}
 	
-	/*public void testParachuteOpens() {
-		assertFalse(skydiver.parachuteDeployed);
+	public void testIntersectsCollectible() {
+		
+	}
+	
+	public void testParachuteOpens() {
+		//assertFalse(skydiver.parachuteDeployed());
 		skydiver.jumpOffAirplane();
-		assertTrue(skydiver.parachuteDeployed);
-	}*/
+		//assertTrue(skydiver.parachuteDeployed)_);
+	}
+	
+	public void testOnWorldStateChanged() {
+		
+	}
 }

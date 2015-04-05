@@ -41,7 +41,7 @@ public class OptionsScreen extends MenuScreen {
 	public OptionsScreen(final Skydiver3D game) {
 		super(game);
 		
-		FontFactory fontFactory = FontFactory.getInstance();
+		final FontFactory fontFactory = FontFactory.getInstance();
 		final PreferenceFactory preferences = PreferenceFactory.getInstance();
 		final SoundFactory sound = SoundFactory.getInstance();
 		final MusicFactory music = MusicFactory.getInstance();
@@ -152,36 +152,9 @@ public class OptionsScreen extends MenuScreen {
 		// create the volume label
 		sensitivityValue = new Label("100%", skin);
 		updateSensitivityLabel();
-
-		/*pixmap = new Pixmap(30, 30, Format.RGBA8888);
-		pixmap.setColor(Color.WHITE);
-		pixmap.fill();
-		sensitivityIndicator = new Image(new Texture(pixmap));
-		sensitivityIndicator.setSize(30, 30);
-		sensitivityIndicator.addAction(new Action() {
-			
-			GameController gameController = GameController.newGameController();
-			float velocity = 0f;
-			float x = 50f;
-			
-			@Override
-			public boolean act(float delta) {
-				gameController.update(delta);
-				Image image = (Image)getActor();
-				velocity += gameController.getAx()*delta;
-				float dx = velocity*delta;
-				x += dx*100;
-				image.setX(x);
-				return false;
-			}
-		});*/
 		
 		// add the volume row
 		table.row();
-		//Table group = new Table(skin);
-		//group.add("Motion Sensitivity");
-		//group.row();
-		//group.add(sensitivityIndicator).align(Align.left);
 		table.add("Motion Sensitivity");
 		table.add(sensitivitySlider);
 		table.add(sensitivityValue).width(40);
@@ -214,41 +187,17 @@ public class OptionsScreen extends MenuScreen {
 		volumeValue.setText(String.format(Locale.US, "%1.0f%%", volume));
 	}
 	
+	/**
+	 * Updates the sensitivity label next to slider
+	 */
 	private void updateSensitivityLabel() {
 		float sensitivity = (PreferenceFactory.getInstance().getSensitivity() * 100);
 		sensitivityValue.setText(String.format(Locale.US, "%1.0f%%", sensitivity));
 	}
-
-	@Override
-	public void showScreen() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void hideScreen() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void pauseScreen() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void resumeScreen() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void disposeScreen() {
-		// TODO Auto-generated method stub
-		
-	}
 	
+	/**
+	 * Return to main menu
+	 */
 	private void backToMainMenu() {
 		game.setScreen(game.mainMenuScreen);
 	}

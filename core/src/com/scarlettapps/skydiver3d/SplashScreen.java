@@ -57,15 +57,7 @@ public class SplashScreen extends MenuScreen {
 		table.row();
 
 		// Loading progress bar
-		TiledDrawable knob = new TiledDrawable(new TextureRegion(new Texture(Gdx.files.internal("skin/stripes.png"))));
-		Pixmap pixmap = new Pixmap(VIRTUAL_WIDTH/2, DefaultScreen.VIRTUAL_HEIGHT/21, Format.RGBA8888);
-		pixmap.setColor(Color.WHITE);
-		pixmap.fill();
-		pixmap.setColor(Color.LIGHT_GRAY);
-		Drawable background = new TextureRegionDrawable(new TextureRegion(new Texture(pixmap)));
-		ProgressBarStyle style = new ProgressBarStyle(background, knob);
-		style.knobBefore = knob;
-		progressBar = new ProgressBar(LOADING_MIN, LOADING_MAX, STEP_SIZE, false, style);
+		progressBar = createProgressBar();
 		progressBar.setAnimateDuration(ANIMATE_DURATION);
 		progressBar.setWidth(DefaultScreen.VIRTUAL_WIDTH/2);
 		progressBar.setHeight(DefaultScreen.VIRTUAL_HEIGHT/10);
@@ -73,19 +65,57 @@ public class SplashScreen extends MenuScreen {
 	}
 	
 	/**
-	 * Render the screen by displaying loagind progress
+	 * Create the progress bar
+	 * @return the progress bar
+	 */
+	private ProgressBar createProgressBar() {
+		Drawable knob = createKnob();
+        Drawable background = createLoadingBar();
+		ProgressBarStyle style = new ProgressBarStyle(background, knob);
+		style.knobBefore = knob;
+		return new ProgressBar(LOADING_MIN, LOADING_MAX, STEP_SIZE, false, style);
+	}
+	
+	/**
+	 * Create the knob
+	 * @return the knob
+	 */
+	private Drawable createKnob() {
+		return new TiledDrawable(new TextureRegion(new Texture(Gdx.files.internal("skin/stripes.png"))));
+	}
+	
+	/**
+	 * Create the loading bar
+	 * @return the loading bar
+	 */
+	private Drawable createLoadingBar() {
+		Pixmap pixmap = new Pixmap(VIRTUAL_WIDTH/2, DefaultScreen.VIRTUAL_HEIGHT/21, Format.RGBA8888);
+		pixmap.setColor(Color.WHITE);
+		pixmap.fill();
+		pixmap.setColor(Color.LIGHT_GRAY);
+		return new TextureRegionDrawable(new TextureRegion(new Texture(pixmap)));
+	}
+	
+	/**
+	 * Render the screen by displaying loading progress
 	 */
 	@Override
 	public void render(float delta) {
 		if (game.mainMenuScreen.isLoaded()) {
 			showMainMenu();
 		} else {
-			AssetFactory assets = AssetFactory.getInstance();
-			float progress = LOADING_MAX*(assets.getLoadedAssets()/5f)+LOADING_MIN;
-			progressBar.setValue(progress);
+			progressBar.setValue(getProgress());
 			super.render(delta);
-			assets.update(50);
+			AssetFactory.getInstance().update(50);
 		}
+	}
+	
+	/**
+	 * Get the current loading progress as a ratio of total loaded/total assets to load
+	 * @return the loading progress
+	 */
+	private float getProgress() {
+		return LOADING_MAX*(AssetFactory.getInstance().getLoadedAssets()/5f)+LOADING_MIN;
 	}
 	
 	/**
@@ -93,36 +123,6 @@ public class SplashScreen extends MenuScreen {
 	 */
 	private void showMainMenu() {
 		game.setScreen(game.mainMenuScreen);
-	}
-
-	@Override
-	protected void showScreen() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	protected void pauseScreen() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	protected void resumeScreen() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	protected void hideScreen() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	protected void disposeScreen() {
-		// TODO Auto-generated method stub
-		
 	}
 
 }

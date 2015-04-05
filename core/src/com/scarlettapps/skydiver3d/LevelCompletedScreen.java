@@ -155,8 +155,8 @@ public class LevelCompletedScreen extends MenuScreen {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
 
 		// Update and draw world
-		game.playingScreen.updateWorld(delta);
-		game.playingScreen.renderWorld(delta);
+		game.playingScreen.updateObjects(delta);
+		game.playingScreen.renderObjects(delta);
 		
 		Gdx.gl.glEnable(GL20.GL_BLEND);
 		shapeRenderer.begin(ShapeType.Filled);

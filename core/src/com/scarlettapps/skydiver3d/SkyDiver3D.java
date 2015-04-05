@@ -22,7 +22,7 @@ public class Skydiver3D extends Game {
 	public static final String LOG = "Skydiver3D";
 	// Whether or not the game should be run in dev mode, which enables
     // advanced debugging options for game logic and gui testing
-	public static final boolean DEV_MODE = true;
+	public static final boolean DEV_MODE = false;
 	
 	/** Screens displayed when browsing the main menu */
 	// Splash screen for main menu that is displayed while loading
@@ -34,7 +34,7 @@ public class Skydiver3D extends Game {
 	// Options screen for changing the settings from the main menu
 	OptionsScreen optionsScreen;
 	// Credits screen
-	CreditsScreen achievementsScreen;
+	CreditsScreen creditsScreen;
 	
 	/** Screens displayed when playing game */
 	// Loading screen for game
@@ -67,7 +67,7 @@ public class Skydiver3D extends Game {
 		levelCompletedScreen = new LevelCompletedScreen(this);
 		helpScreen = new HelpScreen(this);
 		optionsScreen = new OptionsScreen(this);
-		achievementsScreen = new CreditsScreen(this);
+		creditsScreen = new CreditsScreen(this);
 		splashScreen = new SplashScreen(this);
 		gameOptionsScreen = new GameOptionsScreen(this);
 		
@@ -111,16 +111,20 @@ public class Skydiver3D extends Game {
 	 */
 	@Override
 	public void dispose() {
+		// Dispose screens
 		mainMenuScreen.dispose();
 		playingScreen.dispose();
 		pauseScreen.dispose();
 		levelCompletedScreen.dispose();
 		helpScreen.dispose();
 		optionsScreen.dispose();
-		achievementsScreen.dispose();
+		creditsScreen.dispose();
 		splashScreen.dispose();
 		loadingScreen.dispose();
 		gameOptionsScreen.dispose();
+		
+		// Dispose game resources
+		AssetFactory.getInstance().dispose();
 	}
 
 	/**

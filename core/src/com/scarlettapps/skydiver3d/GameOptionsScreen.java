@@ -34,6 +34,11 @@ import com.scarlettapps.skydiver3d.resources.PreferenceFactory;
 import com.scarlettapps.skydiver3d.resources.SoundFactory;
 import com.scarlettapps.skydiver3d.worldstate.GameController;
 
+/**
+ * Screen that changes game options while game is paused
+ * @author Michael Scarlett
+ *
+ */
 public class GameOptionsScreen extends MenuScreen {
 
 	private Label volumeValue;
@@ -153,36 +158,9 @@ public class GameOptionsScreen extends MenuScreen {
 		// create the volume label
 		sensitivityValue = new Label("100%", skin);
 		updateSensitivityLabel();
-
-		/*pixmap = new Pixmap(30, 30, Format.RGBA8888);
-		pixmap.setColor(Color.WHITE);
-		pixmap.fill();
-		sensitivityIndicator = new Image(new Texture(pixmap));
-		sensitivityIndicator.setSize(30, 30);
-		sensitivityIndicator.addAction(new Action() {
-			
-			GameController gameController = GameController.newGameController();
-			float velocity = 0f;
-			float x = 50f;
-			
-			@Override
-			public boolean act(float delta) {
-				gameController.update(delta);
-				Image image = (Image)getActor();
-				velocity += gameController.getAx()*delta;
-				float dx = velocity*delta;
-				x += dx*100;
-				image.setX(x);
-				return false;
-			}
-		});*/
 		
 		// add the volume row
 		table.row();
-		//Table group = new Table(skin);
-		//group.add("Motion Sensitivity");
-		//group.row();
-		//group.add(sensitivityIndicator).align(Align.left);
 		table.add("Motion Sensitivity");
 		table.add(sensitivitySlider);
 		table.add(sensitivityValue).width(40);
@@ -193,14 +171,14 @@ public class GameOptionsScreen extends MenuScreen {
 			
 			@Override
 	        public void clicked(InputEvent event, float x, float y) {
-				backToMainMenu();
+				backToPauseScreen();
 	        }
 			@Override
 			public void touchUp(InputEvent event, float x, float y,
 					int pointer, int button) {
 				super.touchUp(event, x, y, pointer, button);
 				sound.play(SoundType.CLICK);
-				backToMainMenu();
+				backToPauseScreen();
 			}
 		});
 		table.row();
@@ -215,45 +193,21 @@ public class GameOptionsScreen extends MenuScreen {
 		volumeValue.setText(String.format(Locale.US, "%1.0f%%", volume));
 	}
 	
+	/**
+	 * Update controller sensitivity
+	 */
 	private void updateSensitivityLabel() {
 		float sensitivity = (PreferenceFactory.getInstance().getSensitivity() * 100);
 		sensitivityValue.setText(String.format(Locale.US, "%1.0f%%", sensitivity));
 	}
-
-	@Override
-	public void showScreen() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void hideScreen() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void pauseScreen() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void resumeScreen() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void disposeScreen() {
-		// TODO Auto-generated method stub
-		
-	}
 	
-	private void backToMainMenu() {
+	/**
+	 * Return to the pause screen
+	 */
+	private void backToPauseScreen() {
 		Gdx.gl.glClearColor(0.5f, 0.5f, 1.0f, 1.0f);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
-		game.playingScreen.renderWorld(0);
+		game.playingScreen.renderObjects(0);
 		game.setScreen(game.pauseScreen);
 	}
 

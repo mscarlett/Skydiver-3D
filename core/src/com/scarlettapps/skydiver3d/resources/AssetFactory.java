@@ -74,10 +74,6 @@ public final class AssetFactory {
 		return assets.isLoaded(fileName, type);
 	}
 	
-	public AssetManager getAssets() {
-		return assets;
-	}
-	
 	public float getProgress() {
 		return assets.getProgress();
 	}
@@ -125,7 +121,7 @@ public final class AssetFactory {
 		return assets.getAssetNames();
 	}
 	
-	public boolean isLoaded() {
+	public boolean isLoaded() { //XXX this is a hack
 		return getLoadedAssets() == 22;
 	}
 	

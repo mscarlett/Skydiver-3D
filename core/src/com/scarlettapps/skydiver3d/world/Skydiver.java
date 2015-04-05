@@ -59,6 +59,7 @@ public class Skydiver extends GameObject {
 	private float timeSinceJumpedOffAirplane;
 	private boolean finalState;
 	private float timeSinceFinalState;
+	
 	private Vector3 minCpy;
 	private Vector3 maxCpy;
 	
@@ -112,9 +113,8 @@ public class Skydiver extends GameObject {
 		if (getPositionZ() < WorldState.INITIAL.minAltitude) {
 			updateSkydiving(delta);
 		} else {
-			updateBefore(delta);
+			updateBeforeSkydiving(delta);
 		}
-		
 	}
 	
 	private void updateSkydiving(float delta) {
@@ -130,21 +130,31 @@ public class Skydiver extends GameObject {
 		
 		float pose = (-velocity.z-MIN_TERMINAL_SPEED)/(MAX_TERMINAL_SPEED-MIN_TERMINAL_SPEED);
 		
-		if (landing) {
-			skydiverAngle.y = -90;
-		} else {
-			if (!parachuting) {
-			    skydiverAngle.y = pose*90;
-			} else {
-			    skydiverAngle.y -= (skydiverAngle.y+90)*delta;
-			}
-		}
+		updateTilt(delta, pose);
 		
 		axis.set(skydiverAngle.y, skydiverAngle.x, 0);
 		angle.set(skydiverAngle.y, skydiverAngle.x, 0);
 		
 		rotate(axis.nor(), angle.len());
 		
+		updateController(delta, pose);
+		
+		skydiverAngle.x = Math.signum(skydiverAngle.x)
+				* (Math.abs(skydiverAngle.x) - 100 * delta / 2);
+		velocity.z += delta*20f*pose;
+	}
+	
+	private void updateTilt(float delta, float pose) {
+		if (landing) {
+			skydiverAngle.y = -90;
+		} else if (parachuting) {
+			skydiverAngle.y -= (skydiverAngle.y+90)*delta;
+		} else {
+			skydiverAngle.y = pose*90;
+		}
+	}
+	
+	private void updateController(float delta, float pose) {
 		if (finalState) {
 			final float totalTime = 4f;
 			if (timeSinceFinalState < totalTime) {
@@ -170,13 +180,9 @@ public class Skydiver extends GameObject {
 		} else {
 			controller.update(delta, (1-pose)*3.3066728f);
 		}
-		
-		skydiverAngle.x = Math.signum(skydiverAngle.x)
-				* (Math.abs(skydiverAngle.x) - 100 * delta / 2);
-		velocity.z += delta*20f*pose;
 	}
 	
-	private void updateBefore(float delta) {
+	private void updateBeforeSkydiving(float delta) {
 		if (jumpedOffAirplane) {
 			float jumpTime = 5f;
 			

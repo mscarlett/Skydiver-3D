@@ -13,7 +13,6 @@ public class AndroidLauncher extends AndroidApplication {
 		AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
 		config.useAccelerometer = true;
 		config.useWakelock = true;
-		//config.useGLSurfaceView20API18 = true;
 		initialize(new Skydiver3D(), config);
 	}
 }

@@ -77,34 +77,4 @@ public class LoadingScreen extends MenuScreen {
 		game.setScreen(game.playingScreen);
 	}
 
-	@Override
-	protected void showScreen() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	protected void pauseScreen() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	protected void resumeScreen() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	protected void hideScreen() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	protected void disposeScreen() {
-		// TODO Auto-generated method stub
-		
-	}
-
 }

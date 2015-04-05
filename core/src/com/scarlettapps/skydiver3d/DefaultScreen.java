@@ -63,7 +63,13 @@ public abstract class DefaultScreen<T extends Game> implements Screen {
 		}
 	}
 	
-	protected abstract void resizeScreen(int width, int height);
+	/**
+	 * Helper method to allow custom implementation of functions that should be
+	 * called when showing this screen. By default this does nothing.
+	 * @param width the new screen width
+	 * @param height the new screen height
+	 */
+	protected void resizeScreen(int width, int height) {}
 
 	/**
 	 * Set the InputProcessor which handles user input for this screen.
@@ -118,9 +124,9 @@ public abstract class DefaultScreen<T extends Game> implements Screen {
 	
 	/**
 	 * Helper method to allow custom implementation of functions that should be
-	 * called when showing this screen
+	 * called when showing this screen. By default this does nothing.
 	 */
-	protected abstract void showScreen();
+	protected void showScreen() {}
 	
 	/**
 	 * Pause the screen
@@ -135,9 +141,9 @@ public abstract class DefaultScreen<T extends Game> implements Screen {
 	
 	/**
 	 * Helper method to allow custom implementation of functions that should be
-	 * called when pausing this screen
+	 * called when pausing this screen.  By default this does nothing.
 	 */
-	protected abstract void pauseScreen();
+	protected void pauseScreen() {}
 	
 	/**
 	 * Resume the screen
@@ -152,9 +158,9 @@ public abstract class DefaultScreen<T extends Game> implements Screen {
 	
 	/**
 	 * Helper method to allow custom implementation of functions that should be
-	 * called when resuming this screen
+	 * called when resuming this screen.  By default this does nothing.
 	 */
-	protected abstract void resumeScreen();
+	protected void resumeScreen() {}
 	
 	/**
 	 * Hide the screen
@@ -173,9 +179,9 @@ public abstract class DefaultScreen<T extends Game> implements Screen {
 	
 	/**
 	 * Helper method to allow custom implementation of functions that should be
-	 * called when hiding this screen
+	 * called when hiding this screen. By default this does nothing.
 	 */
-	protected abstract void hideScreen();
+	protected void hideScreen() {}
 	
 	/**
 	 * Dispose the screen
@@ -190,9 +196,9 @@ public abstract class DefaultScreen<T extends Game> implements Screen {
 	
 	/**
 	 * Helper method to allow custom implementation of functions that should be
-	 * called when disposing this screen
+	 * called when disposing this screen. By default this does nothing.
 	 */
-	protected abstract void disposeScreen();
+	protected void disposeScreen() {}
 	
 	/**
 	 * Transition from this screen to the next screen by using a fade effect

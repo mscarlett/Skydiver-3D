@@ -64,13 +64,7 @@ class ParachutingStateController implements WorldViewController {
 	@Override
 	public void initialize() {
 		switchCam = false;
-		PerspectiveCamera cam = worldView.getCam();
 		StatusView statusView = worldView.getStatusView();
-		cam.near = 2f;
-		cam.far = 800f;
 		statusView.showSpeedIcon(false);
-		World world = worldView.getWorld();
-		Target target = world.getTarget();
-        target.setRender(true);
 	}
 }

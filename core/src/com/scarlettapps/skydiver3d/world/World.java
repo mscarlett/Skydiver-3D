@@ -7,6 +7,8 @@ import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.utils.Array;
 import com.scarlettapps.skydiver3d.resources.AssetFactory;
+import com.scarlettapps.skydiver3d.resources.MusicFactory;
+import com.scarlettapps.skydiver3d.resources.SoundFactory;
 import com.scarlettapps.skydiver3d.resources.AssetFactory.MusicType;
 import com.scarlettapps.skydiver3d.resources.AssetFactory.SoundType;
 import com.scarlettapps.skydiver3d.worldstate.StatusManager;
@@ -26,8 +28,6 @@ public class World {
 	private Terrain terrain;
 	private Collectibles collectibles;
 	private Clouds clouds;
-	private Sound bell;
-	private Music wind;
 	private Plane plane;
 	
 	public World(StatusManager statusManager) {
@@ -50,12 +50,6 @@ public class World {
 	}
 	
 	public void initialize() {
-		AssetFactory assetFactory = AssetFactory.getInstance();
-		
-		bell = assetFactory.get(SoundType.BELL, Sound.class);
-		wind = assetFactory.get(MusicType.WIND, Music.class);
-		wind.setLooping(true);
-		
 		for (GameObject o: objects) {
 			o.initialize();
 		}
@@ -64,13 +58,15 @@ public class World {
 	}
 	
 	public void playWind() {
-		wind.play();
+		MusicFactory music = MusicFactory.getInstance();
+		music.play(MusicType.WIND);
 	}
 	
 	public void update(float delta) {
 		if (!statusManager.isPaused()) {
 			updatePositions(delta);
-			wind.setVolume(getWindVolume());
+			MusicFactory music = MusicFactory.getInstance();
+			music.setVolume(getWindVolume());
 		}
 		
 		statusManager.update(delta, this);
@@ -126,7 +122,8 @@ public class World {
 	}
 	
 	public void playBell() {
-		bell.play();
+		SoundFactory sound = SoundFactory.getInstance();
+		sound.play(SoundType.BELL);
 	}
 
 	public Array<GameObject> getObjects() {

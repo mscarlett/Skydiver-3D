@@ -323,4 +323,8 @@ public class StatusManager {
 	public void setStickyTime(float time) {
 		stickyTime = time;
 	}
+
+	public boolean isCompleted() {
+		return getState() == WorldState.FINAL;
+	}
 }

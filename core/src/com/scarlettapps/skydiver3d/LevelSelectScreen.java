@@ -49,34 +49,4 @@ public class LevelSelectScreen extends MenuScreen {
 		game.setScreen(game.mainMenuScreen);
 	}
 
-	@Override
-	public void showScreen() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void hideScreen() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void pauseScreen() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void resumeScreen() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void disposeScreen() {
-		// TODO Auto-generated method stub
-		
-	}
-
 }

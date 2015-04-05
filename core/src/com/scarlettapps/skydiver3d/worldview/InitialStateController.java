@@ -70,9 +70,6 @@ class InitialStateController implements WorldViewController {
         cam.near = 1f;
         cam.far = 9000f;
         cam.update();
-        World world = worldView.getWorld();
-        Target target = world.getTarget();
-        target.setRender(false);
 	}
 	
 }

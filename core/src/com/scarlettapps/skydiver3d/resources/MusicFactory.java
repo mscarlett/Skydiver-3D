@@ -96,4 +96,10 @@ public final class MusicFactory {
 		}
 		return instance;
 	}
+
+	public void setVolume(float v) {
+		if (current != null) {
+		    current.setVolume(v);
+		}
+	}
 }

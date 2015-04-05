@@ -17,14 +17,23 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
+/**
+ * Represents a menu screen which contains buttons for navigating to other screens
+ * @author Michael Scarlett
+ *
+ */
 public abstract class MenuScreen extends DefaultScreen<Skydiver3D> {
 
 	private static final String BACKGROUND_FILE = "data/textures/Menu3Background.png";
 	private static final String SKIN_FILE = "skin/uiskin.json";
 	
+	// Renders UI objects
 	protected final Stage stage;
+	// UI object to which other objects are added
 	protected final Table table;
+	// Represents the style of UI objects
 	protected final Skin skin;
+	// Used for displaying screen
 	protected final Viewport viewport;
 	
 	public MenuScreen(Skydiver3D game) {
@@ -82,11 +91,6 @@ public abstract class MenuScreen extends DefaultScreen<Skydiver3D> {
 	@Override
 	protected InputProcessor getInputProcessor() {
 		return stage;
-	}
-	
-	@Override
-	protected void resizeScreen(int width, int height) {
-		//viewport.update(width, height);
 	}
 
 }

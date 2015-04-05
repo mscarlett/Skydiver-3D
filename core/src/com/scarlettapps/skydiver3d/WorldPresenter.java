@@ -16,24 +16,33 @@ import com.scarlettapps.skydiver3d.worldstate.InputManager;
 import com.scarlettapps.skydiver3d.worldstate.Score;
 import com.scarlettapps.skydiver3d.worldstate.SkydiverControls;
 import com.scarlettapps.skydiver3d.worldstate.StatusManager;
-import com.scarlettapps.skydiver3d.worldstate.WorldState;
 import com.scarlettapps.skydiver3d.worldview.WorldView;
 
-
+/**
+ * Screen which displays the skydiving game
+ * @author Michael Scarlett
+ *
+ */
 public class WorldPresenter extends DefaultScreen<Skydiver3D> {
 	
+	// Maximum time difference in seconds between frames
 	private static final float MAX_DELTA = 0.1f;
-	
+	// Represents the current state of game objects
 	private final World world;
+	// Renders the game objects
 	private final WorldView worldView;
+	// Handles user input
 	private final GameController gameController;
+	// Handles listeners for user input
 	private final InputManager inputManager;
+	// Handles listeners for current game state
 	private final StatusManager statusManager;
 	
+	// Whether or not the game objects should be initialized
 	private boolean initialize = true;
 	
 	/**
-	 * 
+	 * Instantiate the screen with the game instance
 	 * @param game the instance of this game
 	 */
 	public WorldPresenter(Skydiver3D game) {
@@ -50,34 +59,50 @@ public class WorldPresenter extends DefaultScreen<Skydiver3D> {
 		inputManager.addListener(skydiverControls);
 	}
 	
+	/**
+	 * Update the game state and render the current frame
+	 * @param delta the time in seconds between frames
+	 */
 	@Override
 	public void render(float delta) {
 		if (statusManager.isPaused()) {
 			// If the world is paused then switch to pause screen
 			game.setScreen(game.pauseScreen);
-		} else if (statusManager.getState() == WorldState.FINAL) {
+		} else if (statusManager.isCompleted()) {
 			// If the level has been completed then switch to level completed screen
 			game.setScreen(game.levelCompletedScreen);
 		} else {
 			// Otherwise update and render world
 			if (delta >= MAX_DELTA) delta = MAX_DELTA;
-			updateWorld(delta);
+			updateObjects(delta);
 			Gdx.gl.glClearColor(0.5f, 0.5f, 1.0f, 1.0f);
 			Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
-			renderWorld(delta);
+			renderObjects(delta);
 		}
 	}
 	
-	protected void updateWorld(float delta) {
+	/**
+	 * Update the world objects
+	 * @param delta the time in seconds between frames
+	 */
+	protected void updateObjects(float delta) {
 		world.update(delta);
 		worldView.update(delta);
 		inputManager.update(delta);
 	}
 	
-	protected void renderWorld(float delta) {
+	/**
+	 * Render the world objects
+	 * @param delta the time in seconds between frames
+	 */
+	protected void renderObjects(float delta) {
 		worldView.render(delta);
 	}
 
+	/**
+	 * Get the input processor which accepts user input
+	 * @return the input processors from the world view and game controller
+	 */
 	@Override
 	protected InputProcessor getInputProcessor() {
 		InputMultiplexer input = new InputMultiplexer();
@@ -85,18 +110,17 @@ public class WorldPresenter extends DefaultScreen<Skydiver3D> {
 		input.addProcessor(gameController);
 		return input;
 	}
-
-	@Override
-	public void disposeScreen() {
-		AssetFactory.getInstance().dispose();
-	}
 	
+	/**
+	 * Show the screen and initialize game resources
+	 */
 	@Override
 	protected void showScreen() {
 		MusicFactory music = MusicFactory.getInstance();
 		
 		music.stop();
 		
+		// Check if world objects should be initialized
 		if (initialize) {
 			if (Skydiver3D.DEV_MODE) {
 				Gdx.app.log(Skydiver3D.LOG, "Initializing world");
@@ -108,32 +132,11 @@ public class WorldPresenter extends DefaultScreen<Skydiver3D> {
 		}
 		
 		music.play(MusicType.WIND);
-		
-		statusManager.setPaused(false);
 	}
 
-	@Override
-	protected void pauseScreen() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	protected void resumeScreen() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	protected void hideScreen() {
-		// TODO Auto-generated method stub
-	}
-	
-	public void tryAgain() {
-		world.reset();
-		worldView.reset();
-	}
-
+	/**
+	 * Restart the level
+	 */
 	public void restartLevel() {
 		gameController.reset();
 		inputManager.reset();
@@ -142,21 +145,35 @@ public class WorldPresenter extends DefaultScreen<Skydiver3D> {
 		worldView.reset();
 	}
 	
+	/**
+	 * Go to the next level
+	 */
 	public void nextLevel() {
 		restartLevel(); //XXX temporary hack until this is implemented
 	}
 	
+	/**
+	 * Get the game score summary
+	 * @return the score
+	 */
 	public Score scoreSummary() {
 		return statusManager.scoreSummary();
 	}
 
+	/**
+	 * Check whether or not game resources are loaded
+	 * @return true if loaded, false otherwise
+	 */
 	public boolean isLoaded() {
 		return AssetFactory.getInstance().isLoaded();
 	}
-	
-	@Override
-	protected void resizeScreen(int width, int height) {
-		
+
+	/**
+	 * Unpause the game
+	 * @param b whether or not the game should be paused
+	 */
+	public void setPaused(boolean b) {
+		statusManager.setPaused(b);
 	}
 
 }

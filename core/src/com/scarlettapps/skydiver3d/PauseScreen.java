@@ -18,6 +18,11 @@ import com.scarlettapps.skydiver3d.resources.AssetFactory.SoundType;
 
 public class PauseScreen extends MenuScreen { // PAUSE the game if pause button or menu button pressed
 
+	private static final float BACKGROUND_BRIGHTNESS = 0.3f;
+	
+	private TextureRegionDrawable screenShot;
+	private boolean takeScreenshot = true;
+	
 	public PauseScreen(Skydiver3D game) {
 		super(game, false);
 		
@@ -85,11 +90,6 @@ public class PauseScreen extends MenuScreen { // PAUSE the game if pause button 
 		table.add(mainMenuButton).uniform().fill();
 	}
 	
-	private TextureRegionDrawable screenShot;
-	private static final float BACKGROUND_BRIGHTNESS = 0.3f;
-
-	boolean takeScreenshot = true;
-	
 	@Override
 	public void showScreen() {
 		MusicFactory.getInstance().stop();
@@ -100,31 +100,9 @@ public class PauseScreen extends MenuScreen { // PAUSE the game if pause button 
 			takeScreenshot = true;
 		}
 	}
-
-	@Override
-	public void hideScreen() {
-		//stage.getRoot().removeActor(screenShot);
-	}
-
-	@Override
-	public void pauseScreen() {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void resumeScreen() {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void disposeScreen() {
-		// TODO Auto-generated method stub
-
-	}
 	
 	private void resumeGame() {
+		game.playingScreen.setPaused(false);
 		game.setScreen(game.playingScreen);
 	}
 	

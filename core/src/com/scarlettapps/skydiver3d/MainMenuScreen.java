@@ -24,11 +24,15 @@ import com.scarlettapps.skydiver3d.resources.SoundFactory;
 
 public class MainMenuScreen extends MenuScreen {
 
+	// Physical dimensions of UI objects
 	private static final float TITLE_WIDTH = DefaultScreen.VIRTUAL_WIDTH*(9/10f);
 	private static final float TITLE_HEIGHT = DefaultScreen.VIRTUAL_HEIGHT*(9/10f)/2f;
 	private static final float BUTTONS_WIDTH = DefaultScreen.VIRTUAL_WIDTH*(6/10f);
 	private static final float BUTTONS_HEIGHT = DefaultScreen.VIRTUAL_HEIGHT/10;
 	private static final float SPACE_BOTTOM = DefaultScreen.VIRTUAL_HEIGHT/64;
+	
+	// Transition time between this screen and the game screen
+	private static final float TRANSITION_TIME = 0.2f;
 	
 	private final Texture title;
 
@@ -57,7 +61,6 @@ public class MainMenuScreen extends MenuScreen {
 		FontFactory fontFactory = FontFactory.getInstance();
 		
 		// Add DistanceFieldFont to fonts and apply to styles
-		//skin.add("DistanceFieldFont", new DistanceFieldFont(1/8f, stage.getBatch()), BitmapFont.class);
 		TextButtonStyle textButtonStyle = skin.get(TextButtonStyle.class);
 		BitmapFont font = fontFactory.generateFont(42);
 		textButtonStyle.font = font;
@@ -105,7 +108,7 @@ public class MainMenuScreen extends MenuScreen {
 			@Override
 	        public void clicked(InputEvent event, float x, float y) {
 				sound.play(SoundType.CLICK);
-	            showAchievements();
+	            showCredits();
 	        }
 		});
 		buttonTable.add(highScoresButton).uniform().fill();
@@ -113,53 +116,51 @@ public class MainMenuScreen extends MenuScreen {
 		table.add(buttonTable);
 	}
 
+	/**
+	 * Transition to the game loading screen if it is still being loaded, or the
+	 * game screen if loading is finished
+	 */
 	private void startGame() {
-		final float transitionTime = 0.2f;
 		Screen next = game.playingScreen.isLoaded() ? game.playingScreen : game.loadingScreen;
-		transitionScreen(next, transitionTime);
+		transitionScreen(next, TRANSITION_TIME);
 	}
 	
+	/**
+	 * Show the help screen
+	 */
 	private void showHelp() {
 		game.setScreen(game.helpScreen);
 	}
 	
+	/**
+	 * Show the options screen
+	 */
 	private void showOptions() {
 		game.setScreen(game.optionsScreen);
 	}
 	
-	private void showAchievements() {
-		game.setScreen(game.achievementsScreen);
+	/**
+	 * Show the credits screen
+	 */
+	private void showCredits() {
+		game.setScreen(game.creditsScreen);
 	}
 
+	/**
+	 * Show this screen
+	 */
 	@Override
 	public void showScreen() {
 		MusicFactory.getInstance().play(MusicType.MAIN_MENU);
 	}
 
-	@Override
-	public void hideScreen() {
-		//game.music.play(null);
-	}
-
-	@Override
-	public void pauseScreen() {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void resumeScreen() {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void disposeScreen() {
-		//title.dispose();
-	}
-
-	String[] dependencies = new String[]{TextureType.RING, TextureType.STAR, SoundType.CLICK, MusicType.MAIN_MENU};
+	// List of dependencies which need to be loaded
+	private static final String[] dependencies = new String[]{TextureType.RING, TextureType.STAR, SoundType.CLICK, MusicType.MAIN_MENU};
 	
+	/**
+	 * Check if this screen is loaded
+	 * @return true if loaded, false otherwise
+	 */
 	public boolean isLoaded() {
 		Array<String> names = AssetFactory.getInstance().getLoaded();
 		outer:

@@ -47,13 +47,13 @@ public class Terrain extends GameObject { //TODO fix bug that causes parachute t
 				+ "attribute vec2 a_texCoord0;                  \n"
 				+ "attribute float a_texIntensity;                  \n"
 				+ "varying vec4 v_color;                  \n"
-				+ "varying vec2 v_texCoord0;                  \n"
-				+ "varying float v_height;                  \n"
+				//+ "varying vec2 v_texCoord0;                  \n"
+				//+ "varying float v_height;                  \n"
 				+ "void main()                                 \n"
 				+ "{                                           \n"
 				+ "   v_color = a_color;                       \n"
-				+ "   v_height = a_position.z;                       \n"
-				+ "   v_texCoord0 = a_texCoord0;                       \n"
+				//+ "   v_height = a_position.z;                       \n"
+				//+ "   v_texCoord0 = a_texCoord0;                       \n"
 				+ "   vec4 pos = a_position;\n"
 				+ "   pos.z = 0.0;\n"
 				+ "   gl_Position = u_mvpMatrix *pos;  \n"
@@ -63,28 +63,28 @@ public class Terrain extends GameObject { //TODO fix bug that causes parachute t
 				+ "#endif\n"
 				+ "uniform float u_fogFactor;\n"
 				+ "varying vec4 v_color;                  \n"
-				+ "varying vec2 v_texCoord0;                  \n"
-				+ "varying float v_height;                  \n"
+				//+ "varying vec2 v_texCoord0;                  \n"
+				//+ "varying float v_height;                  \n"
 				+"\n"
-				+"vec2 truncate(vec2 v)  \n"
-				+"\n{"
-				+"float dx = v.x - float(int(v.x));\n"
-				+"float dy = v.y - float(int(v.y));\n"
-				+"return vec2(dx, dy);\n"
-				+"}\n"
-				+" \n"
+				//+"vec2 truncate(vec2 v)  \n"
+				//+"\n{"
+				//+"float dx = v.x - float(int(v.x));\n"
+				//+"float dy = v.y - float(int(v.y));\n"
+				//+"return vec2(dx, dy);\n"
+				//+"}\n"
+				//+" \n"
 				+ "void main()                                  \n"
 				+ "{                                            \n"
-				+ "float z = gl_FragCoord.z / gl_FragCoord.w;\n"
+				//+ "float z = gl_FragCoord.z / gl_FragCoord.w;\n"
 				//+ "const float LOG2 = 1.442695;\n"
 				//+ "float fogFactor = clamp(exp2( - 0.00000000005*z*z * LOG2 ),0.0,1.0);\n"
 				+ "const vec4 fogColor = vec4(1.0, 1.0, 1.0, 1.0);\n"
-				+ "vec4 texColor;"
-				+ "vec2 newTexCoord = truncate(30.0*v_texCoord0);"
-				+ "float h1 = -5.0;\n"
-				+ "float h2 = 0.0;\n"
-				+ "float h3 = 10.0;\n"
-				+ "float h4 = 75.0;\n"
+				//+ "vec4 texColor;"
+				//+ "vec2 newTexCoord = truncate(30.0*v_texCoord0);"
+				//+ "float h1 = -5.0;\n"
+				//+ "float h2 = 0.0;\n"
+				//+ "float h3 = 10.0;\n"
+				//+ "float h4 = 75.0;\n"
 				+ "gl_FragColor = mix( fogColor, v_color, u_fogFactor);\n"
 				+ "}";
 
@@ -335,10 +335,10 @@ public class Terrain extends GameObject { //TODO fix bug that causes parachute t
 
 	}
 	
-	int u_texture0;
-	int u_texture1;
-	int u_texture2;
-	int u_texture3;
+	private int u_texture0;
+	private int u_texture1;
+	private int u_texture2;
+	private int u_texture3;
 
 	public void render(Camera cam) {
 		/*Gdx.gl.glEnable(GL20.GL_TEXTURE_2D);
