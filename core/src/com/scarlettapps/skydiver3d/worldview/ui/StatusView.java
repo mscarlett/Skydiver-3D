@@ -35,28 +35,32 @@ import com.scarlettapps.skydiver3d.worldstate.StatusManager;
 
 public class StatusView {
 
-	private final Stage stage;
-	private final Table table;
-	private final Skin skin;
-	
-	private final Group initial;
-	private final Group hud;
-	private final Group parachute;
-	private final Group scoreSummary;
-	private final Group collected;
-	
-	private final PooledLinkedList<Group> visibleQueue;
-
-	private final Image pauseIcon;
-	private final Image speedIcon;
-	
 	private final StatusManager statusManager;
 	
-	private final AccuracyMeter accuracyMeter;
-	private final Viewport viewport;
+	private Stage stage;
+	private Table table;
+	private Skin skin;
+	
+	private Group initial;
+	private Group hud;
+	private Group parachute;
+	private Group scoreSummary;
+	private Group collected;
+	
+	private PooledLinkedList<Group> visibleQueue;
+
+	private Image pauseIcon;
+	private Image speedIcon;
+	
+	private AccuracyMeter accuracyMeter;
+	private Viewport viewport;
 
 	public StatusView(StatusManager statusManager) {
-		visibleQueue = new PooledLinkedList<Group>(6);
+		this.statusManager = statusManager;
+	}
+
+	public void initialize() {
+        visibleQueue = new PooledLinkedList<Group>(6);
 		
 		skin = new Skin(Gdx.files.internal("skin/uiskin.json"));
 		viewport = new StretchViewport(DefaultScreen.VIRTUAL_WIDTH, DefaultScreen.VIRTUAL_HEIGHT);
@@ -298,8 +302,6 @@ public class StatusView {
 		label.setColor(Color.WHITE);
 		scoreSummary.addActor(label);
 		stage.addActor(scoreSummary);
-		
-		this.statusManager = statusManager;
 
 		pauseIcon = new Image(AssetFactory.getInstance().get(TextureType.PAUSE, Texture.class));
 		pauseIcon.setPosition(DefaultScreen.VIRTUAL_WIDTH-pauseIcon.getWidth()-10, 10);
@@ -344,7 +346,7 @@ public class StatusView {
 		speedIcon.setVisible(false);
 		stage.addActor(speedIcon);
 	}
-
+	
 	public void update(float delta) {
 		stage.act(delta);
 	}

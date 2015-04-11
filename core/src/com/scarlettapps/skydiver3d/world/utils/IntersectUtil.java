@@ -11,6 +11,10 @@ import com.scarlettapps.skydiver3d.DefaultScreen;
 import com.scarlettapps.skydiver3d.world.Collectible;
 import com.scarlettapps.skydiver3d.world.Skydiver;
 
+/**
+ * Tests whether or not the skydiver and a collectible are intersecting.
+ *
+ */
 public class IntersectUtil {
 
 	private static Vector3 circlePos = new Vector3();

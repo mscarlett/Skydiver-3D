@@ -20,8 +20,9 @@ class FinalStateController implements WorldViewController {
 
 	@Override
 	public void render(float delta) {
-		worldView.drawTerrain();
-		worldView.drawTargetAndSkydiver();
+		Renderer renderer = worldView.getRenderer();
+		renderer.drawTerrain();
+		renderer.drawTargetAndSkydiver();
 	}
 
 	@Override

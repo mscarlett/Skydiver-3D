@@ -26,7 +26,7 @@ class InitialStateController implements WorldViewController {
 	public void update(float delta) {
 		World world = worldView.getWorld();
 		StatusManager statusManager = worldView.getStatusManager();
-		PerspectiveCamera cam = worldView.getCam();
+		PerspectiveCamera cam = worldView.getRenderer().getCam();
 		
 		Skydiver skydiver = world.getSkydiver();
 
@@ -53,7 +53,7 @@ class InitialStateController implements WorldViewController {
 	@Override
 	public void render(float delta) {	
 		World world = worldView.getWorld();
-		worldView.drawSkydiverAndPlane();
+		worldView.getRenderer().drawSkydiverAndPlane();
 		worldView.getStatusView().drawJumpOffPlane(world.getSkydiver());
 	}
 
@@ -64,7 +64,7 @@ class InitialStateController implements WorldViewController {
 		dz = -1.71019554f;
 		totalTime = 0;
 		camOffset = new Vector3(-0.3f*WorldView.CAM_OFFSET+dx,-0.1f*WorldView.CAM_OFFSET+dy,Skydiver.STARTING_HEIGHT+0.4f*WorldView.CAM_OFFSET+dz);
-		PerspectiveCamera cam = worldView.getCam();
+		PerspectiveCamera cam = worldView.getRenderer().getCam();
         cam.direction.set(0,0,-1);
         cam.up.set(Vector3.Z);
         cam.near = 1f;

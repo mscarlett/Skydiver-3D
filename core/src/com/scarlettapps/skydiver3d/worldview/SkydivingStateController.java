@@ -18,7 +18,7 @@ class SkydivingStateController implements WorldViewController {
 	}
 	
 	public void initialize() {
-		PerspectiveCamera cam = worldView.getCam();
+		PerspectiveCamera cam = worldView.getRenderer().getCam();
 		StatusManager statusManager = worldView.getStatusManager();
 		StatusView statusView = worldView.getStatusView();
 		cam.position.set(0, 0.5f,statusManager.position().z + WorldView.CAM_OFFSET);
@@ -34,7 +34,7 @@ class SkydivingStateController implements WorldViewController {
 	@Override
 	public void update(float delta) {
 		StatusManager statusManager = worldView.getStatusManager();
-		PerspectiveCamera cam = worldView.getCam();
+		PerspectiveCamera cam = worldView.getRenderer().getCam();
 		World world = worldView.getWorld();
 		cam.position.z = statusManager.position().z + WorldView.CAM_OFFSET;
 		cam.up.set(Vector3.Y);
@@ -50,11 +50,12 @@ class SkydivingStateController implements WorldViewController {
 	}
 	
 	private void renderSkydiving(float delta) {
-		worldView.drawTerrain();
-		worldView.drawTargetAndSkydiver();
-		worldView.drawCollectibles();
+		Renderer renderer = worldView.getRenderer();
+		renderer.drawTerrain();
+		renderer.drawTargetAndSkydiver();
+		renderer.drawCollectibles();
 		StatusManager statusManager = worldView.getStatusManager();
-		PerspectiveCamera cam = worldView.getCam();
+		PerspectiveCamera cam = renderer.getCam();
 		StatusView statusView = worldView.getStatusView();
 		
 		if (statusManager.collected()) {

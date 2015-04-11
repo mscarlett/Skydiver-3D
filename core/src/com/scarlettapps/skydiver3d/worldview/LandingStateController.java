@@ -13,7 +13,7 @@ class LandingStateController implements WorldViewController {
 
 	@Override
 	public void update(float delta) {
-		PerspectiveCamera cam = worldView.getCam();
+		PerspectiveCamera cam = worldView.getRenderer().getCam();
 		StatusManager statusManager = worldView.getStatusManager();
 		cam.position.x = statusManager.position().x + 0.5f;
 		cam.position.y = statusManager.position().y;
@@ -23,8 +23,9 @@ class LandingStateController implements WorldViewController {
 
 	@Override
 	public void render(float delta) {
-		worldView.drawTerrain();
-		worldView.drawTargetAndSkydiver();
+		Renderer renderer = worldView.getRenderer();
+		renderer.drawTerrain();
+		renderer.drawTargetAndSkydiver();
 		worldView.getStatusView().drawHud();
 	}
 
