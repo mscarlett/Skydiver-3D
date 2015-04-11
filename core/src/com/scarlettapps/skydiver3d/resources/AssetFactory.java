@@ -129,6 +129,10 @@ public final class AssetFactory {
 		return assets.getLoadedAssets();
 	}
 	
+	public void finishLoading() {
+		assets.finishLoading();
+	}
+	
 	public static AssetFactory getInstance() {
 		if (instance == null) {
 			instance = new AssetFactory();

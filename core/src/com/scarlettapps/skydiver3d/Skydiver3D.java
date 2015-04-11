@@ -49,7 +49,7 @@ public class Skydiver3D extends Game {
 	GameOptionsScreen gameOptionsScreen;
 	
 	// FPS logger for debugging the frame rate
-	private FPSLogger fpsLogger;
+	FPSLogger fpsLogger;
 
 	/**
 	 * Instantiate game resources and screens, then display the initial screen
