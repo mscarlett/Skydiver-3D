@@ -50,6 +50,7 @@ public final class PreferenceFactory {
 
 	public void setSensitivity(float value) {
 		preferences.putFloat("Sensitivity", value);
+		preferences.flush();
 	}
 	
 	public static PreferenceFactory getInstance() {
