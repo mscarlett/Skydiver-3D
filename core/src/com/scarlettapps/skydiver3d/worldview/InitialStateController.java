@@ -33,13 +33,20 @@ class InitialStateController implements WorldViewController {
 
 		if (skydiver.jumpedOffAirplane()) {
 			totalTime += delta;
+			
 			dz -= Math.signum(dz)*delta*0.1f;
 			dy -= Math.signum(dy)*delta*0.1f;
 			dx -= Math.signum(dx)*delta*0.1f;
-			camOffset.set(-0.3f*WorldView.CAM_OFFSET+dx,-0.1f*WorldView.CAM_OFFSET+dy,0.4f*WorldView.CAM_OFFSET+dz+skydiver.getPositionZ());
+			
+			float newX = -0.3f*WorldView.CAM_OFFSET+dx;
+			float newY = -0.1f*WorldView.CAM_OFFSET+dy;
+			float newZ = 0.4f*WorldView.CAM_OFFSET+dz+skydiver.getPositionZ();
+			camOffset.set(newX, newY, newZ);
+			
 			tmp2.set(camOffset).sub(statusManager.position());
 			tmp2.scl(totalTime/5f);
 			camOffset.sub(tmp2);
+			
 	        cam.position.set(camOffset);
 	        cam.lookAt(skydiver.getPositionX(),skydiver.getPositionY(),skydiver.getPositionZ()+0.2f*WorldView.CAM_OFFSET);
 	        cam.up.set(Vector3.Z);
@@ -65,7 +72,12 @@ class InitialStateController implements WorldViewController {
 		dy = 3.8138173f;
 		dz = -1.71019554f;
 		totalTime = 0;
-		camOffset = new Vector3(-0.3f*WorldView.CAM_OFFSET+dx,-0.1f*WorldView.CAM_OFFSET+dy,Skydiver.STARTING_HEIGHT+0.4f*WorldView.CAM_OFFSET+dz);
+		
+		float camOffsetX = -0.3f*WorldView.CAM_OFFSET+dx;
+		float camOffsetY = -0.1f*WorldView.CAM_OFFSET+dy;
+		float camOffsetZ = Skydiver.STARTING_HEIGHT+0.4f*WorldView.CAM_OFFSET+dz;
+		camOffset = new Vector3(camOffsetX, camOffsetY, camOffsetZ);
+		
 		PerspectiveCamera cam = worldView.getRenderer().getCam();
         cam.direction.set(0,0,-1);
         cam.up.set(Vector3.Z);
