@@ -6,4 +6,6 @@ This was my first time using 3D graphics and my first time making a video game. 
 
 <img src="http://michaelscarlett.blog.com/files/2014/09/ss3.png" style="width:300px">
 
+This project uses the Gradle build system. It can be imported in Eclipse by cloning the root directory into your local repository, choosing File->Import->Gradle->Gradle Project, then inputting the path of this project into the next dialogue.
+
 Details about this project can be found at <a href="http://michaelscarlett.blog.com/2014/09/02/creating-a-3d-skydiving-game-for-android/" style="width:300px">this blog post</a> on my site.
