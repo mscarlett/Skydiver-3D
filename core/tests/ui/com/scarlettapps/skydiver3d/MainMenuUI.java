@@ -4,7 +4,7 @@ import com.badlogic.gdx.graphics.FPSLogger;
 import com.scarlettapps.skydiver3d.resources.AssetFactory;
 
 
-public class WorldPresenterUI extends Skydiver3D {
+public class MainMenuUI extends Skydiver3D {
 
 	@Override
 	public void create() {
@@ -25,8 +25,8 @@ public class WorldPresenterUI extends Skydiver3D {
 		
 		AssetFactory.getInstance().finishLoading();
 		
-		// Set screen to game
-		setScreen(playingScreen);
+		// Set screen to main menu
+		setScreen(mainMenuScreen);
 		
 		// Initialize FPS logger if dev mode enabled
 		if (DEV_MODE) {
