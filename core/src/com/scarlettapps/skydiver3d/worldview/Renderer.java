@@ -23,7 +23,6 @@ import com.scarlettapps.skydiver3d.world.Target;
 import com.scarlettapps.skydiver3d.world.Terrain;
 import com.scarlettapps.skydiver3d.world.World;
 import com.scarlettapps.skydiver3d.worldstate.StatusManager;
-import com.scarlettapps.skydiver3d.worldview.ui.StatusView;
 
 public class Renderer {
 	
@@ -32,7 +31,6 @@ public class Renderer {
 	private PerspectiveCamera cam;
 	private DecalBatch decalBatch;
 	private ModelBatch modelBatch;
-	private StatusView statusView;
 	private World world;
 
 	public Renderer(World world) {
@@ -134,5 +132,9 @@ public class Renderer {
 	
 	public PerspectiveCamera getCam() {
 		return cam;
+	}
+	
+	public World getWorld() {
+		return world;
 	}
 }

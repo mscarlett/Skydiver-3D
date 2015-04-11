@@ -19,13 +19,11 @@ public class WorldView {
 	
 	static final float CAM_OFFSET = 5f;
 	
-	private final World world;
 	private final StatusManager statusManager;
-	private Renderer renderer;	
-	private StatusView statusView;
+	private final Renderer renderer;	
+	private final StatusView statusView;
 		
 	public WorldView(World world, StatusManager statusManager) {
-		this.world = world;
 		this.statusManager = statusManager;  
 		
 		DefaultShader.defaultCullFace = 0;
@@ -62,10 +60,6 @@ public class WorldView {
 
 	public InputProcessor getInputProcessor() {
 		return statusView.getInputProcessor();
-	}
-	
-	World getWorld() {
-		return world;
 	}
 	
 	StatusManager getStatusManager() {

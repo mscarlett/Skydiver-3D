@@ -33,9 +33,10 @@ class SkydivingStateController implements WorldViewController {
 	
 	@Override
 	public void update(float delta) {
+		Renderer renderer = worldView.getRenderer();
 		StatusManager statusManager = worldView.getStatusManager();
-		PerspectiveCamera cam = worldView.getRenderer().getCam();
-		World world = worldView.getWorld();
+		PerspectiveCamera cam = renderer.getCam();
+		World world = renderer.getWorld();
 		cam.position.z = statusManager.position().z + WorldView.CAM_OFFSET;
 		cam.up.set(Vector3.Y);
 		cam.update();

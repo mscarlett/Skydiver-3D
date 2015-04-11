@@ -20,10 +20,11 @@ class ParachutingStateController implements WorldViewController {
 	
 	@Override
 	public void update(float delta) {
-		World world = worldView.getWorld();
+		Renderer renderer = worldView.getRenderer();
+		World world = renderer.getWorld();
 		StatusManager statusManager = worldView.getStatusManager();
 		StatusView statusView = worldView.getStatusView();
-		PerspectiveCamera cam = worldView.getRenderer().getCam();
+		PerspectiveCamera cam = renderer.getCam();
 		Skydiver skydiver = world.getSkydiver();
 		
 		AccuracyMeter accuracyMeter = statusView.getAccuracyMeter();

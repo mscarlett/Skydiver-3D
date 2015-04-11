@@ -24,9 +24,10 @@ class InitialStateController implements WorldViewController {
 
 	@Override
 	public void update(float delta) {
-		World world = worldView.getWorld();
+		Renderer renderer = worldView.getRenderer();
+		World world = renderer.getWorld();
 		StatusManager statusManager = worldView.getStatusManager();
-		PerspectiveCamera cam = worldView.getRenderer().getCam();
+		PerspectiveCamera cam = renderer.getCam();
 		
 		Skydiver skydiver = world.getSkydiver();
 
@@ -52,8 +53,9 @@ class InitialStateController implements WorldViewController {
 	
 	@Override
 	public void render(float delta) {	
-		World world = worldView.getWorld();
-		worldView.getRenderer().drawSkydiverAndPlane();
+		Renderer renderer = worldView.getRenderer();
+		World world = renderer.getWorld();
+		renderer.drawSkydiverAndPlane();
 		worldView.getStatusView().drawJumpOffPlane(world.getSkydiver());
 	}
 
