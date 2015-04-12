@@ -92,5 +92,10 @@ public abstract class MenuScreen extends DefaultScreen<Skydiver3D> {
 	protected InputProcessor getInputProcessor() {
 		return stage;
 	}
+	
+	@Override
+	protected void resizeScreen(int width, int height) {
+		viewport.update(width, height);
+	}
 
 }

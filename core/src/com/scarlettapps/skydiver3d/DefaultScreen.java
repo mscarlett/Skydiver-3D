@@ -56,6 +56,7 @@ public abstract class DefaultScreen<T extends Game> implements Screen {
 	public void resize(int width, int height) {
 		DefaultScreen.width = width;
 		DefaultScreen.height = height;
+		
 		resizeScreen(width, height);
 		
 		if (Skydiver3D.DEV_MODE) {
