@@ -111,6 +111,10 @@ public class StatusManager {
 	}
 
 	public void reset() {
+		if (Skydiver3D.DEV_MODE) {
+			Gdx.app.log(Skydiver3D.LOG, "Resetting StatusManager");
+		}
+		
 		score = 0;
 		justCollected = false;
 		timeSinceCollected = 0f;
@@ -155,10 +159,18 @@ public class StatusManager {
 	}
 
 	public void setJumpedOffAirplane(boolean jumpedOffAirplane) {
+		if (Skydiver3D.DEV_MODE) {
+			Gdx.app.log(Skydiver3D.LOG, "StatusManager setting jumpedOffAirplane to " + jumpedOffAirplane);
+		}
+		
 		this.jumpedOffAirplane = jumpedOffAirplane;
 	}
 
 	public void setParachuteDeployed(boolean parachuteDeployed) {
+		if (Skydiver3D.DEV_MODE) {
+			Gdx.app.log(Skydiver3D.LOG, "StatusManager setting parachuteDeployed to " + parachuteDeployed);
+		}
+		
 		this.parachuteDeployed = parachuteDeployed;
 	}
 
@@ -199,12 +211,20 @@ public class StatusManager {
 	}
 
 	public void setJustOpenedParachute(boolean justOpenedParachute) {
+		if (Skydiver3D.DEV_MODE) {
+			Gdx.app.log(Skydiver3D.LOG, "StatusManager setting justOpenedParachute to " + justOpenedParachute);
+		}
+		
 		this.justOpenedParachute = justOpenedParachute;
 	}
 
-	boolean calculatedParachuteBonus = false;
+	private boolean calculatedParachuteBonus = false;
 	
 	public void setAccuracy(float accuracy) {
+		if (Skydiver3D.DEV_MODE) {
+			Gdx.app.log(Skydiver3D.LOG, "StatusManager setting accuracy to " + accuracy);
+		}
+		
 		this.accuracy = accuracy;
 		if (!calculatedParachuteBonus) {
 			calculateParachutingBonus();
@@ -213,6 +233,10 @@ public class StatusManager {
 	}
 
 	public void setPaused(boolean isPaused) {
+		if (Skydiver3D.DEV_MODE) {
+			Gdx.app.log(Skydiver3D.LOG, "StatusManager setting paused to " + isPaused);
+		}
+		
 		this.isPaused = isPaused;
 	}
 
@@ -314,7 +338,7 @@ public class StatusManager {
 	
 	private float stickyTime = 3f;
 	
-	InputListener stickyListener = new StickyListener(this);
+	private InputListener stickyListener = new StickyListener(this);
 	
 	public float getStickyTime() {
 		return stickyTime;
