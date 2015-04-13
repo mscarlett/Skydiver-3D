@@ -25,32 +25,30 @@ class ParachutingStateController implements WorldViewController {
 		StatusManager statusManager = worldView.getStatusManager();
 		StatusView statusView = worldView.getStatusView();
 		PerspectiveCamera cam = renderer.getCam();
-		Skydiver skydiver = world.getSkydiver();
 		
 		AccuracyMeter accuracyMeter = statusView.getAccuracyMeter();
 		boolean touched = statusManager.justOpenedParachute();
+		
 		if (touched) {
 			accuracyMeter.stop();
 			statusManager.setAccuracy(accuracyMeter.getAccuracy());
 			switchCam = touched;
+			cam.direction.set(0,0,-1);
+			cam.up.set(Vector3.Y);
+			cam.near = 0.1f;
 		}
 		if (switchCam) {
 			cam.position.x = statusManager.position().x + 0.5f;
 			cam.position.y = statusManager.position().y;
 			cam.position.z = statusManager.position().z + WorldView.CAM_OFFSET;
-			cam.direction.set(0,0,-1);
-			cam.up.set(Vector3.Y);
-			cam.near = 0.1f;
 		} else {
 			cam.position.x = statusManager.position().x;
 			cam.position.y = statusManager.position().y+4f;
 			cam.position.z = statusManager.position().z-2f;
-			cam.lookAt(statusManager.position().x, statusManager.position().y, statusManager.position().z+2f);
-			cam.up.set(Vector3.Z);
+			
+			accuracyMeter.act(delta);
 		}
 		cam.update();
-		accuracyMeter.act(delta);
-		skydiver.setParachuting(true);
 	}
 
 	@Override
@@ -66,7 +64,22 @@ class ParachutingStateController implements WorldViewController {
 	@Override
 	public void initialize() {
 		switchCam = false;
+		
 		StatusView statusView = worldView.getStatusView();
 		statusView.showSpeedIcon(false);
+		Renderer renderer = worldView.getRenderer();
+		
+		World world = renderer.getWorld();
+		Skydiver skydiver = world.getSkydiver();
+		skydiver.setParachuting(true);
+		
+		PerspectiveCamera cam = renderer.getCam();
+		cam.up.set(Vector3.Z);
+		
+		StatusManager statusManager = worldView.getStatusManager();		
+		cam.position.x = statusManager.position().x;
+		cam.position.y = statusManager.position().y+4f;
+		cam.position.z = statusManager.position().z-2f;
+		cam.lookAt(statusManager.position().x, statusManager.position().y, statusManager.position().z+2f);
 	}
 }
