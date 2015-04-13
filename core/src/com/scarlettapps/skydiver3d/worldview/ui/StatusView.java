@@ -41,10 +41,11 @@ public class StatusView {
 	private Skin skin;
 	
 	private Group initial;
-	private HUD hud;
 	private Group parachute;
-	private Group scoreSummary;
 	private Group collected;
+	
+	private HUD hud;
+	private ScoreSummary scoreSummary;
 	
 	private PooledLinkedList<Group> visibleQueue;
 
@@ -70,6 +71,21 @@ public class StatusView {
 		BitmapFont font = FontFactory.getInstance().generateFont(36);
 		textButtonStyle.font = font;
 		
+		addHud();
+		addInitial();
+		addParachute();
+		addCollected();
+		addScoreSummary();
+		addPauseIcon();
+		addSpeedIcon();
+	}
+
+	private void addHud() {
+		hud = new HUD(skin, statusManager);
+		stage.addActor(hud.getGroup());
+	}
+	
+	private void addInitial() {
 		initial = new Group();
 		initial.setVisible(false);
 		Label label = new Label("Tap screen to jump off plane", skin);
@@ -124,12 +140,12 @@ public class StatusView {
 		});
 		initial.addActor(label);
 		stage.addActor(initial);
-		
-		stage.addActor(hud.getGroup());
-		
+	}
+	
+	private void addParachute() {
 		parachute = new Group();
 		parachute.setVisible(false);
-		label = new Label("Tap screen to open parachute", skin);
+		Label label = new Label("Tap screen to open parachute", skin);
 		centerLabel(label);
 		label.setColor(Color.WHITE);
 		parachute.addActor(label);
@@ -161,7 +177,7 @@ public class StatusView {
 					SnapshotArray<Actor> children = group.getChildren();
 					Label successLabel = (Label)children.get(1);
 					successLabel.setText(successString);
-					StatusView.lowerLabel(successLabel);
+					lowerLabel(successLabel);
 					successLabel.setVisible(true);
 					children.get(0).setVisible(false);
 				}
@@ -181,10 +197,12 @@ public class StatusView {
 			}
 		});
 		stage.addActor(parachute);
-		
+	}
+	
+	private void addCollected() {
 		collected = new Group();
 		collected.setVisible(false);
-		label = new Label("500 Points", skin);
+		Label label = new Label("500 Points", skin);
 		label.setX(DefaultScreen.VIRTUAL_WIDTH/2);
 		label.setY(DefaultScreen.VIRTUAL_HEIGHT/2);
 		label.setColor(Color.WHITE);
@@ -202,30 +220,14 @@ public class StatusView {
 		});
 		collected.addActor(label);
 		stage.addActor(collected);
-		
-		scoreSummary = new Group();
-		scoreSummary.setVisible(false);
-		label = new Label("Ring Score: 0", skin);
-		label.setX(DefaultScreen.VIRTUAL_WIDTH/2);
-		label.setY(300/320f*DefaultScreen.VIRTUAL_HEIGHT);
-		label.setColor(Color.WHITE);
-		scoreSummary.addActor(label);
-		label = new Label("Speed Bonus: 0", skin);
-		label.setX(DefaultScreen.VIRTUAL_WIDTH/2);
-		label.setY(280/320f*DefaultScreen.VIRTUAL_HEIGHT);
-		label.setColor(Color.WHITE);
-		scoreSummary.addActor(label);
-		label = new Label("Landing Bonus: 0", skin);
-		label.setX(DefaultScreen.VIRTUAL_WIDTH/2);
-		label.setY(260/320f*DefaultScreen.VIRTUAL_HEIGHT);
-		label.setColor(Color.WHITE);
-		label = new Label("Total Bonus: 0", skin);
-		label.setX(DefaultScreen.VIRTUAL_WIDTH/2);
-		label.setY(240/320f*DefaultScreen.VIRTUAL_HEIGHT);
-		label.setColor(Color.WHITE);
-		scoreSummary.addActor(label);
-		stage.addActor(scoreSummary);
-
+	}
+	
+	private void addScoreSummary() {
+		scoreSummary = new ScoreSummary(skin);
+		stage.addActor(scoreSummary.getGroup());
+	}
+	
+	private void addPauseIcon() {
 		pauseIcon = new Image(AssetFactory.getInstance().get(TextureType.PAUSE, Texture.class));
 		pauseIcon.setPosition(DefaultScreen.VIRTUAL_WIDTH-pauseIcon.getWidth()-10, 10);
 		pauseIcon.addListener(new ClickListener() {
@@ -239,7 +241,9 @@ public class StatusView {
 		});
 		pauseIcon.setVisible(true);
 		stage.addActor(pauseIcon);
-		
+	}
+	
+	private void addSpeedIcon() {
 		speedIcon = new Image(AssetFactory.getInstance().get(TextureType.LIGHTNING, Texture.class));
 		speedIcon.setPosition(10, 10);
 		speedIcon.addListener(new ClickListener() {
@@ -269,6 +273,7 @@ public class StatusView {
 		speedIcon.setVisible(false);
 		stage.addActor(speedIcon);
 	}
+
 	
 	private String getSuccess(int success) {
 		if (success < 10) {
@@ -315,7 +320,7 @@ public class StatusView {
 		visibleQueue.clear();
 	}
 	
-	public void drawJumpOffPlane(Skydiver skydiver) {
+	public void drawJumpOffPlane() {
 		visibleQueue.add(initial);
 	}
 	
