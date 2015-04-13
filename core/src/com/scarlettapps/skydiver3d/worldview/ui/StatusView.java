@@ -45,7 +45,6 @@ public class StatusView {
 	private Group collected;
 	
 	private HUD hud;
-	private ScoreSummary scoreSummary;
 	
 	private PooledLinkedList<Group> visibleQueue;
 
@@ -75,7 +74,7 @@ public class StatusView {
 		addInitial();
 		addParachute();
 		addCollected();
-		addScoreSummary();
+		//addScoreSummary();
 		addPauseIcon();
 		addSpeedIcon();
 	}
@@ -220,11 +219,6 @@ public class StatusView {
 		});
 		collected.addActor(label);
 		stage.addActor(collected);
-	}
-	
-	private void addScoreSummary() {
-		scoreSummary = new ScoreSummary(skin);
-		stage.addActor(scoreSummary.getGroup());
 	}
 	
 	private void addPauseIcon() {
