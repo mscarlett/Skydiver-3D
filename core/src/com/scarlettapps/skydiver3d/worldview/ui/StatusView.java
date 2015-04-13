@@ -38,11 +38,10 @@ public class StatusView {
 	private final StatusManager statusManager;
 	
 	private Stage stage;
-	private Table table;
 	private Skin skin;
 	
 	private Group initial;
-	private Group hud;
+	private HUD hud;
 	private Group parachute;
 	private Group scoreSummary;
 	private Group collected;
@@ -53,6 +52,7 @@ public class StatusView {
 	private Image speedIcon;
 	
 	private AccuracyMeter accuracyMeter;
+	
 	private Viewport viewport;
 
 	public StatusView(StatusManager statusManager) {
@@ -65,8 +65,6 @@ public class StatusView {
 		skin = new Skin(Gdx.files.internal("skin/uiskin.json"));
 		viewport = new StretchViewport(DefaultScreen.VIRTUAL_WIDTH, DefaultScreen.VIRTUAL_HEIGHT);
 		stage = new Stage(viewport);
-		table = new Table();
-		stage.addActor(table);
 		
 		LabelStyle textButtonStyle = skin.get(LabelStyle.class);
 		BitmapFont font = FontFactory.getInstance().generateFont(36);
@@ -125,60 +123,9 @@ public class StatusView {
 			
 		});
 		initial.addActor(label);
-		
-		hud = new Group();
-		hud.setVisible(false);
-		label = new Label("Points: 0", skin);
-		TextBounds bounds = label.getTextBounds();
-		label.setPosition(10, DefaultScreen.VIRTUAL_HEIGHT*0.975f-bounds.height);
-		label.setColor(Color.WHITE);
-		label.addAction(new Action() {
-
-			@Override
-			public boolean act(float delta) {
-				Label label = (Label)getActor();
-				int points = StatusView.this.statusManager.getScore();
-				label.setText("Points: " + points);
-				return false;
-			}
-			
-		});
 		stage.addActor(initial);
 		
-		hud.addActor(label);
-		label = new Label("Speed: 000 mph", skin);
-		bounds = label.getTextBounds();
-		label.setPosition(9*DefaultScreen.VIRTUAL_WIDTH/20-bounds.width/2, DefaultScreen.VIRTUAL_HEIGHT*0.975f-bounds.height);
-		label.setColor(Color.WHITE);
-		label.addAction(new Action() {
-
-			@Override
-			public boolean act(float delta) {
-				Label label = (Label)getActor();
-				int speed = Math.round(-2.23694f*StatusView.this.statusManager.velocity().z);
-				label.setText("Speed: " + speed + " mph");
-				return false;
-			}
-			
-		});
-		hud.addActor(label);
-		label = new Label("Altitude: 00000 feet", skin);
-		bounds = label.getTextBounds();
-		label.setPosition(DefaultScreen.VIRTUAL_WIDTH-bounds.width, DefaultScreen.VIRTUAL_HEIGHT*0.975f-bounds.height);
-		label.setColor(Color.WHITE);
-		label.addAction(new Action() {
-
-			@Override
-			public boolean act(float delta) {
-				Label label = (Label)getActor();
-				int altitude = Math.round(3.28084f*StatusView.this.statusManager.position().z);
-				label.setText("Altitude: " + altitude + " feet");
-				return false;
-			}
-			
-		});
-		hud.addActor(label);
-		stage.addActor(hud);
+		stage.addActor(hud.getGroup());
 		
 		parachute = new Group();
 		parachute.setVisible(false);
@@ -208,31 +155,7 @@ public class StatusView {
 					statusManager.setJustOpenedParachute(false);
 					
 					int success = (int)(statusManager.getAccuracy()*100+0.5f);
-					String successString;
-					
-					if (success < 10) {
-						successString = "Crash Landing!!!";
-					} else if (success < 20) {
-						successString = "Poor Reflexes";
-					} else if (success < 30) {
-						successString = "Bad Reflexes";
-					} else if (success < 40) {
-						successString = "Sloppy Timing";
-					} else if (success < 50) {
-						successString = "OK Timing";
-					} else if (success < 60) {
-						successString = "Average Timing";
-					} else if (success < 70) {
-						successString = "Good Timing";
-					} else if (success < 80) {
-						successString = "Great Timing!";
-					} else if (success < 90) {
-						successString = "Nice Timing!";
-					} else if (success < 97) {
-						successString = "Perfect Timing!";
-					} else {
-						successString = "Incredible Timing!!!";
-					}
+					String successString = getSuccess(success);
 					
 					Group group = (Group)getActor();
 					SnapshotArray<Actor> children = group.getChildren();
@@ -347,6 +270,32 @@ public class StatusView {
 		stage.addActor(speedIcon);
 	}
 	
+	private String getSuccess(int success) {
+		if (success < 10) {
+			return "Crash Landing!!!";
+		} else if (success < 20) {
+			return "Poor Reflexes";
+		} else if (success < 30) {
+			return "Bad Reflexes";
+		} else if (success < 40) {
+			return "Sloppy Timing";
+		} else if (success < 50) {
+			return "OK Timing";
+		} else if (success < 60) {
+			return "Average Timing";
+		} else if (success < 70) {
+			return "Good Timing";
+		} else if (success < 80) {
+			return "Great Timing!";
+		} else if (success < 90) {
+			return "Nice Timing!";
+		} else if (success < 97) {
+			return "Perfect Timing!";
+		} else {
+			return "Incredible Timing!!!";
+		}
+	}
+	
 	public void update(float delta) {
 		stage.act(delta);
 	}
@@ -379,7 +328,7 @@ public class StatusView {
 	}
 	
 	public void drawHud() {
-		visibleQueue.add(hud);
+		visibleQueue.add(hud.getGroup());
 	}
 
 	public AccuracyMeter getAccuracyMeter() {
@@ -389,19 +338,16 @@ public class StatusView {
 	private static void centerLabel(Label label) {
 		float x = DefaultScreen.VIRTUAL_WIDTH/2;
 		float y = DefaultScreen.VIRTUAL_HEIGHT/2;
-		LabelStyle style = new LabelStyle();
-		style.font = FontFactory.getInstance().generateFont(64);
-		style.fontColor = Color.WHITE;
-		label.setStyle(style);
-		TextBounds bounds = label.getTextBounds();
-		x -= bounds.width/2;
-		y -= bounds.height/2;
-		label.setPosition(x, y);
+		setLabel(label, x, y);
 	}
 	
 	private static void lowerLabel(Label label) {
 		float x = DefaultScreen.VIRTUAL_WIDTH/2;
 		float y = DefaultScreen.VIRTUAL_HEIGHT/4;
+		setLabel(label, x, y);
+	}
+	
+	private static void setLabel(Label label, float x, float y) {
 		LabelStyle style = new LabelStyle();
 		style.font = FontFactory.getInstance().generateFont(64);
 		style.fontColor = Color.WHITE;
