@@ -2,14 +2,14 @@ package com.scarlettapps.skydiver3d.worldstate;
 
 public class StickyListener implements InputListener {
 
-	private final StatusManager status;
-	
-	public StickyListener(StatusManager status) {
-		this.status = status;
+	public StickyListener() {
+		
 	}
 	
 	@Override
 	public boolean update(GameController gameController, float delta) {
+		Status status = Status.getInstance();
+		
 		float stickyTime = status.getStickyTime();
 		if (stickyTime >= 3f) {
 			gameController.sticky = false;

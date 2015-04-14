@@ -1,7 +1,7 @@
 package com.scarlettapps.skydiver3d.worldview;
 
 import com.badlogic.gdx.graphics.PerspectiveCamera;
-import com.scarlettapps.skydiver3d.worldstate.StatusManager;
+import com.scarlettapps.skydiver3d.worldstate.Status;
 
 class LandingStateController implements WorldViewController {
 	
@@ -14,15 +14,15 @@ class LandingStateController implements WorldViewController {
 	@Override
 	public void update(float delta) {
 		PerspectiveCamera cam = worldView.getRenderer().getCam();
-		StatusManager statusManager = worldView.getStatusManager();
-		cam.position.x = statusManager.position().x + 0.5f;
-		cam.position.y = statusManager.position().y;
-		cam.position.z = statusManager.position().z + WorldView.CAM_OFFSET;
+		Status status = Status.getInstance();
+		cam.position.x = status.position().x + 0.5f;
+		cam.position.y = status.position().y;
+		cam.position.z = status.position().z + WorldView.CAM_OFFSET;
 		cam.update();
 	}
 
 	@Override
-	public void render(float delta) {
+	public void render(float delta) { //TODO why does game crash
 		Renderer renderer = worldView.getRenderer();
 		renderer.drawTerrain();
 		renderer.drawTargetAndSkydiver();

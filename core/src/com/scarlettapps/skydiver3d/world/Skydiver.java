@@ -19,6 +19,7 @@ import com.scarlettapps.skydiver3d.resources.AssetFactory;
 import com.scarlettapps.skydiver3d.resources.AssetFactory.ModelType;
 import com.scarlettapps.skydiver3d.world.utils.AnimationController;
 import com.scarlettapps.skydiver3d.world.utils.IntersectUtil;
+import com.scarlettapps.skydiver3d.worldstate.Status;
 import com.scarlettapps.skydiver3d.worldstate.WorldState;
 import com.scarlettapps.skydiver3d.worldview.Renderer;
 
@@ -37,19 +38,20 @@ public class Skydiver extends GameObject {
 	public static final float MAX_TERMINAL_SPEED = 89f;
 	private static final float STARTING_POSE = 8.266682f*34/200;
 	
+	private final Vector3 position = Status.getInstance().position();
+	
+	private final Vector3 velocity = Status.getInstance().velocity();
+	
 	public static PerspectiveCamera cam;
 
 	private ModelInstance instance;
 	private AnimationController controller;
 	
-	private Vector3 position;
-	private Vector3 velocity;
-	
 	private Environment environment;
 	
-	private Vector3 axis;
-	private Vector3 angle;
-	private Vector2 skydiverAngle;
+	private final Vector3 axis = new Vector3();
+	private final Vector3 angle = new Vector3();
+	private final Vector2 skydiverAngle = new Vector2();
 	
 	private boolean landing;
 	private boolean parachuting;
@@ -78,9 +80,9 @@ public class Skydiver extends GameObject {
 		finalState = false;
 		timeSinceFinalState = 0f;
 		
-		axis = new Vector3();
-		angle = new Vector3();
-		skydiverAngle = new Vector2();
+		axis.set(0,0,0);
+		angle.set(0,0,0);
+		skydiverAngle.set(0,0);
 		
         String filename = ModelType.SKYDIVER;
 		
@@ -97,9 +99,8 @@ public class Skydiver extends GameObject {
 		maxCpy = new Vector3(0.436073f*xScale, 1.9008393f*yScale, 0.17680216f);
 		//bounds = new BoundingBox(minCpy, maxCpy);
 		
-		position = new Vector3();
 		setToTranslation(0, 0, STARTING_HEIGHT);
-		velocity = new Vector3(0, 0, 0);
+		velocity.set(0, 0, 0);
 		
 		controller.animate(instance.animations.get(0).id, -1, 1f, null,0.2f);
 		

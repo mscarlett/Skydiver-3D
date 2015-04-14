@@ -2,6 +2,7 @@ package com.scarlettapps.skydiver3d.worldview;
 
 import com.badlogic.gdx.Gdx;
 import com.scarlettapps.skydiver3d.Skydiver3D;
+import com.scarlettapps.skydiver3d.worldstate.Status;
 import com.scarlettapps.skydiver3d.worldstate.StatusManager;
 import com.scarlettapps.skydiver3d.worldview.ui.StatusView;
 
@@ -27,12 +28,12 @@ class FinalStateController implements WorldViewController {
 
 	@Override
 	public void initialize() {
-		StatusManager statusManager = worldView.getStatusManager();
+		Status status = Status.getInstance();
 		StatusView statusView = worldView.getStatusView();
-		statusManager.calculateTimeBonus();
-		statusManager.calculateLandingBonus();
+		status.calculateTimeBonus();
+		status.calculateLandingBonus();
 		if (Skydiver3D.DEV_MODE) {
-			Gdx.app.log(Skydiver3D.LOG, "Loanded at position " + statusManager.position());
+			Gdx.app.log(Skydiver3D.LOG, "Loanded at position " + status.position());
 		}
 		statusView.hidePause();
 	}

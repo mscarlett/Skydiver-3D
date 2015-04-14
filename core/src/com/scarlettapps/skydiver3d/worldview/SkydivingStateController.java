@@ -5,6 +5,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.scarlettapps.skydiver3d.world.Collectibles;
 import com.scarlettapps.skydiver3d.world.Skydiver;
 import com.scarlettapps.skydiver3d.world.World;
+import com.scarlettapps.skydiver3d.worldstate.Status;
 import com.scarlettapps.skydiver3d.worldstate.StatusManager;
 import com.scarlettapps.skydiver3d.worldview.ui.StatusView;
 
@@ -19,30 +20,30 @@ class SkydivingStateController implements WorldViewController {
 	
 	public void initialize() {
 		PerspectiveCamera cam = worldView.getRenderer().getCam();
-		StatusManager statusManager = worldView.getStatusManager();
+		Status status = Status.getInstance();
 		StatusView statusView = worldView.getStatusView();
-		cam.position.set(0, 0.5f,statusManager.position().z + WorldView.CAM_OFFSET);
+		cam.position.set(0, 0.5f,status.position().z + WorldView.CAM_OFFSET);
         cam.direction.set(0,0,-1);
         cam.near = 1f;
         cam.far = 9000f;
         cam.update();
-        statusManager.position().x = (Skydiver.MIN_X+Skydiver.MAX_X)/2;
-        statusManager.position().y = (Skydiver.MIN_Y+Skydiver.MAX_Y)/2;
+        status.position().x = (Skydiver.MIN_X+Skydiver.MAX_X)/2;
+        status.position().y = (Skydiver.MIN_Y+Skydiver.MAX_Y)/2;
         statusView.showSpeedIcon(true);
 	}
 	
 	@Override
 	public void update(float delta) {
 		Renderer renderer = worldView.getRenderer();
-		StatusManager statusManager = worldView.getStatusManager();
+		Status status = Status.getInstance();
 		PerspectiveCamera cam = renderer.getCam();
 		World world = renderer.getWorld();
-		cam.position.z = statusManager.position().z + WorldView.CAM_OFFSET;
+		cam.position.z = status.position().z + WorldView.CAM_OFFSET;
 		cam.up.set(Vector3.Y);
 		cam.update();
 		Collectibles collectibles = world.getCollectibles();
 		collectibles.setToRender(cam.position.z, COLLECTIBLES_OFFSET);
-		statusManager.addToSkydivingTime(delta);
+		status.addToSkydivingTime(delta);
 	}
 
 	@Override
@@ -55,23 +56,23 @@ class SkydivingStateController implements WorldViewController {
 		renderer.drawTerrain();
 		renderer.drawTargetAndSkydiver();
 		renderer.drawCollectibles();
-		StatusManager statusManager = worldView.getStatusManager();
+		Status status = Status.getInstance();
 		PerspectiveCamera cam = renderer.getCam();
 		StatusView statusView = worldView.getStatusView();
 		
-		if (statusManager.collected()) {
-			float displayScoreTime = statusManager.displayScoreTime();
+		if (status.collected()) {
+			float displayScoreTime = status.displayScoreTime();
 			if (displayScoreTime < 1) {
-				Vector3 intersectPoint = statusManager.intersectPoint();
+				Vector3 intersectPoint = status.intersectPoint();
 				if (displayScoreTime == 0) {
-					intersectPoint.set(statusManager.position());
+					intersectPoint.set(status.position());
 					cam.project(intersectPoint);
-					statusManager.addToScore(1000);
+					status.addToScore(1000);
 				}
 				statusView.drawCollected();
         	} else {
-        		statusManager.setDisplayScoreTime(0);
-        		statusManager.setCollected(false);
+        		status.setDisplayScoreTime(0);
+        		status.setCollected(false);
         	}
 		}
 		statusView.drawHud();

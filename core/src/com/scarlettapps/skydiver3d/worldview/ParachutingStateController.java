@@ -3,8 +3,8 @@ package com.scarlettapps.skydiver3d.worldview;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.math.Vector3;
 import com.scarlettapps.skydiver3d.world.Skydiver;
-import com.scarlettapps.skydiver3d.world.Target;
 import com.scarlettapps.skydiver3d.world.World;
+import com.scarlettapps.skydiver3d.worldstate.Status;
 import com.scarlettapps.skydiver3d.worldstate.StatusManager;
 import com.scarlettapps.skydiver3d.worldview.ui.AccuracyMeter;
 import com.scarlettapps.skydiver3d.worldview.ui.StatusView;
@@ -22,29 +22,29 @@ class ParachutingStateController implements WorldViewController {
 	public void update(float delta) {
 		Renderer renderer = worldView.getRenderer();
 		World world = renderer.getWorld();
-		StatusManager statusManager = worldView.getStatusManager();
+		Status status = Status.getInstance();
 		StatusView statusView = worldView.getStatusView();
 		PerspectiveCamera cam = renderer.getCam();
 		
 		AccuracyMeter accuracyMeter = statusView.getAccuracyMeter();
-		boolean touched = statusManager.justOpenedParachute();
+		boolean touched = status.justOpenedParachute();
 		
 		if (touched) {
 			accuracyMeter.stop();
-			statusManager.setAccuracy(accuracyMeter.getAccuracy());
+			status.setAccuracy(accuracyMeter.getAccuracy());
 			switchCam = touched;
 			cam.direction.set(0,0,-1);
 			cam.up.set(Vector3.Y);
 			cam.near = 0.1f;
 		}
 		if (switchCam) {
-			cam.position.x = statusManager.position().x + 0.5f;
-			cam.position.y = statusManager.position().y;
-			cam.position.z = statusManager.position().z + WorldView.CAM_OFFSET;
+			cam.position.x = status.position().x + 0.5f;
+			cam.position.y = status.position().y;
+			cam.position.z = status.position().z + WorldView.CAM_OFFSET;
 		} else {
-			cam.position.x = statusManager.position().x;
-			cam.position.y = statusManager.position().y+4f;
-			cam.position.z = statusManager.position().z-2f;
+			cam.position.x = status.position().x;
+			cam.position.y = status.position().y+4f;
+			cam.position.z = status.position().z-2f;
 			
 			accuracyMeter.act(delta);
 		}
@@ -76,10 +76,10 @@ class ParachutingStateController implements WorldViewController {
 		PerspectiveCamera cam = renderer.getCam();
 		cam.up.set(Vector3.Z);
 		
-		StatusManager statusManager = worldView.getStatusManager();		
-		cam.position.x = statusManager.position().x;
-		cam.position.y = statusManager.position().y+4f;
-		cam.position.z = statusManager.position().z-2f;
-		cam.lookAt(statusManager.position().x, statusManager.position().y, statusManager.position().z+2f);
+		Status status = Status.getInstance();		
+		cam.position.x = status.position().x;
+		cam.position.y = status.position().y+4f;
+		cam.position.z = status.position().z-2f;
+		cam.lookAt(status.position().x, status.position().y, status.position().z+2f);
 	}
 }

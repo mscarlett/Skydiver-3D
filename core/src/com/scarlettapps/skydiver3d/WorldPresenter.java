@@ -15,6 +15,7 @@ import com.scarlettapps.skydiver3d.worldstate.GameController;
 import com.scarlettapps.skydiver3d.worldstate.InputManager;
 import com.scarlettapps.skydiver3d.worldstate.Score;
 import com.scarlettapps.skydiver3d.worldstate.SkydiverControls;
+import com.scarlettapps.skydiver3d.worldstate.Status;
 import com.scarlettapps.skydiver3d.worldstate.StatusManager;
 import com.scarlettapps.skydiver3d.worldview.WorldView;
 
@@ -54,8 +55,7 @@ public class WorldPresenter extends DefaultScreen<Skydiver3D> {
 		world = new World(statusManager);
 		worldView = new WorldView(world, statusManager);
 
-		SkydiverControls skydiverControls = new SkydiverControls(world,
-				statusManager);
+		SkydiverControls skydiverControls = new SkydiverControls(world);
 		inputManager.addListener(skydiverControls);
 	}
 	
@@ -65,10 +65,12 @@ public class WorldPresenter extends DefaultScreen<Skydiver3D> {
 	 */
 	@Override
 	public void render(float delta) {
-		if (statusManager.isPaused()) {
+		Status status = Status.getInstance();
+		
+		if (status.isPaused()) {
 			// If the world is paused then switch to pause screen
 			game.setScreen(game.pauseScreen);
-		} else if (statusManager.isCompleted()) {
+		} else if (status.isCompleted()) {
 			// If the level has been completed then switch to level completed screen
 			game.setScreen(game.levelCompletedScreen);
 		} else {
@@ -157,7 +159,7 @@ public class WorldPresenter extends DefaultScreen<Skydiver3D> {
 	 * @return the score
 	 */
 	public Score scoreSummary() {
-		return statusManager.scoreSummary();
+		return Status.getInstance().scoreSummary();
 	}
 
 	/**
@@ -173,7 +175,7 @@ public class WorldPresenter extends DefaultScreen<Skydiver3D> {
 	 * @param b whether or not the game should be paused
 	 */
 	public void setPaused(boolean b) {
-		statusManager.setPaused(b);
+		Status.getInstance().setPaused(b);
 	}
 
 }

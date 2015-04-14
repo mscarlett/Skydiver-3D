@@ -14,11 +14,9 @@ public class SkydiverControls implements InputListener {
 	private static final float PARACHUTING_TIME_LIMIT = 8f;
 	private float elapsedTime;
 	private World world;
-	private StatusManager statusManager;
 	
-	public SkydiverControls(World world, StatusManager statusManager) {
+	public SkydiverControls(World world) {
 		this.world = world;
-		this.statusManager = statusManager;
 		reset();
 	}
 	
@@ -29,13 +27,14 @@ public class SkydiverControls implements InputListener {
 	
 	@Override
 	public boolean update(GameController gameController, float delta) {
+		Status status = Status.getInstance();
 					
-		switch (statusManager.worldState()) {
+		switch (status.worldState()) {
 			case INITIAL:
 				Skydiver skydiver = world.getSkydiver();
 				if (gameController.justTouched() && !skydiver.jumpedOffAirplane()) {
 					skydiver.jumpOffAirplane();
-					statusManager.setJumpedOffAirplane(true);
+					status.setJumpedOffAirplane(true);
 				}
 				break;
 			case SKYDIVING:
@@ -47,49 +46,49 @@ public class SkydiverControls implements InputListener {
 				skydiver.skydiverAngle().x += 10 * delta*gameController.getAx();
 				break;
 			case PARACHUTING:
-				if (!statusManager.justOpenedParachute()) {
+				if (!status.justOpenedParachute()) {
 					elapsedTime += delta;
-					statusManager.setJustOpenedParachute(Gdx.input.justTouched() || elapsedTime > PARACHUTING_TIME_LIMIT);
+					status.setJustOpenedParachute(Gdx.input.justTouched() || elapsedTime > PARACHUTING_TIME_LIMIT);
 				}
 				skydiver = world.getSkydiver();
-				statusManager.velocity().x = 0;
-				statusManager.velocity().y = 0;
-				statusManager.position().x = Math.signum(statusManager.position().x)*(Math.abs(statusManager.position().x)-0.5f*delta);
-				statusManager.position().y = Math.signum(statusManager.position().y)*(Math.abs(statusManager.position().y)-0.5f*delta);
+				status.velocity().x = 0;
+				status.velocity().y = 0;
+				status.position().x = Math.signum(status.position().x)*(Math.abs(status.position().x)-0.5f*delta);
+				status.position().y = Math.signum(status.position().y)*(Math.abs(status.position().y)-0.5f*delta);
 				
-				if (statusManager.justOpenedParachute()) {
-					if (!statusManager.parachuteDeployed()) {
+				if (status.justOpenedParachute()) {
+					if (!status.parachuteDeployed()) {
 						skydiver.deployParachute();
-						statusManager.setParachuteDeployed(true);
+						status.setParachuteDeployed(true);
 						
 						
 					}
 					
-					statusManager.velocity().z -= 15*Math.signum(statusManager.velocity().z+30)*delta;
+					status.velocity().z -= 15*Math.signum(status.velocity().z+30)*delta;
 				}
 					break;
 			case LANDING:
 				skydiver = world.getSkydiver();
-				float accuracy = statusManager.getAccuracy();
+				float accuracy = status.getAccuracy();
 				float error = 3-2*accuracy;
 				skydiver.addToVelocity(15*gameController.getAx()*error*delta,15*gameController.getAy()*error*delta,0);
-				statusManager.velocity().z = -8f*(1.7f-accuracy)*(7*statusManager.position().z/1000f+1);
-				statusManager.velocity().x += 3*(Math.signum(statusManager.velocity().x) == 0 ? Math.random() : Math.signum(statusManager.velocity().x))*Math.abs(Math.random()*delta);
+				status.velocity().z = -8f*(1.7f-accuracy)*(7*status.position().z/1000f+1);
+				status.velocity().x += 3*(Math.signum(status.velocity().x) == 0 ? Math.random() : Math.signum(status.velocity().x))*Math.abs(Math.random()*delta);
 				if (Gdx.app.getType() != ApplicationType.Android) {
-					statusManager.velocity().y += 3*(Math.signum(statusManager.velocity().y) == 0 ? Math.random() : Math.signum(statusManager.velocity().y))*Math.abs(Math.random()*delta);
+					status.velocity().y += 3*(Math.signum(status.velocity().y) == 0 ? Math.random() : Math.signum(status.velocity().y))*Math.abs(Math.random()*delta);
 				}
 				skydiver.setLanding(true);
-				Vector3 pos = statusManager.position();
+				Vector3 pos = status.position();
 				float dist2 = pos.x*pos.x+pos.y*pos.y;
 				if (dist2 < 2027) {
 					if (pos.z < 9) {
-						statusManager.velocity().z = 0;
-						statusManager.setState(WorldState.FINAL);
+						status.velocity().z = 0;
+						status.setState(WorldState.FINAL);
 					}
 				} else if (dist2 > 2027 && dist2 < 3550) {
 					if (pos.z < 20) {
-						statusManager.velocity().z = 0;
-						statusManager.setState(WorldState.FINAL);
+						status.velocity().z = 0;
+						status.setState(WorldState.FINAL);
 					}
 				} else {
 					if (pos.z < 9) {
@@ -99,8 +98,8 @@ public class SkydiverControls implements InputListener {
 							if (altitude < 0) {
 								world.getSkydiver().setRender(false);
 							}
-							statusManager.velocity().z = 0;
-							statusManager.setState(WorldState.FINAL);
+							status.velocity().z = 0;
+							status.setState(WorldState.FINAL);
 							SoundFactory.getInstance().play(SoundType.LAUGH);
 						}
 					}
@@ -108,7 +107,7 @@ public class SkydiverControls implements InputListener {
 				break;
 			case FINAL:
 				skydiver = world.getSkydiver();
-				statusManager.velocity().set(0,0,0);
+				status.velocity().set(0,0,0);
 				skydiver.setFinalState(true);
 				break;
 		}

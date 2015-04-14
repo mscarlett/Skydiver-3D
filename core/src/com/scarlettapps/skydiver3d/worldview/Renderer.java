@@ -22,6 +22,7 @@ import com.scarlettapps.skydiver3d.world.Skydiver;
 import com.scarlettapps.skydiver3d.world.Target;
 import com.scarlettapps.skydiver3d.world.Terrain;
 import com.scarlettapps.skydiver3d.world.World;
+import com.scarlettapps.skydiver3d.worldstate.Status;
 import com.scarlettapps.skydiver3d.worldstate.StatusManager;
 
 public class Renderer {
@@ -60,7 +61,9 @@ public class Renderer {
 			oldName = controller == null ? null : controller.getClass().getSimpleName();
 		}
 		
-		switch(statusManager.getState()) {
+		Status status = Status.getInstance();
+		
+		switch(status.getState()) {
 			case FINAL:
 				controller = new FinalStateController(worldView);
 				break;

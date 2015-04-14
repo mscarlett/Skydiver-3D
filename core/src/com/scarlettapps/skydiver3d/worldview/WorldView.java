@@ -7,6 +7,7 @@ import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.g3d.shaders.DefaultShader;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.scarlettapps.skydiver3d.world.World;
+import com.scarlettapps.skydiver3d.worldstate.Status;
 import com.scarlettapps.skydiver3d.worldstate.StatusManager;
 import com.scarlettapps.skydiver3d.worldview.ui.StatusView;
 
@@ -52,7 +53,7 @@ public class WorldView {
 	}
 
 	public void reset() {
-		if (statusManager.jumpedOffAirplane()) { //XXX another hack
+		if (Status.getInstance().jumpedOffAirplane()) { //XXX another hack
 			throw new GdxRuntimeException("Need to call reset() on statusManager first.");
 		}
 		initialize();

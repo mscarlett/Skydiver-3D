@@ -197,7 +197,7 @@ public class LevelCompletedScreen extends MenuScreen {
 
 	private void backToMainMenu() {
 		if (Skydiver3D.DEV_MODE) {
-			Gdx.app.log(Skydiver3D.LOG, "");
+			Gdx.app.log(Skydiver3D.LOG, "Back to main menu");
 		}
 		
 		game.playingScreen.restartLevel();

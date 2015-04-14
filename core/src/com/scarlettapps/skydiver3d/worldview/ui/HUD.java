@@ -3,21 +3,17 @@ package com.scarlettapps.skydiver3d.worldview.ui;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont.TextBounds;
 import com.badlogic.gdx.scenes.scene2d.Action;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.scarlettapps.skydiver3d.DefaultScreen;
-import com.scarlettapps.skydiver3d.worldstate.StatusManager;
+import com.scarlettapps.skydiver3d.worldstate.Status;
 
 public class HUD {
 	
 	private Group hud;
 	
-	public HUD(Skin skin, StatusManager statusManager) {
-		final StatusManager status = statusManager;
+	public HUD(Skin skin) {;
 		Label label;
 		
 		hud = new Group();
@@ -31,7 +27,7 @@ public class HUD {
 			@Override
 			public boolean act(float delta) {
 				Label label = (Label)getActor();
-				int points = status.getScore();
+				int points = Status.getInstance().getScore();
 				label.setText("Points: " + points);
 				return false;
 			}
@@ -48,7 +44,7 @@ public class HUD {
 			@Override
 			public boolean act(float delta) {
 				Label label = (Label)getActor();
-				int speed = Math.round(-2.23694f*status.velocity().z);
+				int speed = Math.round(-2.23694f*Status.getInstance().velocity().z);
 				label.setText("Speed: " + speed + " mph");
 				return false;
 			}
@@ -65,7 +61,7 @@ public class HUD {
 			@Override
 			public boolean act(float delta) {
 				Label label = (Label)getActor();
-				int altitude = Math.round(3.28084f*status.position().z);
+				int altitude = Math.round(3.28084f*Status.getInstance().position().z);
 				label.setText("Altitude: " + altitude + " feet");
 				return false;
 			}

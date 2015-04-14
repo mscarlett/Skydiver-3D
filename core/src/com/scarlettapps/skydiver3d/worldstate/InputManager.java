@@ -45,8 +45,4 @@ public class InputManager {
 		}
 	}
 
-	protected Vector2 getTouchPoint() {
-		return gameController.getTouchPosition();
-	}
-
 }

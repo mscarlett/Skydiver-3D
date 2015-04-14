@@ -11,6 +11,7 @@ import com.scarlettapps.skydiver3d.resources.MusicFactory;
 import com.scarlettapps.skydiver3d.resources.SoundFactory;
 import com.scarlettapps.skydiver3d.resources.AssetFactory.MusicType;
 import com.scarlettapps.skydiver3d.resources.AssetFactory.SoundType;
+import com.scarlettapps.skydiver3d.worldstate.Status;
 import com.scarlettapps.skydiver3d.worldstate.StatusManager;
 
 /**
@@ -53,8 +54,6 @@ public class World {
 		for (GameObject o: objects) {
 			o.initialize();
 		}
-		
-		statusManager.syncSkydiver(skydiver);
 	}
 	
 	public void playWind() {
@@ -63,7 +62,7 @@ public class World {
 	}
 	
 	public void update(float delta) {
-		if (!statusManager.isPaused()) {
+		if (!Status.getInstance().isPaused()) {
 			updatePositions(delta);
 			MusicFactory music = MusicFactory.getInstance();
 			music.setVolume(getWindVolume());
@@ -73,7 +72,7 @@ public class World {
 	}
 	
 	private float getWindVolume() {
-		return (0.2f-statusManager.velocity().z/Skydiver.MAX_TERMINAL_SPEED)/1.2f;
+		return (0.2f-Status.getInstance().velocity().z/Skydiver.MAX_TERMINAL_SPEED)/1.2f;
 	}
 	
 	private void updatePositions(float delta) {
@@ -86,15 +85,15 @@ public class World {
 	}
 	
 	public void pause() {
-		statusManager.setPaused(true);
+		Status.getInstance().setPaused(true);
 	}
 	
 	public void resume() {
-		statusManager.setPaused(false);
+		Status.getInstance().setPaused(false);
 	}
 
 	public boolean isPaused() {
-		return statusManager.isPaused();
+		return Status.getInstance().isPaused();
 	}
 	
 	public Terrain getTerrain() {
