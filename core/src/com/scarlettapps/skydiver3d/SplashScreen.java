@@ -41,8 +41,12 @@ public class SplashScreen extends MenuScreen {
 	 */
 	public SplashScreen(Skydiver3D game) {
 		super(game);
-		
-		FontFactory fontFactory = FontFactory.getInstance();
+		super.render(0);
+		initLoading();
+	}
+	
+	public void initLoading() {
+        FontFactory fontFactory = FontFactory.getInstance();
 		
 		// Style for text label
 		LabelStyle labelStyle = skin.get(LabelStyle.class);
@@ -81,7 +85,7 @@ public class SplashScreen extends MenuScreen {
 	 * @return the knob
 	 */
 	private Drawable createKnob() {
-		return new TiledDrawable(new TextureRegion(new Texture(Gdx.files.internal("skin/stripes.png"))));
+		return new TiledDrawable(new TextureRegion(new Texture("skin/stripes.png")));
 	}
 	
 	/**
@@ -122,6 +126,7 @@ public class SplashScreen extends MenuScreen {
 	 * Switch to the main menu screen
 	 */
 	private void showMainMenu() {
+		game.mainMenuScreen.initialize();
 		game.setScreen(game.mainMenuScreen);
 	}
 

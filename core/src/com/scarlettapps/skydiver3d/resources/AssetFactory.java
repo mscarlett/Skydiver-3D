@@ -90,7 +90,6 @@ public final class AssetFactory {
 		
 		// Assets needed for splash screen
 		assets.load(TextureType.TITLE, Texture.class);
-		assets.finishLoading();
 		
 		// Assets needed for main menu screen
 		assets.load(TextureType.RING, Texture.class);

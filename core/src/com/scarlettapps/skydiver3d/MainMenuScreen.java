@@ -34,11 +34,13 @@ public class MainMenuScreen extends MenuScreen {
 	// Transition time between this screen and the game screen
 	private static final float TRANSITION_TIME = 0.2f;
 	
-	private final Texture title;
+	private Texture title;
 
 	public MainMenuScreen(Skydiver3D game) {
 		super(game);
-		
+	}
+	
+	public void initialize() {
 		AssetFactory assetFactory = AssetFactory.getInstance();
 		final SoundFactory sound = SoundFactory.getInstance();
 		
@@ -155,7 +157,7 @@ public class MainMenuScreen extends MenuScreen {
 	}
 
 	// List of dependencies which need to be loaded
-	private static final String[] dependencies = new String[]{TextureType.RING, TextureType.STAR, SoundType.CLICK, MusicType.MAIN_MENU};
+	private static final String[] dependencies = new String[]{TextureType.RING, TextureType.STAR, SoundType.CLICK, MusicType.MAIN_MENU, TextureType.TITLE};
 	
 	/**
 	 * Check if this screen is loaded
