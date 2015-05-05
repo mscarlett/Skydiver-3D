@@ -120,10 +120,6 @@ public class WorldPresenter extends DefaultScreen<Skydiver3D> {
 	 */
 	@Override
 	protected void showScreen() {
-		MusicFactory music = MusicFactory.getInstance();
-		
-		music.stop();
-		
 		// Check if world objects should be initialized
 		if (initialize) {
 			if (Skydiver3D.DEV_MODE) {
@@ -135,6 +131,9 @@ public class WorldPresenter extends DefaultScreen<Skydiver3D> {
 			initialize = false;
 		}
 		
+		// Switch music
+        MusicFactory music = MusicFactory.getInstance();
+		music.stop();		
 		music.play(MusicType.WIND);
 	}
 

@@ -3,9 +3,11 @@
 
 package com.scarlettapps.skydiver3d.world;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.utils.Array;
+import com.scarlettapps.skydiver3d.Skydiver3D;
 import com.scarlettapps.skydiver3d.resources.AssetFactory;
 import com.scarlettapps.skydiver3d.resources.MusicFactory;
 import com.scarlettapps.skydiver3d.resources.SoundFactory;
@@ -76,6 +78,10 @@ public class World {
 	}
 
 	public void reset() {
+		if (Skydiver3D.DEV_MODE) {
+			Gdx.app.log(Skydiver3D.LOG, "Resetting World");
+		}
+		
 		for (GameObject o: objects) {
 			o.reset();
 		}

@@ -7,6 +7,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.GdxRuntimeException;
+import com.scarlettapps.skydiver3d.Skydiver3D;
 import com.scarlettapps.skydiver3d.resources.PreferenceFactory;
 
 public abstract class GameController implements InputProcessor {
@@ -22,6 +23,10 @@ public abstract class GameController implements InputProcessor {
 	protected boolean sticky;
 	
 	public void reset() {
+		if (Skydiver3D.DEV_MODE) {
+			Gdx.app.log(Skydiver3D.LOG, "Resetting GameController");
+		}
+		
 		ax = 0;
 		ay = 0;
 		faster = false;

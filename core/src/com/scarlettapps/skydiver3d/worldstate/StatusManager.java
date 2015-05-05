@@ -88,6 +88,10 @@ public class StatusManager {
 	}
 
 	public void reset() {
+		if (Skydiver3D.DEV_MODE) {
+			Gdx.app.log(Skydiver3D.LOG, "Resetting StatusManager");
+		}
+		
 		Status.getInstance().reset();
 		switchState = false;
 	}

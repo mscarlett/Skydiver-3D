@@ -140,4 +140,9 @@ public class Renderer {
 	public World getWorld() {
 		return world;
 	}
+
+	public void reset() {
+		// TODO Auto-generated method stub
+		
+	}
 }

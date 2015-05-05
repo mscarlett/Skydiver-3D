@@ -371,4 +371,8 @@ public class StatusView {
 		speedIcon.setVisible(visible);
 	}
 
+	public void reset() {
+		initialize();
+	}
+
 }

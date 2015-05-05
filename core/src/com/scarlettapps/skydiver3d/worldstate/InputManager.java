@@ -6,8 +6,10 @@ package com.scarlettapps.skydiver3d.worldstate;
 import java.util.LinkedList;
 import java.util.List;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
+import com.scarlettapps.skydiver3d.Skydiver3D;
 
 public class InputManager {
 	
@@ -22,6 +24,10 @@ public class InputManager {
 	}
 	
 	public void reset() {
+		if (Skydiver3D.DEV_MODE) {
+			Gdx.app.log(Skydiver3D.LOG, "Resetting InputManager");
+		}
+		
 		for (InputListener listener: removedListeners) {
 			listeners.add(listener);
 		}
