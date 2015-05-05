@@ -25,6 +25,7 @@ import com.badlogic.gdx.utils.SnapshotArray;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.scarlettapps.skydiver3d.DefaultScreen;
+import com.scarlettapps.skydiver3d.Skydiver3D;
 import com.scarlettapps.skydiver3d.resources.AssetFactory;
 import com.scarlettapps.skydiver3d.resources.AssetFactory.SoundType;
 import com.scarlettapps.skydiver3d.resources.AssetFactory.TextureType;
@@ -56,42 +57,21 @@ public class StatusView {
 	
 	private Viewport viewport;
 
+	private Label jumpLabel;
+	private Label readyLabel;
+	private Label landLabel;
+	private Label tapScreenLabel;
+	
+	private Action initialLabelAction;
+	private Action jumpLabelAction;
+	private Action parachuteAction;
+	
 	public StatusView(StatusManager statusManager) {
 		this.statusManager = statusManager;
 	}
 
 	public void initialize() {
-        visibleQueue = new PooledLinkedList<Group>(6);
-		
-		skin = new Skin(Gdx.files.internal("skin/uiskin.json"));
-		viewport = new StretchViewport(DefaultScreen.VIRTUAL_WIDTH, DefaultScreen.VIRTUAL_HEIGHT);
-		stage = new Stage(viewport);
-		
-		LabelStyle textButtonStyle = skin.get(LabelStyle.class);
-		BitmapFont font = FontFactory.getInstance().generateFont(36);
-		textButtonStyle.font = font;
-		
-		addHud();
-		addInitial();
-		addParachute();
-		addCollected();
-		//addScoreSummary();
-		addPauseIcon();
-		addSpeedIcon();
-	}
-
-	private void addHud() {
-		hud = new HUD(skin);
-		stage.addActor(hud.getGroup());
-	}
-	
-	private void addInitial() {
-		initial = new Group();
-		initial.setVisible(false);
-		Label label = new Label("Tap screen to jump off plane", skin);
-		centerLabel(label);
-		label.setColor(Color.WHITE);
-		label.addAction(new Action() {
+		jumpLabelAction = new Action() {
 			
 			Color white = Color.WHITE.cpy();
 			float elapsedTime = 0.5f;
@@ -108,13 +88,9 @@ public class StatusView {
 				return false;
 			}
 			
-		});
-		initial.addActor(label);
-		label = new Label("Get ready", skin);
-		centerLabel(label);
-		label.setColor(Color.WHITE);
-		label.setVisible(false);
-		initial.addAction(new Action() {
+		};
+		
+		initialLabelAction = new Action() {
 			
 			@Override
 			public boolean act(float delta) {
@@ -138,30 +114,9 @@ public class StatusView {
 				return false;
 			}
 			
-		});
-		initial.addActor(label);
-		stage.addActor(initial);
-	}
-	
-	private void addParachute() {
-		parachute = new Group();
-		parachute.setVisible(false);
-		Label label = new Label("Tap screen to open parachute", skin);
-		centerLabel(label);
-		label.setColor(Color.WHITE);
-		parachute.addActor(label);
-		label = new Label("", skin);
-		label.setVisible(false);
-		label.setColor(Color.WHITE);
-		parachute.addActor(label);
-		label = new Label("Get ready to land", skin);
-		label.setVisible(false);
-		lowerLabel(label);
-		label.setColor(Color.WHITE);
-		parachute.addActor(label);
-		accuracyMeter = new AccuracyMeter();
-		parachute.addActor(accuracyMeter);
-		parachute.addAction(new Action() {
+		};
+		
+		parachuteAction = new Action() {
 			
 			private float elapsedTime = 0f;
 
@@ -196,7 +151,72 @@ public class StatusView {
 				}
 				return false;
 			}
-		});
+			
+			public void reset() {
+				elapsedTime = 0f;
+			}
+		};
+		
+        visibleQueue = new PooledLinkedList<Group>(6);
+		
+		skin = new Skin(Gdx.files.internal("skin/uiskin.json"));
+		viewport = new StretchViewport(DefaultScreen.VIRTUAL_WIDTH, DefaultScreen.VIRTUAL_HEIGHT);
+		stage = new Stage(viewport);
+		
+		LabelStyle textButtonStyle = skin.get(LabelStyle.class);
+		BitmapFont font = FontFactory.getInstance().generateFont(36);
+		textButtonStyle.font = font;
+		
+		addHud();
+		addInitial();
+		addParachute();
+		addCollected();
+		//addScoreSummary();
+		addPauseIcon();
+		addSpeedIcon();
+	}
+
+	private void addHud() {
+		hud = new HUD(skin);
+		stage.addActor(hud.getGroup());
+	}
+	
+	private void addInitial() {
+		initial = new Group();
+		initial.setVisible(false);
+		jumpLabel = new Label("Tap screen to jump off plane", skin);
+		centerLabel(jumpLabel);
+		jumpLabel.setColor(Color.WHITE);
+		jumpLabel.addAction(jumpLabelAction);
+		initial.addActor(jumpLabel);
+		readyLabel = new Label("Get ready", skin);
+		centerLabel(readyLabel);
+		readyLabel.setColor(Color.WHITE);
+		readyLabel.setVisible(false);
+		initial.addAction(initialLabelAction);
+		initial.addActor(readyLabel);
+		stage.addActor(initial);
+	}
+	
+	private void addParachute() {
+		parachute = new Group();
+		parachute.setVisible(false);
+		tapScreenLabel = new Label("Tap screen to open parachute", skin);
+		centerLabel(tapScreenLabel);
+		tapScreenLabel.setColor(Color.WHITE);
+		parachute.addActor(tapScreenLabel);
+		Label label = new Label("", skin);
+		label.setVisible(false);
+		label.setColor(Color.WHITE);
+		parachute.addActor(label);
+		landLabel = new Label("Get ready to land", skin);
+		landLabel.setVisible(false);
+		lowerLabel(landLabel);
+		landLabel.setColor(Color.WHITE);
+		parachute.addActor(landLabel);
+		accuracyMeter = new AccuracyMeter();
+		parachute.addActor(accuracyMeter);
+		parachute.addAction(parachuteAction);
 		stage.addActor(parachute);
 	}
 	
@@ -372,7 +392,19 @@ public class StatusView {
 	}
 
 	public void reset() {
-		initialize();
+		if (Skydiver3D.DEV_MODE) {
+			Gdx.app.log(Skydiver3D.LOG, "Resetting StatusView");
+		}
+
+		jumpLabel.addAction(jumpLabelAction);
+        initial.addAction(initialLabelAction);
+        parachute.addAction(parachuteAction);
+        accuracyMeter.reset();
+        parachuteAction.reset();
+		
+		speedIcon.setVisible(false);
+		landLabel.setVisible(false);
+		tapScreenLabel.setVisible(true);
 	}
 
 }

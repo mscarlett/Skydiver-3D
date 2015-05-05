@@ -142,7 +142,8 @@ public class Renderer {
 	}
 
 	public void reset() {
-		// TODO Auto-generated method stub
-		
+		if (Skydiver3D.DEV_MODE) {
+			Gdx.app.log(Skydiver3D.LOG, "Resetting Renderer");
+		}
 	}
 }

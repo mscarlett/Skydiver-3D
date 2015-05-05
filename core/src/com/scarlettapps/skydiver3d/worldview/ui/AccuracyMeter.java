@@ -17,8 +17,8 @@ public class AccuracyMeter extends Actor { //TODO This needs to be resolution in
 	private Image slider;
 	private Image bar;
 	private float barX;
-	private float barVelocity = 200;
-	private boolean right = true;
+	private float barVelocity;
+	private boolean right;
 	
 	public AccuracyMeter() {
 		AssetFactory assetFactory = AssetFactory.getInstance();
@@ -30,6 +30,8 @@ public class AccuracyMeter extends Actor { //TODO This needs to be resolution in
 		slider.setPosition(DefaultScreen.VIRTUAL_WIDTH/2-slider.getWidth()/2,DefaultScreen.VIRTUAL_HEIGHT/2-slider.getHeight()/2-75);
 		bar.setPosition(slider.getX()-bar.getWidth()/2,slider.getY()+(slider.getHeight()-bar.getHeight())/2);
 		barX = bar.getX();
+		barVelocity = 200;
+		right = true;
 	}
 	
 	@Override
@@ -69,5 +71,14 @@ public class AccuracyMeter extends Actor { //TODO This needs to be resolution in
 		float barPos = barX-(minX-bar.getWidth()/2);
 		float percent = barPos/(maxX-minX);
 		return 2*(percent < 0.5f? percent : 1-percent);
+	}
+
+	public void reset() {
+		bar.setScale(0.5f, 1);
+		slider.setPosition(DefaultScreen.VIRTUAL_WIDTH/2-slider.getWidth()/2,DefaultScreen.VIRTUAL_HEIGHT/2-slider.getHeight()/2-75);
+		bar.setPosition(slider.getX()-bar.getWidth()/2,slider.getY()+(slider.getHeight()-bar.getHeight())/2);
+		barX = bar.getX();
+		barVelocity = 200;
+		right = true;
 	}
 }
