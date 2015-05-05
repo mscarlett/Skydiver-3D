@@ -13,7 +13,12 @@ public class LoadingScreenUI extends Skydiver3D {
 		// Initialize screens
 		mainMenuScreen = new MainMenuScreen(this);
 		playingScreen = new WorldPresenter(this);
-		loadingScreen = new LoadingScreen(this);
+		loadingScreen = new LoadingScreen(this) {
+			@Override
+			protected void startGame() {
+				// do nothing
+			}
+		};
 		pauseScreen = new PauseScreen(this);
 		levelCompletedScreen = new LevelCompletedScreen(this);
 		helpScreen = new HelpScreen(this);

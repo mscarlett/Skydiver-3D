@@ -73,7 +73,7 @@ public class LoadingScreen extends MenuScreen {
 		}
 	}
 	
-	private void startGame() {
+	protected void startGame() {
 		game.setScreen(game.playingScreen);
 	}
 
