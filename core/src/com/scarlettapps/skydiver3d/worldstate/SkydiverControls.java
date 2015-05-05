@@ -33,7 +33,6 @@ public class SkydiverControls implements InputListener {
 			case INITIAL:
 				Skydiver skydiver = world.getSkydiver();
 				if (gameController.justTouched() && !skydiver.jumpedOffAirplane()) {
-					skydiver.jumpOffAirplane();
 					status.setJumpedOffAirplane(true);
 				}
 				break;
@@ -46,10 +45,11 @@ public class SkydiverControls implements InputListener {
 				skydiver.skydiverAngle().x += 10 * delta*gameController.getAx();
 				break;
 			case PARACHUTING:
-				if (!status.justOpenedParachute()) {
+				if (!status.parachuteDeployed()) {
 					elapsedTime += delta;
 					status.setJustOpenedParachute(Gdx.input.justTouched() || elapsedTime > PARACHUTING_TIME_LIMIT);
 				}
+				
 				skydiver = world.getSkydiver();
 				status.velocity().x = 0;
 				status.velocity().y = 0;
@@ -57,16 +57,14 @@ public class SkydiverControls implements InputListener {
 				status.position().y = Math.signum(status.position().y)*(Math.abs(status.position().y)-0.5f*delta);
 				
 				if (status.justOpenedParachute()) {
-					if (!status.parachuteDeployed()) {
-						skydiver.deployParachute();
+					if (!status.parachuteDeployed()) { //why is there if clause
 						status.setParachuteDeployed(true);
-						
-						
 					}
 					
 					status.velocity().z -= 15*Math.signum(status.velocity().z+30)*delta;
 				}
-					break;
+				
+				break;
 			case LANDING:
 				skydiver = world.getSkydiver();
 				float accuracy = status.getAccuracy();
@@ -77,7 +75,7 @@ public class SkydiverControls implements InputListener {
 				if (Gdx.app.getType() != ApplicationType.Android) {
 					status.velocity().y += 3*(Math.signum(status.velocity().y) == 0 ? Math.random() : Math.signum(status.velocity().y))*Math.abs(Math.random()*delta);
 				}
-				skydiver.setLanding(true);
+				status.setLanding(true);
 				Vector3 pos = status.position();
 				float dist2 = pos.x*pos.x+pos.y*pos.y;
 				if (dist2 < 2027) {

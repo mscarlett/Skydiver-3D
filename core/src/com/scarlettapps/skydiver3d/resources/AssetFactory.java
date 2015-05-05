@@ -111,10 +111,6 @@ public final class AssetFactory {
 		assets.load(TextureType.LIGHTNING, Texture.class);
 		assets.load(TextureType.GOLD_STAR, Texture.class);
 		assets.load(TextureType.EMPTY_STAR, Texture.class);
-		assets.load(TextureType.WATER_TERRAIN, Texture.class);
-		assets.load(TextureType.SAND_TERRAIN, Texture.class);
-		assets.load(TextureType.GRASS_TERRAIN, Texture.class);
-		assets.load(TextureType.FOLIAGE_TERRAIN, Texture.class);
 	}
 	
 	public Array<String> getLoaded() {
@@ -122,7 +118,7 @@ public final class AssetFactory {
 	}
 	
 	public boolean isLoaded() { //XXX this is a hack
-		return getLoadedAssets() == 22;
+		return getLoadedAssets() == 18;
 	}
 	
 	public int getLoadedAssets() {

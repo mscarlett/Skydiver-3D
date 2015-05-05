@@ -21,7 +21,6 @@ import com.scarlettapps.skydiver3d.worldstate.StatusManager;
  */
 public class World {
 	
-	private final StatusManager statusManager;
 	private final Array<GameObject> objects;
 	
 	private Skydiver skydiver;
@@ -31,9 +30,7 @@ public class World {
 	private Clouds clouds;
 	private Plane plane;
 	
-	public World(StatusManager statusManager) {
-		this.statusManager = statusManager;
-		
+	public World() {		
 		skydiver = new Skydiver();
 		plane = new Plane();
 		collectibles = new Collectibles();
@@ -67,8 +64,6 @@ public class World {
 			MusicFactory music = MusicFactory.getInstance();
 			music.setVolume(getWindVolume());
 		}
-		
-		statusManager.update(delta, this);
 	}
 	
 	private float getWindVolume() {
@@ -81,7 +76,9 @@ public class World {
 	}
 
 	public void reset() {
-		initialize();
+		for (GameObject o: objects) {
+			o.reset();
+		}
 	}
 	
 	public void pause() {

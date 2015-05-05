@@ -18,22 +18,36 @@ import com.scarlettapps.skydiver3d.world.World;
  */
 public class StatusManager {
 
+	private final Array<StatusListener> listeners;
+	private final World world;
+	
 	private boolean switchState;
 	
-	public StatusManager(InputManager inputManager) {
+	public StatusManager(InputManager inputManager, World world) {
 		InputListener stickyListener = new StickyListener();
 		inputManager.addListener(stickyListener);
+		listeners = new Array<StatusListener>();
+		listeners.add(new CheckIntersectListener(world));
+		
+		this.world = world;
+		
 		reset();
 	}
+	
+	public void addListener(StatusListener listener) {
+		listeners.add(listener);
+	}
 
-	public void update(float delta, World world) {
+	public void update(float delta) {
+		for (StatusListener listener : listeners) {
+			listener.update(delta);
+		}
+		
 		Status status = Status.getInstance();
 		
 		if (status.justCollected()) {
 			status.addTimeSinceCollected(delta);
 		}
-
-		checkIntersect(world);
 
 		if (switchState = checkSwitchState()) {
 			Array<GameObject> objects = world.getObjects();
@@ -52,31 +66,6 @@ public class StatusManager {
 
 		if (status.jumpedOffAirplane()) {
 			status.addSkydivingTime(delta);
-		}
-	}
-
-	private void checkIntersect(World world) {
-		Status status = Status.getInstance();
-		Vector3 skydiverPosition = status.position();
-		Vector3 skydiverVelocity = status.velocity();
-		
-		Collectibles collectibles = world.getCollectibles();
-		Skydiver skydiver = world.getSkydiver();
-		if (collectibles.checkIntersect(skydiverPosition.z)) {
-			Collectible closest = collectibles.getClosest();
-			if (closest != null && skydiver.intersects(closest)) {
-				world.playBell();
-				collectibles.removeClosest();
-				status.setCollected(true);
-				if (Skydiver3D.DEV_MODE) {
-					Gdx.app.log(Skydiver3D.LOG, "Collected collectible: "
-							+ closest.getClass().getSimpleName());
-				}
-				float a = Skydiver.MIN_TERMINAL_SPEED;
-				float b = Skydiver.MAX_TERMINAL_SPEED;
-				float speedFactor = (-skydiverVelocity.z-a)/(b-a);
-				status.addToScore(closest.getPoints()*(1f+speedFactor));
-			}
 		}
 	}
 

@@ -71,7 +71,7 @@ class ParachutingStateController implements WorldViewController {
 		
 		World world = renderer.getWorld();
 		Skydiver skydiver = world.getSkydiver();
-		skydiver.setParachuting(true);
+		Status.getInstance().setParachuting(true);
 		
 		PerspectiveCamera cam = renderer.getCam();
 		cam.up.set(Vector3.Z);

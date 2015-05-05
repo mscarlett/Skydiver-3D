@@ -57,6 +57,11 @@ public class Plane extends GameObject {
 	}
 	
 	@Override
+	public void reset() {
+		
+	}
+	
+	@Override
 	public void updateObject(float delta) {
 		pose = (pose + delta*rps)%1f;
 		controller.update(delta,pose*animationTime);

@@ -48,6 +48,11 @@ public class Target extends GameObject {
         instance.materials.get(0).set(attribute);
 	}
 	
+	@Override
+	public void reset() {
+		
+	}
+	
 	public void render(ModelBatch modelBatch) {
 		if (render) {
 		    modelBatch.render(instance, environment);

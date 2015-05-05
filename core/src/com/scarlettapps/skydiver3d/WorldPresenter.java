@@ -49,10 +49,11 @@ public class WorldPresenter extends DefaultScreen<Skydiver3D> {
 	public WorldPresenter(Skydiver3D game) {
 		super(game, false);
 		gameController = GameController.newGameController();
+		world = new World();
 		inputManager = new InputManager(gameController);
-		statusManager = new StatusManager(inputManager);
+		statusManager = new StatusManager(inputManager, world);
 		
-		world = new World(statusManager);
+		
 		worldView = new WorldView(world, statusManager);
 
 		SkydiverControls skydiverControls = new SkydiverControls(world);
@@ -89,6 +90,7 @@ public class WorldPresenter extends DefaultScreen<Skydiver3D> {
 	 */
 	protected void updateObjects(float delta) {
 		world.update(delta);
+		statusManager.update(delta);
 		worldView.update(delta);
 		inputManager.update(delta);
 	}

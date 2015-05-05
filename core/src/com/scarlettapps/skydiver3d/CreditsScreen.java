@@ -42,7 +42,7 @@ public class CreditsScreen extends MenuScreen {
 		Calendar now = Calendar.getInstance();
 		int year = now.get(Calendar.YEAR);
 		String yearInString = String.valueOf(year);
-		Label label = new Label("Developed by Michael Scarlett\n\nCopyright (c) "+yearInString+" Michael Scarlett\n\nMain menu music \"Local Forecast\" by Kevin MacLeod\nWebsite: incompetech.com\n\nThis game is purely fictional and is provided to amuse\nor entertain, not to inform. Seriously, don't\nget yourself injured because of a video game!", skin);
+		Label label = new Label("Developed by Michael Scarlett\n\nCopyright (c) "+yearInString+" Michael Scarlett\n\nMain menu music \"Local Forecast\" by Kevin MacLeod\nWebsite: incompetech.com\n\nThis game is purely fictional and unrealistic.\nIt is not intended to teach skydiving. Don't\nget yourself injured because of a video game!", skin);
 		ScrollPane scrollPane = new ScrollPane(label);
 		scrollPane.setWidth(VIRTUAL_WIDTH*0.75f);
 		scrollPane.setHeight(VIRTUAL_HEIGHT*0.9f);

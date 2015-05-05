@@ -1,5 +1,7 @@
 package com.scarlettapps.skydiver3d.world;
 
+import com.scarlettapps.skydiver3d.worldstate.Status;
+
 import junit.framework.TestCase;
 
 public class SkydiverTest extends TestCase {
@@ -17,9 +19,7 @@ public class SkydiverTest extends TestCase {
 	}
 	
 	public void testJumpsOffPlane() {
-    	assertFalse(skydiver.jumpedOffAirplane());
-		skydiver.jumpOffAirplane();
-		assertTrue(skydiver.jumpedOffAirplane());
+		
 	}
 	
 	public void testIntersectsCollectible() {
@@ -27,12 +27,15 @@ public class SkydiverTest extends TestCase {
 	}
 	
 	public void testParachuteOpens() {
-		//assertFalse(skydiver.parachuteDeployed());
-		skydiver.jumpOffAirplane();
-		//assertTrue(skydiver.parachuteDeployed)_);
+		
 	}
 	
 	public void testOnWorldStateChanged() {
 		
+	}
+	
+	public void testOutOfBounds() {
+		//Vector3 position = skydiver.getPosition();
+	
 	}
 }

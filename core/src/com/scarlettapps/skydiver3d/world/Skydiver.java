@@ -53,11 +53,7 @@ public class Skydiver extends GameObject {
 	private final Vector3 angle = new Vector3();
 	private final Vector2 skydiverAngle = new Vector2();
 	
-	private boolean landing;
-	private boolean parachuting;
-	private boolean parachuteDeployed;
 	private float timeSinceParachuteDeployed;
-	private boolean jumpedOffAirplane;
 	private float timeSinceJumpedOffAirplane;
 	private boolean finalState;
 	private float timeSinceFinalState;
@@ -71,11 +67,7 @@ public class Skydiver extends GameObject {
 	
 	@Override
 	public void initialize() {
-		landing = false;
-		parachuting = false;
-		parachuteDeployed = false;
 		timeSinceParachuteDeployed = 0f;
-		jumpedOffAirplane = false;
 		timeSinceJumpedOffAirplane = 0f;
 		finalState = false;
 		timeSinceFinalState = 0f;
@@ -110,6 +102,29 @@ public class Skydiver extends GameObject {
 	}
 	
 	@Override
+	public void reset() {
+		timeSinceParachuteDeployed = 0f;
+		timeSinceJumpedOffAirplane = 0f;
+		finalState = false;
+		timeSinceFinalState = 0f;
+		
+		axis.set(0,0,0);
+		angle.set(0,0,0);
+		skydiverAngle.set(0,0);
+		
+		float xScale = DefaultScreen.width()/480f;
+		float yScale = DefaultScreen.height()/320f;
+		minCpy = new Vector3(-1.436071f*xScale, 0.0028594136f*yScale, -0.38007197f);
+		maxCpy = new Vector3(0.436073f*xScale, 1.9008393f*yScale, 0.17680216f);
+		//bounds = new BoundingBox(minCpy, maxCpy);
+		
+		setToTranslation(0, 0, STARTING_HEIGHT);
+		velocity.set(0, 0, 0);
+		
+		controller.animate(instance.animations.get(0).id, -1, 1f, null,0.2f);
+	}
+	
+	@Override
 	public void updateObject(float delta) {
 		if (getPositionZ() < WorldState.INITIAL.minAltitude) {
 			updateSkydiving(delta);
@@ -119,7 +134,7 @@ public class Skydiver extends GameObject {
 	}
 	
 	private void updateSkydiving(float delta) {
-		if (!landing) {
+		if (!Status.getInstance().landing()) {
 			checkBounds();
 		}
 		
@@ -146,9 +161,10 @@ public class Skydiver extends GameObject {
 	}
 	
 	private void updateTilt(float delta, float pose) {
-		if (landing) {
+		Status status = Status.getInstance();
+		if (status.landing()) {
 			skydiverAngle.y = -90;
-		} else if (parachuting) {
+		} else if (status.parachuting()) {
 			skydiverAngle.y -= (skydiverAngle.y+90)*delta;
 		} else {
 			skydiverAngle.y = pose*90;
@@ -156,6 +172,8 @@ public class Skydiver extends GameObject {
 	}
 	
 	private void updateController(float delta, float pose) {
+		Status status = Status.getInstance();
+		
 		if (finalState) {
 			final float totalTime = 4f;
 			if (timeSinceFinalState < totalTime) {
@@ -164,11 +182,11 @@ public class Skydiver extends GameObject {
 			} else {
 				controller.update(delta, 8.266682f);
 			}
-		} else if (landing) {
+		} else if (status.landing()) {
 			controller.update(delta, 6.32401173f);
-		} else if (parachuting) {
+		} else if (status.parachuting()) {
 			final float totalTime = 1f;
-			if (parachuteDeployed) {
+			if (status.parachuteDeployed()) {
 				if (timeSinceParachuteDeployed < totalTime) {
 					timeSinceParachuteDeployed += delta;
 					controller.update(delta, 4.133341f+(6.32401173f-4.133341f)*timeSinceParachuteDeployed/totalTime);
@@ -184,7 +202,7 @@ public class Skydiver extends GameObject {
 	}
 	
 	private void updateBeforeSkydiving(float delta) {
-		if (jumpedOffAirplane) {
+		if (Status.getInstance().jumpedOffAirplane()) {
 			float jumpTime = 5f;
 			
 			if (timeSinceJumpedOffAirplane < jumpTime) {
@@ -245,19 +263,11 @@ public class Skydiver extends GameObject {
 		}
 	}
 	
-	public void jumpOffAirplane() {
-		jumpedOffAirplane = true;
-	}
-	
-	public void deployParachute() {
-		parachuteDeployed = true;
-	}
-	
 	public void addToVelocity(float x, float y, float z) { //TODO separate methods for each component
 		velocity.x += x;
 		velocity.y += y;
 		velocity.z += z;
-		if (!landing) {
+		if (!Status.getInstance().landing()) {
 			if (velocity.z < -MAX_TERMINAL_SPEED) {
 				velocity.z = -MAX_TERMINAL_SPEED;
 			} else if (velocity.z > -MIN_TERMINAL_SPEED) {
@@ -346,16 +356,8 @@ public class Skydiver extends GameObject {
 		return skydiverAngle;
 	}
 
-	public void setLanding(boolean b) {
-		landing = b;
-	}
-
-	public void setParachuting(boolean b) {
-		parachuting = b;
-	}
-
 	public boolean jumpedOffAirplane() {
-		return jumpedOffAirplane;
+		return Status.getInstance().jumpedOffAirplane();
 	}
 
 	public void setFinalState(boolean b) {

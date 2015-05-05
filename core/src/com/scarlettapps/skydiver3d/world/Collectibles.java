@@ -57,6 +57,11 @@ public class Collectibles extends GameObject  implements Iterable<Node<Collectib
 		}
 	}
 	
+	@Override
+	public void reset() {
+		initialize();
+	}
+	
 	public void updateObject(float delta) {
 		for (Node<Collectible> node : toRender) {
 			Decal decal = node.value.getDecal();

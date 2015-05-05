@@ -24,6 +24,11 @@ public class Clouds extends GameObject {
 		clouds.clear();
 		clouds.addAll(CloudFactory.generateClouds(NUM_CLOUDS));
 	}
+	
+	@Override
+	public void reset() {
+		
+	}
 
 	@Override
 	protected void updateObject(float delta) {

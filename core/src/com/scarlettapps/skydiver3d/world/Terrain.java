@@ -108,6 +108,11 @@ public class Terrain extends GameObject { //TODO fix bug that causes parachute t
 		}
 	}
 	
+	@Override
+	public void reset() {
+		
+	}
+	
 	private static class CustomHeightmap {
 		
 		private static final float DEFAULT_SEA_LEVEL = -5;

@@ -30,7 +30,9 @@ public class Status {
 	private int timeBonus;
 	private int maxPoints;
 	private float accuracy;
-	private boolean collected = false;
+	private boolean collected;
+	private boolean landing;
+	private boolean parachuting;
 	
 	public void setState(WorldState state) {
 		worldState = state;
@@ -53,6 +55,9 @@ public class Status {
 		displayScoreTime = 0;
 		accuracy = 0;
 		parachutingBonus = 0;
+		collected = false;
+		landing = false;
+		parachuting = false;
 	}
 
 	public int getScore() {
@@ -279,5 +284,21 @@ public class Status {
 
 	public void addSkydivingTime(float delta) {
 		skydivingTime += delta;
+	}
+
+	public void setParachuting(boolean b) {
+		parachuting = b;
+	}
+
+	public boolean landing() {
+		return landing;
+	}
+
+	public void setLanding(boolean b) {
+		landing = b;
+	}
+
+	public boolean parachuting() {
+		return parachuting;
 	}
 }
