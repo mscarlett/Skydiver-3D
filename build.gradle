@@ -18,7 +18,7 @@ allprojects {
     version = '1.0'
     ext {
         appName = 'Skydiver 3D'
-        gdxVersion = '1.1.0'
+        gdxVersion = '1.5.5'
         roboVMVersion = '0.0.13'
     }
 
