@@ -40,6 +40,11 @@ public class OptionsScreen extends MenuScreen {
 	
 	public OptionsScreen(final Skydiver3D game) {
 		super(game);
+	}
+	
+	@Override
+	public void initializeScreen() {
+		super.initializeScreen();
 		
 		final FontFactory fontFactory = FontFactory.getInstance();
 		final PreferenceFactory preferences = PreferenceFactory.getInstance();

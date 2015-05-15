@@ -33,7 +33,7 @@ import com.scarlettapps.skydiver3d.worldstate.Score;
 
 public class LevelCompletedScreen extends MenuScreen {
 	
-	private final Table stars;
+	private Table stars;
 	private Drawable goldTextureDrawable;
 	private Drawable emptyTextureDrawable;
 	
@@ -52,8 +52,13 @@ public class LevelCompletedScreen extends MenuScreen {
 	
 	public LevelCompletedScreen(Skydiver3D game) {
 		super(game, false);
+	}
+	
+	@Override
+	public void initializeScreen() {
+		super.initializeScreen();
 		
-		FontFactory fontFactory = FontFactory.getInstance();
+        FontFactory fontFactory = FontFactory.getInstance();
 		
 		TextButtonStyle textButtonStyle = skin.get(TextButtonStyle.class);
 		BitmapFont font = fontFactory.generateFont(42);

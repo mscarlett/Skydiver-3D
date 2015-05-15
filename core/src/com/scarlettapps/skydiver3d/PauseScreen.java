@@ -25,8 +25,13 @@ public class PauseScreen extends MenuScreen { // PAUSE the game if pause button 
 	
 	public PauseScreen(Skydiver3D game) {
 		super(game, false);
+	}
+	
+	@Override
+	public void initializeScreen() {
+		super.initializeScreen();
 		
-		FontFactory fontFactory = FontFactory.getInstance();
+        FontFactory fontFactory = FontFactory.getInstance();
 		
 		TextButtonStyle textButtonStyle = skin.get(TextButtonStyle.class);
 		BitmapFont font = fontFactory.generateFont(42);

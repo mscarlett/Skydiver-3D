@@ -22,7 +22,17 @@ public class CreditsScreen extends MenuScreen {
 
 	public CreditsScreen(Skydiver3D game) {
 		super(game);
+	}
+	
+	@Override
+	public void initializeScreen() {
+		super.initializeScreen();
 		
+		drawCopyrightMessage();
+		addBackButton();
+	}
+	
+	private void drawCopyrightMessage() {
 		FontFactory fontFactory = FontFactory.getInstance();
 		
 		TextButtonStyle textButtonStyle = skin.get(TextButtonStyle.class);
@@ -49,7 +59,9 @@ public class CreditsScreen extends MenuScreen {
 		scrollPane.setScrollingDisabled(true, false);
 		table.add(scrollPane).fill().spaceBottom(20);
 		table.row();
-		
+	}
+	
+	private void addBackButton() {
 		// register the button "resume game"
 		TextButton backButton = new TextButton("Back to Main", skin);
 		backButton.addListener(new ClickListener() {

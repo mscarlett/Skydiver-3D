@@ -29,18 +29,15 @@ public class WorldPresenter extends DefaultScreen<Skydiver3D> {
 	// Maximum time difference in seconds between frames
 	private static final float MAX_DELTA = 0.1f;
 	// Represents the current state of game objects
-	private final World world;
+	private World world;
 	// Renders the game objects
-	private final WorldView worldView;
+	private WorldView worldView;
 	// Handles user input
-	private final GameController gameController;
+	private GameController gameController;
 	// Handles listeners for user input
-	private final InputManager inputManager;
+	private InputManager inputManager;
 	// Handles listeners for current game state
-	private final StatusManager statusManager;
-	
-	// Whether or not the game objects should be initialized
-	private boolean initialize = true;
+	private StatusManager statusManager;
 	
 	/**
 	 * Instantiate the screen with the game instance
@@ -48,16 +45,25 @@ public class WorldPresenter extends DefaultScreen<Skydiver3D> {
 	 */
 	public WorldPresenter(Skydiver3D game) {
 		super(game, false);
+	}
+	
+	public void initializeScreen() {
+		if (Skydiver3D.DEV_MODE) {
+			Gdx.app.log(Skydiver3D.LOG, "Initializing world");
+		}
+		
 		gameController = GameController.newGameController();
 		world = new World();
 		inputManager = new InputManager(gameController);
 		statusManager = new StatusManager(inputManager, world);
 		
-		
 		worldView = new WorldView(world, statusManager);
 
 		SkydiverControls skydiverControls = new SkydiverControls(world);
 		inputManager.addListener(skydiverControls);
+		
+		world.initialize();
+		worldView.initialize();
 	}
 	
 	/**
@@ -120,17 +126,6 @@ public class WorldPresenter extends DefaultScreen<Skydiver3D> {
 	 */
 	@Override
 	protected void showScreen() {
-		// Check if world objects should be initialized
-		if (initialize) {
-			if (Skydiver3D.DEV_MODE) {
-				Gdx.app.log(Skydiver3D.LOG, "Initializing world");
-			}
-			
-			world.initialize();
-			worldView.initialize();
-			initialize = false;
-		}
-		
 		// Switch music
         MusicFactory music = MusicFactory.getInstance();
 		music.stop();		

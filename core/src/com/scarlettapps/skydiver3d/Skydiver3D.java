@@ -7,6 +7,7 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.FPSLogger;
+import com.badlogic.gdx.utils.TimeUtils;
 import com.scarlettapps.skydiver3d.resources.AssetFactory;
 
 /**
@@ -56,6 +57,13 @@ public class Skydiver3D extends Game {
 	 */
 	@Override
 	public void create() {
+		long start;
+		
+		if (DEV_MODE) {
+			// Monitor the time to init screens and other resources
+			start = TimeUtils.nanoTime();
+		}
+		
 		// Initialize resources
 		AssetFactory.getInstance().load();
 		
@@ -74,9 +82,13 @@ public class Skydiver3D extends Game {
 		// Set screen to splash screen
 		setScreen(splashScreen);
 		
-		// Initialize FPS logger if dev mode enabled
 		if (DEV_MODE) {
+			// Initialize FPS logger for monitoring frame rate
 			fpsLogger = new FPSLogger();
+		    
+			double elapsed = TimeUtils.timeSinceNanos(start)/1e9;
+			
+			Gdx.app.log(LOG, "Time to init screens: " + elapsed + " s");
 		}
 	}
 	

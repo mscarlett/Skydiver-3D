@@ -32,7 +32,12 @@ public class LoadingScreen extends MenuScreen {
 	
 	public LoadingScreen(Skydiver3D game) {
 		super(game);
-		
+	}
+	
+	@Override
+	public void initializeScreen() {
+		super.initializeScreen();
+
 		FontFactory fontFactory = FontFactory.getInstance();
 		
 		LabelStyle labelStyle = skin.get(LabelStyle.class);

@@ -15,8 +15,13 @@ public class LevelSelectScreen extends MenuScreen {
 
 	public LevelSelectScreen(Skydiver3D game) {
 		super(game);
+	}
+	
+	@Override
+	public void initializeScreen() {
+		super.initializeScreen();
 		
-		FontFactory fontFactory = FontFactory.getInstance();
+        FontFactory fontFactory = FontFactory.getInstance();
 		
 		TextButtonStyle textButtonStyle = skin.get(TextButtonStyle.class);
 		BitmapFont font = fontFactory.generateFont(42);
@@ -36,6 +41,7 @@ public class LevelSelectScreen extends MenuScreen {
 	        public void clicked(InputEvent event, float x, float y) {
 				backToMainMenu();
 	        }
+			
 		});
 		// add back button to table
 		table.row();

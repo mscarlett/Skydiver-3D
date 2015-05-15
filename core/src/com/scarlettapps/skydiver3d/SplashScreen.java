@@ -41,11 +41,15 @@ public class SplashScreen extends MenuScreen {
 	 */
 	public SplashScreen(Skydiver3D game) {
 		super(game);
-		super.render(0);
-		initLoading();
 	}
 	
-	public void initLoading() {
+	@Override
+	public void initializeScreen() {
+		super.initializeScreen();
+		
+		// Renders background so that screen doesn't appear blank
+		super.render(0);
+		
         FontFactory fontFactory = FontFactory.getInstance();
 		
 		// Style for text label

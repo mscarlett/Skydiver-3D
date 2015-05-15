@@ -28,6 +28,8 @@ public abstract class DefaultScreen<T extends Game> implements Screen {
 	// Keep an instance of the game so that we can switch screens
 	protected final T game;
 	
+	protected boolean initialize;
+	
 	// Whether or not the screen should be disposed when it is hidden
 	private final boolean disposeOnHide;
 
@@ -45,9 +47,23 @@ public abstract class DefaultScreen<T extends Game> implements Screen {
 	 * @param disposeOnHide whether the dispose() method should be called when the screen is hidden
 	 */
 	public DefaultScreen (T game, boolean disposeOnHide) {
+		this(game, true, true);
+	}
+	
+	public DefaultScreen (T game, boolean disposeOnHide, boolean initialize) {
 		this.game = game;
 		this.disposeOnHide = disposeOnHide;
+		this.initialize = initialize;
 	}
+	
+	public final void initialize() {
+		if (initialize) {
+			initializeScreen();
+			initialize = false;
+		}
+	}
+	
+	protected abstract void initializeScreen();
 	
 	/**
 	 * Resize the screen
@@ -119,6 +135,8 @@ public abstract class DefaultScreen<T extends Game> implements Screen {
 		if (Skydiver3D.DEV_MODE) {
 			Gdx.app.log(Skydiver3D.LOG, "Showing screen: " + getName());
 		}
+		
+		initialize();
 		showScreen();
 		setInputProcessor();
 	}
@@ -206,11 +224,11 @@ public abstract class DefaultScreen<T extends Game> implements Screen {
 	 * @param next the next screen to show
 	 * @param duration the duration of the transition
 	 */
-	protected void transitionScreen(Screen next, float duration) {
+	protected void transitionScreen(DefaultScreen<?> next, float duration) {
 		TransitionScreen transitionScreen = new TransitionScreen(game, this, next, duration);
 		
 		if (Skydiver3D.DEV_MODE) {
-			Gdx.app.log(Skydiver3D.LOG, "Transitioning from " + getName() + " to " + next.getClass().getSimpleName());
+			Gdx.app.log(Skydiver3D.LOG, "Transitioning from " + getName() + " to " + next.getClass().getName());
 		}
 		game.setScreen(transitionScreen);
 	}

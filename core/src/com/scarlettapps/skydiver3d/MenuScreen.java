@@ -23,18 +23,29 @@ import com.badlogic.gdx.utils.viewport.Viewport;
  *
  */
 public abstract class MenuScreen extends DefaultScreen<Skydiver3D> {
-
+    /* Resource locations */
 	private static final String BACKGROUND_FILE = "data/textures/Menu3Background.png";
 	private static final String SKIN_FILE = "skin/uiskin.json";
 	
+	/* Store resources to speed up screen loading */
+	// Default background
+	private static TextureRegionDrawable defaultBackground = null;
+	// Default skin
+	private static Skin defaultSkin = null;
+	// Default viewport
+	private static Viewport defaultViewport = null;
+	
 	// Renders UI objects
-	protected final Stage stage;
+	protected Stage stage;
 	// UI object to which other objects are added
-	protected final Table table;
+	protected Table table;
 	// Represents the style of UI objects
-	protected final Skin skin;
+	protected Skin skin;
 	// Used for displaying screen
-	protected final Viewport viewport;
+	protected Viewport viewport;
+	
+	// Whether to use menu background theme
+	private final boolean useDefaultBackground;
 	
 	public MenuScreen(Skydiver3D game) {
 		this(game, true);
@@ -42,28 +53,26 @@ public abstract class MenuScreen extends DefaultScreen<Skydiver3D> {
 	
 	public MenuScreen(Skydiver3D game, boolean useDefaultBackground) {
 		super(game);
-		
-		// Initialize stage and skin
-		viewport = new StretchViewport(VIRTUAL_WIDTH, VIRTUAL_HEIGHT);
+		this.useDefaultBackground = useDefaultBackground;
+	}
+	
+	@Override
+	public void initializeScreen() {
+		// Initialize stage, skin, and table
+		viewport = getDefaultViewport();
 		stage = new Stage(viewport);
-		skin = new Skin(Gdx.files.internal(SKIN_FILE));
 		
-		// Set default font to use linear texture filter
-		BitmapFont font = skin.getFont("default-font");
-		font.getRegion().getTexture().setFilter(TextureFilter.Linear, TextureFilter.Linear);
-		
-		// Initialize table and add to stage
+		skin = getDefaultSkin();
 		table = new Table(skin);
-        table.setFillParent(true);
-        stage.addActor(table);
-        
-        // Add default background if we should use it
-        if (useDefaultBackground) {
-        	Texture background = new Texture(BACKGROUND_FILE);
-        	background.setFilter(TextureFilter.Linear, TextureFilter.Linear);
-        	table.setBackground(new TextureRegionDrawable(new TextureRegion(background)));
-        }
-        
+		table.setFillParent(true);
+		
+		stage.addActor(table);
+		        
+		// Add default background if we should use it
+		if (useDefaultBackground) {
+			table.setBackground(getDefaultBackground());
+		}
+		        
         // Turn on debug lines if we are in dev mode
         if (Skydiver3D.DEV_MODE) {
         	table.debug();
@@ -96,6 +105,32 @@ public abstract class MenuScreen extends DefaultScreen<Skydiver3D> {
 	@Override
 	protected void resizeScreen(int width, int height) {
 		viewport.update(width, height);
+	}
+		
+	protected static Skin getDefaultSkin() {
+		if (defaultSkin == null) {
+			defaultSkin = new Skin(Gdx.files.internal(SKIN_FILE));
+			// Set default font to use linear texture filter
+			BitmapFont font = defaultSkin.getFont("default-font");
+			font.getRegion().getTexture().setFilter(TextureFilter.Linear, TextureFilter.Linear);
+		}
+		return defaultSkin;
+	}
+	
+	protected static TextureRegionDrawable getDefaultBackground() {
+		if (defaultBackground == null) {
+			Texture background = new Texture(BACKGROUND_FILE);
+			background.setFilter(TextureFilter.Linear, TextureFilter.Linear);
+			defaultBackground = new TextureRegionDrawable(new TextureRegion(background));
+		}
+		return defaultBackground;
+	}
+	
+	protected static Viewport getDefaultViewport() {
+		if (defaultViewport == null) {
+		    defaultViewport = new StretchViewport(VIRTUAL_WIDTH, VIRTUAL_HEIGHT);
+		}
+		return defaultViewport;
 	}
 
 }

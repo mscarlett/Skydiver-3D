@@ -24,8 +24,13 @@ public class HelpScreen extends MenuScreen {
 
 	public HelpScreen(Skydiver3D game) {
 		super(game);
+	}
+	
+	@Override
+	public void initializeScreen() {
+		super.initializeScreen();
 		
-		FontFactory fontFactory = FontFactory.getInstance();
+        FontFactory fontFactory = FontFactory.getInstance();
 		
 		TextButtonStyle textButtonStyle = skin.get(TextButtonStyle.class);
 		BitmapFont font = fontFactory.generateFont(42);

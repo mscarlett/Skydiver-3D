@@ -40,7 +40,9 @@ public class MainMenuScreen extends MenuScreen {
 		super(game);
 	}
 	
-	public void initialize() {
+	public void initializeScreen() {
+		super.initializeScreen();
+		
 		AssetFactory assetFactory = AssetFactory.getInstance();
 		final SoundFactory sound = SoundFactory.getInstance();
 		
@@ -123,7 +125,7 @@ public class MainMenuScreen extends MenuScreen {
 	 * game screen if loading is finished
 	 */
 	private void startGame() {
-		Screen next = game.playingScreen.isLoaded() ? game.playingScreen : game.loadingScreen;
+		DefaultScreen<?> next = game.playingScreen.isLoaded() ? game.playingScreen : game.loadingScreen;
 		transitionScreen(next, TRANSITION_TIME);
 	}
 	

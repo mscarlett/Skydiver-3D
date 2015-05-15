@@ -17,11 +17,13 @@ public class TransitionScreen implements Screen {
 	private final Screen next;
 	private final TransitionEffect transitionEffect;
 
-	public TransitionScreen(Game game, Screen current, Screen next, float duration) {
+	public TransitionScreen(Game game, DefaultScreen<?> current, DefaultScreen<?> next, float duration) {
 		this.current = current;
 		this.next = next;
 		this.transitionEffect = new FadeOutTransitionEffect(duration);
 		this.game = game;
+		
+		next.initialize();
 	}
 
 	@Override
@@ -36,7 +38,8 @@ public class TransitionScreen implements Screen {
 
 	@Override
 	public void resize(int width, int height) {
-
+		current.resize(width,  height);
+		next.resize(width,  height);
 	}
 
 	@Override
