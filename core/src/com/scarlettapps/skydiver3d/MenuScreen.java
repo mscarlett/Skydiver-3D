@@ -93,7 +93,7 @@ public abstract class MenuScreen extends DefaultScreen<Skydiver3D> {
 		
 		// Draw debug lines if we are in dev mode
 		if (Skydiver3D.DEV_MODE) {
-			Table.drawDebug(stage);
+			stage.setDebugAll(true);
 		}
 	}
 	
