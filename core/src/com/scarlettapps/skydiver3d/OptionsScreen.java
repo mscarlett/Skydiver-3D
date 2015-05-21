@@ -61,7 +61,6 @@ public class OptionsScreen extends MenuScreen {
 		font = fontFactory.generateFont(64);
 		skin.add("Title font", font, BitmapFont.class);
 
-		Table table = this.table;
 		table.defaults().spaceBottom(20);
 		table.columnDefaults(0).padRight(20);
 		Label title = new Label("Options", skin, "Title font", Color.WHITE);
@@ -164,6 +163,11 @@ public class OptionsScreen extends MenuScreen {
 		table.add(sensitivitySlider);
 		table.add(sensitivityValue).width(40);
 
+		addBackButton();
+	}
+	
+	protected void addBackButton() {
+		final SoundFactory sound = SoundFactory.getInstance();
 		// register the back button
 		TextButton backButton = new TextButton("Back to Main", skin);
 		backButton.addListener(new ClickListener() {
