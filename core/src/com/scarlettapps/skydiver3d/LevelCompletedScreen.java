@@ -149,7 +149,6 @@ public class LevelCompletedScreen extends MenuScreen {
 		table.padBottom(50);
 		
 		stage.addActor(table);
-		table.debug();
 		
 		shapeRenderer = new ShapeRenderer();
 	}
