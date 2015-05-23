@@ -6,18 +6,21 @@ import java.util.Comparator;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g3d.ModelBatch;
 import com.badlogic.gdx.graphics.g3d.decals.CameraGroupStrategy;
 import com.badlogic.gdx.graphics.g3d.decals.Decal;
 import com.badlogic.gdx.graphics.g3d.decals.DecalBatch;
-import com.badlogic.gdx.graphics.g3d.shaders.DefaultShader;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.SortedIntList.Node;
 import com.scarlettapps.skydiver3d.DefaultScreen;
 import com.scarlettapps.skydiver3d.Skydiver3D;
+import com.scarlettapps.skydiver3d.world.Cloud;
 import com.scarlettapps.skydiver3d.world.Collectible;
 import com.scarlettapps.skydiver3d.world.Collectibles;
 import com.scarlettapps.skydiver3d.world.Plane;
+import com.scarlettapps.skydiver3d.world.Sky;
 import com.scarlettapps.skydiver3d.world.Skydiver;
 import com.scarlettapps.skydiver3d.world.Target;
 import com.scarlettapps.skydiver3d.world.Terrain;
@@ -32,12 +35,11 @@ public class Renderer {
 	private PerspectiveCamera cam;
 	private DecalBatch decalBatch;
 	private ModelBatch modelBatch;
+	private SpriteBatch spriteBatch;
 	private World world;
 
 	public Renderer(World world) {
 		this.world = world;
-		
-		DefaultShader.defaultCullFace = 0;
 	}
 	
 	public void initialize() {
@@ -52,6 +54,9 @@ public class Renderer {
         }));
         
 		modelBatch = new ModelBatch();
+		
+		spriteBatch = new SpriteBatch();
+		spriteBatch.getProjectionMatrix().setToOrtho2D(0, 0, DefaultScreen.VIRTUAL_WIDTH, DefaultScreen.VIRTUAL_HEIGHT);
 	}
 	
 	public void switchState(StatusManager statusManager, WorldView worldView) {
@@ -107,7 +112,8 @@ public class Renderer {
 		modelBatch.begin(cam);
 		Target target = world.getTarget();
 		Skydiver skydiver = world.getSkydiver();
-		target.render(modelBatch);
+		target.render(decalBatch);
+		decalBatch.flush();
 		skydiver.render(modelBatch);
 		modelBatch.end();
 	}
@@ -122,15 +128,24 @@ public class Renderer {
 	}
 	
 	public void drawCollectibles() {
+		Target target = world.getTarget();
+		target.render(decalBatch);
 		Collectibles collectibles = world.getCollectibles();
-		//Array<Cloud> clouds = world.getClouds();
+		Array<Cloud> clouds = world.getClouds();
 		for (Node<Collectible> node: collectibles) {
 			decalBatch.add(node.value.getDecal());
 		}
-		//for (Cloud c: clouds) {
-			//decalBatch.add(c.getDecal());
-		//}
+		for (Cloud c: clouds) {
+			decalBatch.add(c.getDecal());
+		}
 		decalBatch.flush();
+	}
+	
+	public void drawSky() {
+		Sky sky = world.getSky();
+		spriteBatch.begin();
+		sky.render(spriteBatch);
+		spriteBatch.end();
 	}
 	
 	public PerspectiveCamera getCam() {

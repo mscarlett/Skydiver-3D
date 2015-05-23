@@ -27,17 +27,17 @@ import com.scarlettapps.skydiver3d.worldview.WorldView;
 public class WorldPresenter extends DefaultScreen<Skydiver3D> {
 	
 	// Maximum time difference in seconds between frames
-	private static final float MAX_DELTA = 0.1f;
+	protected static final float MAX_DELTA = 0.1f;
 	// Represents the current state of game objects
-	private World world;
+	protected World world;
 	// Renders the game objects
-	private WorldView worldView;
+	protected WorldView worldView;
 	// Handles user input
-	private GameController gameController;
+	protected GameController gameController;
 	// Handles listeners for user input
-	private InputManager inputManager;
+	protected InputManager inputManager;
 	// Handles listeners for current game state
-	private StatusManager statusManager;
+	protected StatusManager statusManager;
 	
 	/**
 	 * Instantiate the screen with the game instance

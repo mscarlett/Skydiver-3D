@@ -34,7 +34,7 @@ public class Plane extends GameObject {
 	
 	@Override
 	public void initialize() {
-		String filename = ModelType.PLANE;
+		/*String filename = ModelType.PLANE;
 		Model model = AssetFactory.getInstance().get(filename, Model.class);
 		instance = new ModelInstance(model);
 		instance.materials.get(0).set(
@@ -53,7 +53,7 @@ public class Plane extends GameObject {
 		
 		setToTranslation(3.1f, -0.85f, Skydiver.STARTING_HEIGHT+1.2f);
 		rotate(Vector3.X, 90);
-		rotate(Vector3.Y, 90);
+		rotate(Vector3.Y, 90);*/
 	}
 	
 	@Override
@@ -63,24 +63,24 @@ public class Plane extends GameObject {
 	
 	@Override
 	public void updateObject(float delta) {
-		pose = (pose + delta*rps)%1f;
-		controller.update(delta,pose*animationTime);
+		//pose = (pose + delta*rps)%1f;
+		//controller.update(delta,pose*animationTime);
 	}
 	
 	public void render(ModelBatch modelBatch) {
-		modelBatch.render(instance, environment);
+		//modelBatch.render(instance, environment);
 	}
 	
 	public void setToTranslation(float x, float y, float z) {
-		instance.transform.setToTranslation(x, y, z);
+		//instance.transform.setToTranslation(x, y, z);
 	}
 	
 	public void rotate(Vector3 axis, float angle) {
-		instance.transform.rotate(axis, angle);
+		//instance.transform.rotate(axis, angle);
 	}
 	
 	public void scl(float scale) {
-		instance.transform.scl(scale);
+		//instance.transform.scl(scale);
 	}
 
 	@Override

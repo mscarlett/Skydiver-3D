@@ -96,7 +96,7 @@ public class StatusView {
 			public boolean act(float delta) {
 				Status status = Status.getInstance();
 				Group group = (Group)getActor();
-				SnapshotArray<Actor> children = group.getChildren();
+				SnapshotArray<Actor> children = group.getChildren(); // why is this null?
 				if (status.jumpedOffAirplane()) {
 					float elapsedTime = status.skydivingTime();
 					if (elapsedTime > 2f) {

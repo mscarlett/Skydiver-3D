@@ -3,49 +3,31 @@
 
 package com.scarlettapps.skydiver3d.world;
 
-import com.badlogic.gdx.graphics.g3d.Attribute;
-import com.badlogic.gdx.graphics.g3d.Environment;
-import com.badlogic.gdx.graphics.g3d.Model;
-import com.badlogic.gdx.graphics.g3d.ModelBatch;
-import com.badlogic.gdx.graphics.g3d.ModelInstance;
-import com.badlogic.gdx.graphics.g3d.attributes.BlendingAttribute;
-import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
-import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.g3d.decals.Decal;
+import com.badlogic.gdx.graphics.g3d.decals.DecalBatch;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.math.collision.BoundingBox;
-import com.scarlettapps.skydiver3d.resources.AssetFactory;
-import com.scarlettapps.skydiver3d.resources.AssetFactory.ModelType;
 import com.scarlettapps.skydiver3d.worldstate.WorldState;
 import com.scarlettapps.skydiver3d.worldview.Renderer;
 
 public class Target extends GameObject {
 	
-	private ModelInstance instance;
-	private BoundingBox bounds;
-	
-	private Environment environment;
-	private Attribute attribute;
+	private Decal target;
 	
 	public Target() {
 		super(false,true);
 	}
 	
 	@Override
-	public void initialize() {
-		Model model = AssetFactory.getInstance().get(ModelType.TARGET, Model.class);
-		instance = new ModelInstance(model);
-		instance.transform.setToTranslation(0,0,0);
-		instance.transform.scale(10, 10, 10);
-		instance.transform.rotate(Vector3.X, 90);
-		bounds = new BoundingBox();
-		instance.calculateBoundingBox(bounds);
-		
-		environment = new Environment();
-		environment.set(new ColorAttribute(ColorAttribute.AmbientLight, 0.7f, 0.7f, 0.7f, 1.0f));
-        environment.add(new DirectionalLight().set(0.8f, 0.8f, 0.8f, -1f, -0.8f, -0.2f));
-        
-        attribute = new BlendingAttribute(0.5f);
-        instance.materials.get(0).set(attribute);
+	public void initialize() { //TODO can this be drawn procedurally?
+		target = Decal.newDecal(new TextureRegion(new Texture(Gdx.files.local("data/textures/target.gif"))));
+		target.setPosition(0, 0, 0);
+		target.setScale(1);
+		target.lookAt(Vector3.Z, Vector3.Z);
+		target.setBlending(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
 	}
 	
 	@Override
@@ -53,9 +35,9 @@ public class Target extends GameObject {
 		
 	}
 	
-	public void render(ModelBatch modelBatch) {
+	public void render(DecalBatch decalBatch) {
 		if (render) {
-		    modelBatch.render(instance, environment);
+		    decalBatch.add(target);
 		}
 	}
 	

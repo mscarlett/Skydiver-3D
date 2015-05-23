@@ -8,8 +8,8 @@ import com.scarlettapps.skydiver3d.worldview.Renderer;
 
 public abstract class GameObject {
 
-	protected boolean update = true;
-	protected boolean render = true;
+	protected boolean update;
+	protected boolean render;
 	
 	public GameObject(boolean update, boolean render) {
 		this.update = update;

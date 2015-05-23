@@ -26,7 +26,7 @@ class InitialStateController implements WorldViewController {
 	public void update(float delta) {
 		Renderer renderer = worldView.getRenderer();
 		World world = renderer.getWorld();
-		StatusManager statusManager = worldView.getStatusManager();
+		//StatusManager statusManager = worldView.getStatusManager();
 		PerspectiveCamera cam = renderer.getCam();
 		
 		Skydiver skydiver = world.getSkydiver();
@@ -34,9 +34,9 @@ class InitialStateController implements WorldViewController {
 		if (skydiver.jumpedOffAirplane()) {
 			totalTime += delta;
 			
-			dz -= Math.signum(dz)*delta*0.1f;
-			dy -= Math.signum(dy)*delta*0.1f;
-			dx -= Math.signum(dx)*delta*0.1f;
+			dz -= delta*2f;
+			dy -= delta*3f;
+			dx -= delta*1f;
 			
 			float newX = -0.3f*WorldView.CAM_OFFSET+dx;
 			float newY = -0.1f*WorldView.CAM_OFFSET+dy;
@@ -50,13 +50,12 @@ class InitialStateController implements WorldViewController {
 			camOffset.sub(tmp2);
 			
 	        cam.position.set(camOffset);
-	        cam.lookAt(skydiver.getPositionX(),skydiver.getPositionY(),skydiver.getPositionZ()+0.2f*WorldView.CAM_OFFSET);
+	        cam.lookAt(skydiver.getPositionX()+dx,skydiver.getPositionY(),skydiver.getPositionZ()+0.3f*WorldView.CAM_OFFSET);
 	        cam.up.set(Vector3.Z);
 		} else {
 			Status status = Status.getInstance();
 	        cam.position.set(camOffset);
-	        cam.lookAt(status.position().x,status.position().y,status.position().z+0.2f*WorldView.CAM_OFFSET);
-	        
+	        cam.lookAt(status.position().x+dx,status.position().y,status.position().z+0.3f*WorldView.CAM_OFFSET);  
 		}
 		cam.update();
 	}
@@ -64,15 +63,16 @@ class InitialStateController implements WorldViewController {
 	@Override
 	public void render(float delta) {	
 		Renderer renderer = worldView.getRenderer();
+		renderer.drawSky();
 		renderer.drawSkydiverAndPlane();
 		worldView.getStatusView().drawJumpOffPlane();
 	}
 
 	@Override
 	public void initialize() {
-		dx = 10.245517f;
-		dy = 3.8138173f;
-		dz = -1.71019554f;
+		dx = 2.2f;
+		dy = -0.2f;
+		dz = -0.21019554f;
 		totalTime = 0;
 		
 		float camOffsetX = -0.3f*WorldView.CAM_OFFSET+dx;
@@ -83,8 +83,8 @@ class InitialStateController implements WorldViewController {
 		PerspectiveCamera cam = worldView.getRenderer().getCam();
         cam.direction.set(0,0,-1);
         cam.up.set(Vector3.Z);
-        cam.near = 1f;
-        cam.far = 9000f;
+        cam.near = 0.1f;
+        cam.far = 100f;
         cam.update();
 	}
 	

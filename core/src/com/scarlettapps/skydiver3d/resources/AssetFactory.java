@@ -30,6 +30,7 @@ public final class AssetFactory {
 		public static final String FOLIAGE_TERRAIN = "data/textures/foliage_tiled.png";
 		public static final String GRASS_TERRAIN = "data/textures/grasstile.jpg";
 		public static final String LIGHTNING = "data/textures/lightning.png";
+		public static final String SKY = "data/textures/sky.png";
 	}
 	
 	public static class SoundType {
@@ -41,7 +42,6 @@ public final class AssetFactory {
 	public static class MusicType {
 		public static final String WIND = "data/music/wind.ogg";
 		public static final String MAIN_MENU = "data/music/local_forecast.ogg";
-		public static final String SKYDIVING = "data/music/disco_house.ogg";
 	}
 	
 	public static class FontType {
@@ -49,9 +49,7 @@ public final class AssetFactory {
 	}
 	
 	public static class ModelType {
-		public static final String PLANE = "data/models/plane_new_6.g3db";
-		public static final String SKYDIVER = "data/models/human_with_parachute_and_backpack_and_helmet_a8.g3db";
-		public static final String TARGET = "data/models/target_raft_5.g3db";
+		public static final String SKYDIVER = "data/models/skydiver.g3db";
 	}
 	
 	private static AssetFactory instance;
@@ -98,9 +96,7 @@ public final class AssetFactory {
 		assets.load(MusicType.MAIN_MENU, Music.class);
 		
 		// Assets needed for game
-		assets.load(ModelType.PLANE, Model.class);
 		assets.load(ModelType.SKYDIVER, Model.class);
-		assets.load(ModelType.TARGET, Model.class);
 		assets.load(SoundType.BELL, Sound.class);
 		assets.load(SoundType.LAUGH, Sound.class);
 		assets.load(MusicType.WIND, Music.class);
@@ -110,6 +106,7 @@ public final class AssetFactory {
 		assets.load(TextureType.LIGHTNING, Texture.class);
 		assets.load(TextureType.GOLD_STAR, Texture.class);
 		assets.load(TextureType.EMPTY_STAR, Texture.class);
+		assets.load(TextureType.SKY, Texture.class);
 	}
 	
 	public Array<String> getLoaded() {
@@ -117,7 +114,7 @@ public final class AssetFactory {
 	}
 	
 	public boolean isLoaded() { //XXX this is a hack
-		return getLoadedAssets() == 18;
+		return getLoadedAssets() == 17;
 	}
 	
 	public int getLoadedAssets() {

@@ -31,6 +31,7 @@ public class World {
 	private Collectibles collectibles;
 	private Clouds clouds;
 	private Plane plane;
+	private Sky sky;
 	
 	public World() {		
 		skydiver = new Skydiver();
@@ -39,6 +40,7 @@ public class World {
 		clouds = new Clouds();
 		terrain = new Terrain();
 		target = new Target();
+		sky = new Sky();
 		
 		objects = new Array<GameObject>();
 		objects.add(skydiver);
@@ -47,6 +49,7 @@ public class World {
 		objects.add(clouds);
 		objects.add(plane);
 		objects.add(target);
+		objects.add(sky);
 	}
 	
 	public void initialize() {
@@ -73,6 +76,7 @@ public class World {
 	}
 	
 	private void updatePositions(float delta) {
+		sky.update(delta);
 		skydiver.update(delta);
 		collectibles.update(delta);
 	}
@@ -130,6 +134,10 @@ public class World {
 
 	public Array<GameObject> getObjects() {
 		return objects;
+	}
+
+	public Sky getSky() {
+	    return sky;
 	}
 	
 }
