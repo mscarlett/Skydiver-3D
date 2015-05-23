@@ -44,7 +44,6 @@ public class Renderer {
 	
 	public void initialize() {
 		cam = new PerspectiveCamera(67, DefaultScreen.width(), DefaultScreen.height());
-        Skydiver.cam = cam;
         
         decalBatch = new DecalBatch(new CameraGroupStrategy(cam, new Comparator<Decal>(){
 			@Override

@@ -42,8 +42,6 @@ public class Skydiver extends GameObject {
 	
 	private final Vector3 velocity = Status.getInstance().velocity();
 	
-	public static PerspectiveCamera cam;
-
 	private ModelInstance instance;
 	private AnimationController controller;
 	
@@ -57,9 +55,6 @@ public class Skydiver extends GameObject {
 	private float timeSinceJumpedOffAirplane;
 	private boolean finalState;
 	private float timeSinceFinalState;
-	
-	private Vector3 minCpy;
-	private Vector3 maxCpy;
 	
 	public Skydiver() {
 		super(true,true);
@@ -85,12 +80,6 @@ public class Skydiver extends GameObject {
 						GL20.GL_ONE_MINUS_SRC_ALPHA, 1f));
 		controller = new AnimationController(instance);
 		
-		float xScale = DefaultScreen.width()/480f;
-		float yScale = DefaultScreen.height()/320f;
-		minCpy = new Vector3(-1.436071f*xScale, 0.0028594136f*yScale, -0.38007197f);
-		maxCpy = new Vector3(0.436073f*xScale, 1.9008393f*yScale, 0.17680216f);
-		//bounds = new BoundingBox(minCpy, maxCpy);
-		
 		setToTranslation(0, 0, STARTING_HEIGHT);
 		velocity.set(0, 0, 0);
 		
@@ -111,12 +100,6 @@ public class Skydiver extends GameObject {
 		axis.set(0,0,0);
 		angle.set(0,0,0);
 		skydiverAngle.set(0,0);
-		
-		float xScale = DefaultScreen.width()/480f;
-		float yScale = DefaultScreen.height()/320f;
-		minCpy = new Vector3(-1.436071f*xScale, 0.0028594136f*yScale, -0.38007197f);
-		maxCpy = new Vector3(0.436073f*xScale, 1.9008393f*yScale, 0.17680216f);
-		//bounds = new BoundingBox(minCpy, maxCpy);
 		
 		setToTranslation(0, 0, STARTING_HEIGHT);
 		velocity.set(0, 0, 0);
@@ -312,7 +295,7 @@ public class Skydiver extends GameObject {
 	}
 	
 	public boolean intersects(Collectible collectible) { //offset collectible position up and to right
-		return IntersectUtil.intersects(this, collectible, cam, minCpy, maxCpy);
+		return IntersectUtil.intersects(this, collectible);
 	}
 
 	public Vector3 getPosition() {
