@@ -30,8 +30,8 @@ public class IntersectUtil {
 		}
 		float x = 0.2f*decal.getX();
 		float y = 0.2f*decal.getY();
-		float width = 0.15f*decal.getWidth();
-		float height = 0.15f*decal.getHeight();
+		float width = 0.25f*decal.getWidth();
+		float height = 0.25f*decal.getHeight();
 		Vector3 position = skydiver.getPosition();
 		float px = position.x + 1.9f;
 		float py = position.y + 2.5f;

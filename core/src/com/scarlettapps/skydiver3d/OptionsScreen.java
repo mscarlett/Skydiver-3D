@@ -68,7 +68,7 @@ public class OptionsScreen extends MenuScreen {
 
 		// create the labels widgets
 		final CheckBox soundEffectsCheckbox = new CheckBox("", skin);
-		soundEffectsCheckbox.setScale(2);
+		soundEffectsCheckbox.setScale(5);
 		soundEffectsCheckbox.setChecked(preferences.isSoundEnabled());
 		soundEffectsCheckbox.addListener(new ChangeListener() {
 			@Override
@@ -87,7 +87,7 @@ public class OptionsScreen extends MenuScreen {
 		table.add(soundEffectsCheckbox).colspan(2).left();
 
 		final CheckBox musicCheckbox = new CheckBox("", skin);
-		musicCheckbox.setScale(2);
+		musicCheckbox.setScale(5);
 		musicCheckbox.setChecked(preferences.isMusicEnabled());
 		musicCheckbox.addListener(new ChangeListener() {
 			@Override

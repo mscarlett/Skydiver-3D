@@ -43,7 +43,7 @@ public class Renderer {
 	}
 	
 	public void initialize() {
-		cam = new PerspectiveCamera(67, DefaultScreen.width(), DefaultScreen.height());
+		cam = new PerspectiveCamera(67, DefaultScreen.VIRTUAL_WIDTH, DefaultScreen.VIRTUAL_HEIGHT);
         
         decalBatch = new DecalBatch(new CameraGroupStrategy(cam, new Comparator<Decal>(){
 			@Override

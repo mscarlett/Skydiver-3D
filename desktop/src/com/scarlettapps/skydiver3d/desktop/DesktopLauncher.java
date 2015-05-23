@@ -12,8 +12,8 @@ public class DesktopLauncher {
 	
 	public static void launchApplication(ApplicationListener listener) {
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
-		config.width = 1920;
-		config.height = 1280;
+		config.width = 960;
+		config.height = 640;
 		launchApplication(listener, config);
 	}
 	

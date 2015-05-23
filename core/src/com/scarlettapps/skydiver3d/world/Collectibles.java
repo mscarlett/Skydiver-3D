@@ -18,13 +18,13 @@ import com.scarlettapps.skydiver3d.worldview.Renderer;
 public class Collectibles extends GameObject  implements Iterable<Node<Collectible>> {
 	
 	private static final float ROTATION_FREQUENCY = 0.5f;
-	private static final float DECAL_WIDTH = 7/480f*DefaultScreen.width();
-	private static final float DECAL_HEIGHT = 7/320f*DefaultScreen.height();
+	private static final float DECAL_WIDTH = 7/480f*DefaultScreen.VIRTUAL_WIDTH;
+	private static final float DECAL_HEIGHT = 7/320f*DefaultScreen.VIRTUAL_HEIGHT;
 	private static final int NUM_OBJECTS = 35;
 	private static final int STARTING_OFFSET = 289;
 	private static final int VERTICAL_SPACING = 89;
-	private static final int X_RANGE = DefaultScreen.width()/75;
-	private static final int Y_RANGE = DefaultScreen.height()/75;
+	private static final int X_RANGE = DefaultScreen.VIRTUAL_WIDTH/75;
+	private static final int Y_RANGE = DefaultScreen.VIRTUAL_HEIGHT/75;
 	
 	private final SortedIntList<Collectible> preRender;
 	private final SortedIntList<Collectible> toRender;

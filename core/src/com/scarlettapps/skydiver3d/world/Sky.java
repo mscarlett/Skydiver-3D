@@ -18,7 +18,7 @@ public class Sky extends GameObject {
 	private float offsetX = 0;
 	private float offsetX2 = DefaultScreen.VIRTUAL_WIDTH;
 	
-	private static final float VELOCITY = 10;
+	private static final float VELOCITY = 20;
 
 	public Sky() {
 		super(true, true);
