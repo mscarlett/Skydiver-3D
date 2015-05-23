@@ -4,7 +4,10 @@
 package com.scarlettapps.skydiver3d.world;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g3d.decals.Decal;
@@ -23,9 +26,9 @@ public class Target extends GameObject {
 	
 	@Override
 	public void initialize() { //TODO can this be drawn procedurally?
-		target = Decal.newDecal(new TextureRegion(new Texture(Gdx.files.local("data/textures/target.gif"))));
+		target = Decal.newDecal(new TextureRegion(makeTarget(5000, 8)));
 		target.setPosition(0, 0, 0);
-		target.setScale(1);
+		target.setScale(0.1f);
 		target.lookAt(Vector3.Z, Vector3.Z);
 		target.setBlending(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
 	}
@@ -62,6 +65,26 @@ public class Target extends GameObject {
 	
 	public void setRender(boolean render) {
 		this.render = render;
+	}
+	
+	private static Texture makeTarget(int size, int numLayers) {
+		Pixmap pixmap = new Pixmap(size, size, Format.RGBA8888);
+		pixmap.setColor(Color.CLEAR);
+		pixmap.fill();
+		
+		//Color yo = new Color(Color.YELLOW).lerp(Color.ORANGE, 0.5f);
+		//Color or = new Color(Color.ORANGE).lerp(Color.RED, 0.5f);
+		
+		Color[] colors = {Color.WHITE, Color.YELLOW, Color.ORANGE, Color.RED, Color.PURPLE, Color.CYAN, Color.NAVY, Color.BLACK};
+		
+		for (int layer = numLayers-1; layer >= 0; layer--) {
+			int maxRadius = size/2/numLayers*(layer+1);
+			Color c = new Color(colors[layer]).lerp(Color.GRAY, 0.2f);
+			pixmap.setColor(c);
+			pixmap.fillCircle(size/2, size/2, maxRadius);
+		}
+		
+		return new Texture(pixmap);
 	}
 
 }

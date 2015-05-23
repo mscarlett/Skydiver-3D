@@ -34,7 +34,7 @@ class InitialStateController implements WorldViewController {
 		if (skydiver.jumpedOffAirplane()) {
 			totalTime += delta;
 			
-			dz -= delta*2f;
+			dz -= delta*3f;
 			dy -= delta*3f;
 			dx -= delta*1f;
 			
