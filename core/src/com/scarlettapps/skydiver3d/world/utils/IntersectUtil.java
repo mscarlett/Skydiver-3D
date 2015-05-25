@@ -15,11 +15,6 @@ import com.scarlettapps.skydiver3d.world.Skydiver;
  *
  */
 public class IntersectUtil {
-
-	private static Vector3 circlePos = new Vector3();
-	private static Vector3 circleSize = new Vector3();
-	private static Rectangle rectangle = new Rectangle();
-	private static Circle circle = new Circle();
 	
 	private IntersectUtil() {}
 	
