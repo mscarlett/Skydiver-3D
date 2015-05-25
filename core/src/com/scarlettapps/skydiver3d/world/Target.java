@@ -3,7 +3,6 @@
 
 package com.scarlettapps.skydiver3d.world;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Pixmap;
@@ -26,9 +25,9 @@ public class Target extends GameObject {
 	
 	@Override
 	public void initialize() { //TODO can this be drawn procedurally?
-		target = Decal.newDecal(new TextureRegion(makeTarget(5000, 8)));
+		target = Decal.newDecal(new TextureRegion(makeTarget(512, 8)));
 		target.setPosition(0, 0, 0);
-		target.setScale(0.1f);
+		target.setScale(0.25f);
 		target.lookAt(Vector3.Z, Vector3.Z);
 		target.setBlending(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
 	}

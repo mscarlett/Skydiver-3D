@@ -395,6 +395,7 @@ public class StatusView {
 			Gdx.app.log(Skydiver3D.LOG, "Resetting StatusView");
 		}
 		
+		// Am I doing this right?
 		accuracyMeter.reset();
         jumpLabelAction.reset();
         initialLabelAction.reset();

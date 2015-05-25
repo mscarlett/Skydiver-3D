@@ -47,7 +47,7 @@ public class Collectibles extends GameObject  implements Iterable<Node<Collectib
 			float x = MathUtils.random(X_RANGE * 1.8f) - X_RANGE / 2 * 1.8f;
 			float y;
 			if (Gdx.app.getType() == ApplicationType.Android) {
-				y = Y_RANGE / 2 * 1.5f;
+				y = 0;
 			} else {
 				y = MathUtils.random(Y_RANGE * 1.5f) - Y_RANGE / 2 * 1.5f;
 			}

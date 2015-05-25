@@ -109,11 +109,12 @@ public class SplashScreen extends MenuScreen {
 	 */
 	@Override
 	public void render(float delta) {
+		progressBar.setValue(getProgress());
+		super.render(delta);
+		
 		if (game.mainMenuScreen.isLoaded()) {
 			showMainMenu();
-		} else {
-			progressBar.setValue(getProgress());
-			super.render(delta);
+		} else {	
 			AssetFactory.getInstance().update(50);
 		}
 	}

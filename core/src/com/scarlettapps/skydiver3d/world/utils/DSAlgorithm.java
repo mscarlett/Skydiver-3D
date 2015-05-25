@@ -220,41 +220,4 @@ public class DSAlgorithm {
 	private static int indexOf(int x, int y, int length) {
 		return x * length + y;
 	}
-	
-    public static void main(String[] args) {
-        final float[] map = makeHeightMap(9, 128, 128);
-        final int size = (1 << 9) + 1;
-        
-//        for (int y = 0; y < map.length; y++) {
-//             for (int x = 0; x < map[y].length; x++) {
-//                  System.out.printf("[%3d]", map[x][y]);
-//             }
-//             System.out.println();
-//        }
-        
-        javax.swing.JFrame frame = new javax.swing.JFrame();
-        javax.swing.JPanel panel = new javax.swing.JPanel(){
-             public void paint(java.awt.Graphics g){
-                  super.paint(g);
-                  for(int y = 0; y < size; y++){
-                       for(int x = 0; x < size; x++){
-                            int value = (int)map[indexOf(x,y,size)];
-                            if(value > 255){
-                                 value = 255;
-                            }else if(value < 0){
-                                 value = 0;
-                            }
-                            java.awt.Color color = new java.awt.Color(value, value, value);
-                            g.setColor(color);
-                            g.fillRect(x, y, 1, 1);
-                       }
-                  }
-             }
-        };
-        panel.setPreferredSize(new java.awt.Dimension(size, size));
-        frame.setContentPane(panel);
-        frame.setDefaultCloseOperation(javax.swing.JFrame.EXIT_ON_CLOSE);
-        frame.pack();
-        frame.setVisible(true);
-   }
 }
