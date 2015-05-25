@@ -15,11 +15,11 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
+import com.badlogic.gdx.scenes.scene2d.ui.CheckBox.CheckBoxStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Slider;
 import com.badlogic.gdx.scenes.scene2d.ui.Slider.SliderStyle;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
@@ -54,6 +54,11 @@ public class OptionsScreen extends MenuScreen {
 		TextButtonStyle textButtonStyle = skin.get(TextButtonStyle.class);
 		BitmapFont font = fontFactory.generateFont(42);
 		textButtonStyle.font = font;
+		//CheckBoxStyle checkBoxStyle = skin.get(CheckBoxStyle.class);
+		//checkBoxStyle.checkboxOff.setMinWidth(50f);
+		//checkBoxStyle.checkboxOff.setMinHeight(50f);
+		//checkBoxStyle.checkboxOn.setMinWidth(50f);
+		//checkBoxStyle.checkboxOn.setMinHeight(50f);
 		
 		LabelStyle labelStyle = skin.get(LabelStyle.class);
 		font = fontFactory.generateFont(36);
@@ -68,7 +73,8 @@ public class OptionsScreen extends MenuScreen {
 
 		// create the labels widgets
 		final CheckBox soundEffectsCheckbox = new CheckBox("", skin);
-		soundEffectsCheckbox.setScale(5);
+		soundEffectsCheckbox.setScale(4);
+		soundEffectsCheckbox.setScaleX(10);
 		soundEffectsCheckbox.setChecked(preferences.isSoundEnabled());
 		soundEffectsCheckbox.addListener(new ChangeListener() {
 			@Override
@@ -87,7 +93,8 @@ public class OptionsScreen extends MenuScreen {
 		table.add(soundEffectsCheckbox).colspan(2).left();
 
 		final CheckBox musicCheckbox = new CheckBox("", skin);
-		musicCheckbox.setScale(5);
+		musicCheckbox.setScale(4);
+		musicCheckbox.setScaleX(10);
 		musicCheckbox.setChecked(preferences.isMusicEnabled());
 		musicCheckbox.addListener(new ChangeListener() {
 			@Override
@@ -118,7 +125,7 @@ public class OptionsScreen extends MenuScreen {
 		pixmap.fill();
 		sliderStyle.knob = new TextureRegionDrawable(new TextureRegion(new Texture(pixmap)));
 		Slider volumeSlider = new Slider(0f, 1f, 0.1f, true, sliderStyle);
-		volumeSlider.setScaleX(6);
+		volumeSlider.setScaleX(10);
 		volumeSlider.setValue(preferences.getVolume());
 		volumeSlider.addListener(new ChangeListener() {
 			@Override
@@ -141,7 +148,7 @@ public class OptionsScreen extends MenuScreen {
 		table.add(volumeValue).width(40);
 		
 		Slider sensitivitySlider = new Slider(0.5f, 1.5f, 0.1f, true, sliderStyle);
-		sensitivitySlider.setScaleX(6);
+		sensitivitySlider.setScaleX(10);
 		sensitivitySlider.setValue(preferences.getSensitivity());
 		sensitivitySlider.addListener(new ChangeListener() {
 			@Override
