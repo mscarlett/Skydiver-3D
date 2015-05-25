@@ -26,7 +26,7 @@ public class LoadingScreen extends MenuScreen {
 	private static final float LOADING_MIN = 0;
 	private static final float LOADING_MAX = 1f;
 	private static final float STEP_SIZE = 0.05f;
-	private static final float ANIMATE_DURATION = 0.5f;
+	private static final float ANIMATE_DURATION = 2f;
 	
 	private ProgressBar progressBar;
 	
@@ -68,12 +68,13 @@ public class LoadingScreen extends MenuScreen {
 	@Override
 	public void render(float delta) {
 		AssetFactory assetFactory = AssetFactory.getInstance();
+		float progress = assetFactory.getProgress();
+		progressBar.setValue(progress);
+		super.render(delta);
+		
 		if (game.playingScreen.isLoaded()) {
 			startGame();
-		} else {
-			float progress = LOADING_MAX*assetFactory.getProgress()+LOADING_MIN;
-			progressBar.setValue(progress);
-			super.render(delta);
+		} else {	
 			assetFactory.update(50);
 		}
 	}

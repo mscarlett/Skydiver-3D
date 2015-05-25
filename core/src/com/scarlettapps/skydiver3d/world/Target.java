@@ -84,7 +84,7 @@ public class Target extends GameObject {
 			pixmap.fillCircle(size/2, size/2, maxRadius);
 		}
 		
-		return new Texture(pixmap);
+		return new Texture(pixmap, true);
 	}
 
 }

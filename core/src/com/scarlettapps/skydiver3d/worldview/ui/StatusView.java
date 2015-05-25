@@ -102,7 +102,7 @@ public class StatusView {
 					if (elapsedTime > 2f) {
 						children.get(1).setVisible(true);
 						children.get(0).setVisible(false);
-						return true;
+						return false;
 					} else {
 						children.get(1).setVisible(false);
 						children.get(0).setVisible(false);
@@ -171,7 +171,6 @@ public class StatusView {
 		addInitial();
 		addParachute();
 		addCollected();
-		//addScoreSummary();
 		addPauseIcon();
 		addSpeedIcon();
 	}
@@ -395,13 +394,17 @@ public class StatusView {
 		if (Skydiver3D.DEV_MODE) {
 			Gdx.app.log(Skydiver3D.LOG, "Resetting StatusView");
 		}
+		
+		accuracyMeter.reset();
+        jumpLabelAction.reset();
+        initialLabelAction.reset();
+        parachuteAction.reset();
 
+        
 		jumpLabel.addAction(jumpLabelAction);
         initial.addAction(initialLabelAction);
         parachute.addAction(parachuteAction);
-        accuracyMeter.reset();
-        parachuteAction.reset();
-		
+        
 		speedIcon.setVisible(false);
 		landLabel.setVisible(false);
 		tapScreenLabel.setVisible(true);

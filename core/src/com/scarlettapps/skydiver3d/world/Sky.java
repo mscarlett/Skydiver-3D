@@ -13,16 +13,19 @@ import com.scarlettapps.skydiver3d.worldview.Renderer;
 
 public class Sky extends GameObject {
 	
+	private static final float VELOCITY = 20;
+	
 	private TextureRegion sky;
 	private TextureRegion sky2;
 	
-	private float offsetX = 0;
-	private float offsetX2 = DefaultScreen.VIRTUAL_WIDTH;
-	
-	private static final float VELOCITY = 20;
+	private float offsetX;
+	private float offsetX2;
 
 	public Sky() {
 		super(true, true);
+		
+		offsetX = 0;
+		offsetX2 = DefaultScreen.VIRTUAL_WIDTH;
 	}
 	
 	public void initialize() {
