@@ -3,18 +3,19 @@ package com.scarlettapps.skydiver3d.worldview;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.scarlettapps.skydiver3d.worldstate.Status;
 
-class LandingStateController implements WorldViewController {
+class LandingStateView implements WorldStateView {
 	
 	private final WorldView worldView;
+	private final Status status;
 	
-	public LandingStateController(WorldView worldView) {
+	public LandingStateView(WorldView worldView, Status status) {
 		this.worldView = worldView;
+		this.status = status;
 	}
 
 	@Override
 	public void update(float delta) {
 		PerspectiveCamera cam = worldView.getRenderer().getCam();
-		Status status = Status.getInstance();
 		cam.position.x = status.position().x + 0.5f;
 		cam.position.y = status.position().y;
 		cam.position.z = status.position().z + WorldView.CAM_OFFSET;

@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.scarlettapps.skydiver3d.DefaultScreen;
 import com.scarlettapps.skydiver3d.resources.AssetFactory;
 import com.scarlettapps.skydiver3d.resources.AssetFactory.TextureType;
+import com.scarlettapps.skydiver3d.worldstate.Status;
 import com.scarlettapps.skydiver3d.worldstate.WorldState;
 import com.scarlettapps.skydiver3d.worldview.Renderer;
 

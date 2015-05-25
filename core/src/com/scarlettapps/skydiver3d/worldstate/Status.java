@@ -6,8 +6,8 @@ import com.scarlettapps.skydiver3d.Skydiver3D;
 import com.scarlettapps.skydiver3d.world.Skydiver;
 
 public class Status {
-	
-	private static Status instance = null;
+
+	public boolean switchState;
 	
 	public static final int MAX_LANDING_BONUS = 15000;
 	public static final int MAX_PARACHUTING_BONUS = 5000;
@@ -269,13 +269,6 @@ public class Status {
 
 	public boolean isCompleted() {
 		return getState() == WorldState.FINAL;
-	}
-
-	public static Status getInstance() {
-		if (instance == null) {
-			instance = new Status();
-		}
-		return instance;
 	}
 
 	public void addTimeSinceCollected(float delta) {

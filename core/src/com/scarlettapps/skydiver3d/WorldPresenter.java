@@ -38,6 +38,8 @@ public class WorldPresenter extends DefaultScreen<Skydiver3D> {
 	protected InputManager inputManager;
 	// Handles listeners for current game state
 	protected StatusManager statusManager;
+	// Status of the world
+	protected Status status;
 	
 	/**
 	 * Instantiate the screen with the game instance
@@ -52,15 +54,15 @@ public class WorldPresenter extends DefaultScreen<Skydiver3D> {
 			Gdx.app.log(Skydiver3D.LOG, "Initializing world");
 		}
 		
+		status = new Status();
 		gameController = GameController.newGameController();
-		world = new World();
-		inputManager = new InputManager(gameController);
-		statusManager = new StatusManager(inputManager, world);
 		
+		inputManager = new InputManager(gameController);
+		statusManager = new StatusManager(inputManager, status);
+		world = new World(inputManager, statusManager);
 		worldView = new WorldView(world, statusManager);
 
-		SkydiverControls skydiverControls = new SkydiverControls(world);
-		inputManager.addListener(skydiverControls);
+		
 		
 		world.initialize();
 		worldView.initialize();
@@ -71,9 +73,7 @@ public class WorldPresenter extends DefaultScreen<Skydiver3D> {
 	 * @param delta the time in seconds between frames
 	 */
 	@Override
-	public void render(float delta) {
-		Status status = Status.getInstance();
-		
+	public void render(float delta) {		
 		if (status.isPaused()) {
 			// If the world is paused then switch to pause screen
 			game.setScreen(game.pauseScreen);
@@ -155,7 +155,7 @@ public class WorldPresenter extends DefaultScreen<Skydiver3D> {
 	 * @return the score
 	 */
 	public Score scoreSummary() {
-		return Status.getInstance().scoreSummary();
+		return status.scoreSummary();
 	}
 
 	/**
@@ -171,7 +171,7 @@ public class WorldPresenter extends DefaultScreen<Skydiver3D> {
 	 * @param b whether or not the game should be paused
 	 */
 	public void setPaused(boolean b) {
-		Status.getInstance().setPaused(b);
+		status.setPaused(b);
 	}
 
 }

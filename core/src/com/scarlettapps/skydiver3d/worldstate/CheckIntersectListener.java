@@ -17,17 +17,14 @@ public class CheckIntersectListener implements StatusListener {
 	}
 	
 	@Override
-	public boolean update(float delta) {
-		Status status = Status.getInstance();
+	public boolean update(float delta, Status status) {
 		if (status.worldState() == WorldState.SKYDIVING) {
-		    checkIntersect();
+		    checkIntersect(status);
 		}
 		return false;
 	}
 	
-	private void checkIntersect() {
-		Status status = Status.getInstance();
-		
+	private void checkIntersect(Status status) {		
 		Vector3 skydiverPosition = status.position();
 		Vector3 skydiverVelocity = status.velocity();
 		

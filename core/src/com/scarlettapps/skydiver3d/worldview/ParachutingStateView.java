@@ -9,20 +9,20 @@ import com.scarlettapps.skydiver3d.worldstate.StatusManager;
 import com.scarlettapps.skydiver3d.worldview.ui.AccuracyMeter;
 import com.scarlettapps.skydiver3d.worldview.ui.StatusView;
 
-class ParachutingStateController implements WorldViewController {
+class ParachutingStateView implements WorldStateView {
 	
 	private boolean switchCam;
 	private final WorldView worldView;
+	private final Status status;
 	
-	public ParachutingStateController(WorldView worldView) {
+	public ParachutingStateView(WorldView worldView, Status status) {
 		this.worldView = worldView;
+		this.status = status;
 	}
 	
 	@Override
 	public void update(float delta) {
 		Renderer renderer = worldView.getRenderer();
-		World world = renderer.getWorld();
-		Status status = Status.getInstance();
 		StatusView statusView = worldView.getStatusView();
 		PerspectiveCamera cam = renderer.getCam();
 		
@@ -71,12 +71,11 @@ class ParachutingStateController implements WorldViewController {
 		
 		World world = renderer.getWorld();
 		Skydiver skydiver = world.getSkydiver();
-		Status.getInstance().setParachuting(true);
+		status.setParachuting(true);
 		
 		PerspectiveCamera cam = renderer.getCam();
 		cam.up.set(Vector3.Z);
-		
-		Status status = Status.getInstance();		
+			
 		cam.position.x = status.position().x;
 		cam.position.y = status.position().y+4f;
 		cam.position.z = status.position().z-2f;

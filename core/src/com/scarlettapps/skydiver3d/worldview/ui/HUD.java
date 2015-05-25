@@ -13,7 +13,7 @@ public class HUD {
 	
 	private Group hud;
 	
-	public HUD(Skin skin) {;
+	public HUD(Skin skin, final Status status) {
 		Label label;
 		
 		hud = new Group();
@@ -27,7 +27,7 @@ public class HUD {
 			@Override
 			public boolean act(float delta) {
 				Label label = (Label)getActor();
-				int points = Status.getInstance().getScore();
+				int points = status.getScore();
 				label.setText("Points: " + points);
 				return false;
 			}
@@ -44,7 +44,7 @@ public class HUD {
 			@Override
 			public boolean act(float delta) {
 				Label label = (Label)getActor();
-				int speed = Math.round(-2.23694f*Status.getInstance().velocity().z);
+				int speed = Math.round(-2.23694f*status.velocity().z);
 				label.setText("Speed: " + speed + " mph");
 				return false;
 			}
@@ -61,7 +61,7 @@ public class HUD {
 			@Override
 			public boolean act(float delta) {
 				Label label = (Label)getActor();
-				int altitude = Math.round(3.28084f*Status.getInstance().position().z);
+				int altitude = Math.round(3.28084f*status.position().z);
 				label.setText("Altitude: " + altitude + " feet");
 				return false;
 			}

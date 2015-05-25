@@ -7,7 +7,7 @@ import com.scarlettapps.skydiver3d.world.World;
 import com.scarlettapps.skydiver3d.worldstate.Status;
 import com.scarlettapps.skydiver3d.worldstate.StatusManager;
 
-class InitialStateController implements WorldViewController {
+class InitialStateView implements WorldStateView {
 
 	private float dx, dy, dz;
 	private float totalTime;
@@ -18,8 +18,11 @@ class InitialStateController implements WorldViewController {
 	
 	private final WorldView worldView;
 	
-	public InitialStateController(WorldView worldView) {
+	private final Status status;
+	
+	public InitialStateView(WorldView worldView, Status status) {
 		this.worldView = worldView;
+		this.status = status;
 	}
 
 	@Override
@@ -43,8 +46,6 @@ class InitialStateController implements WorldViewController {
 			float newZ = 0.4f*WorldView.CAM_OFFSET+dz+skydiver.getPositionZ();
 			camOffset.set(newX, newY, newZ);
 			
-			Status status = Status.getInstance();
-			
 			tmp2.set(camOffset).sub(status.position());
 			tmp2.scl(totalTime/5f);
 			camOffset.sub(tmp2);
@@ -53,7 +54,6 @@ class InitialStateController implements WorldViewController {
 	        cam.lookAt(skydiver.getPositionX()+dx,skydiver.getPositionY(),skydiver.getPositionZ()+0.3f*WorldView.CAM_OFFSET);
 	        cam.up.set(Vector3.Z);
 		} else {
-			Status status = Status.getInstance();
 	        cam.position.set(camOffset);
 	        cam.lookAt(status.position().x+dx,status.position().y,status.position().z+0.3f*WorldView.CAM_OFFSET);  
 		}
@@ -64,7 +64,7 @@ class InitialStateController implements WorldViewController {
 	public void render(float delta) {	
 		Renderer renderer = worldView.getRenderer();
 		renderer.drawSky();
-		renderer.drawSkydiverAndPlane();
+		renderer.drawSkydiver();
 		worldView.getStatusView().drawJumpOffPlane();
 	}
 

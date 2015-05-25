@@ -4,17 +4,22 @@
 package com.scarlettapps.skydiver3d.world;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.audio.Music;
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.utils.Array;
 import com.scarlettapps.skydiver3d.Skydiver3D;
-import com.scarlettapps.skydiver3d.resources.AssetFactory;
-import com.scarlettapps.skydiver3d.resources.MusicFactory;
-import com.scarlettapps.skydiver3d.resources.SoundFactory;
 import com.scarlettapps.skydiver3d.resources.AssetFactory.MusicType;
 import com.scarlettapps.skydiver3d.resources.AssetFactory.SoundType;
+import com.scarlettapps.skydiver3d.resources.MusicFactory;
+import com.scarlettapps.skydiver3d.resources.SoundFactory;
+import com.scarlettapps.skydiver3d.worldstate.CheckIntersectListener;
+import com.scarlettapps.skydiver3d.worldstate.InputListener;
+import com.scarlettapps.skydiver3d.worldstate.InputManager;
+import com.scarlettapps.skydiver3d.worldstate.SkydiverControls;
 import com.scarlettapps.skydiver3d.worldstate.Status;
+import com.scarlettapps.skydiver3d.worldstate.StatusListener;
 import com.scarlettapps.skydiver3d.worldstate.StatusManager;
+import com.scarlettapps.skydiver3d.worldstate.StickyListener;
+import com.scarlettapps.skydiver3d.worldstate.SwitchStateListener;
+import com.scarlettapps.skydiver3d.worldstate.WorldState;
 
 /**
  * The World is the representation of the game world of SkyDiving3D. It knows nothing about
@@ -30,12 +35,14 @@ public class World {
 	private Terrain terrain;
 	private Collectibles collectibles;
 	private Clouds clouds;
-	private Plane plane;
 	private Sky sky;
 	
-	public World() {		
-		skydiver = new Skydiver();
-		plane = new Plane();
+	private Status status;
+	
+	public World(InputManager inputManager, StatusManager statusManager) {
+		status = statusManager.getStatus();
+		
+		skydiver = new Skydiver(status);
 		collectibles = new Collectibles();
 		clouds = new Clouds();
 		terrain = new Terrain();
@@ -47,14 +54,25 @@ public class World {
 		objects.add(terrain);
 		objects.add(collectibles);
 		objects.add(clouds);
-		objects.add(plane);
 		objects.add(target);
 		objects.add(sky);
+		
+		
+		SkydiverControls skydiverControls = new SkydiverControls(this, status);
+		inputManager.addListener(skydiverControls);
+		statusManager.addListener(new CheckIntersectListener(this));
+		statusManager.addListener(new SwitchStateListener(this));
 	}
+	
+	
 	
 	public void initialize() {
 		for (GameObject o: objects) {
 			o.initialize();
+		}
+		
+		for (GameObject o: objects) {
+			o.onWorldStateChanged(WorldState.INITIAL);
 		}
 	}
 	
@@ -64,7 +82,7 @@ public class World {
 	}
 	
 	public void update(float delta) {
-		if (!Status.getInstance().isPaused()) {
+		if (!status.isPaused()) {
 			updatePositions(delta);
 			MusicFactory music = MusicFactory.getInstance();
 			music.setVolume(getWindVolume());
@@ -72,7 +90,7 @@ public class World {
 	}
 	
 	private float getWindVolume() {
-		return (0.2f-Status.getInstance().velocity().z/Skydiver.MAX_TERMINAL_SPEED)/1.2f;
+		return (0.2f-status.velocity().z/Skydiver.MAX_TERMINAL_SPEED)/1.2f;
 	}
 	
 	private void updatePositions(float delta) {
@@ -92,15 +110,15 @@ public class World {
 	}
 	
 	public void pause() {
-		Status.getInstance().setPaused(true);
+		status.setPaused(true);
 	}
 	
 	public void resume() {
-		Status.getInstance().setPaused(false);
+		status.setPaused(false);
 	}
 
 	public boolean isPaused() {
-		return Status.getInstance().isPaused();
+		return status.isPaused();
 	}
 	
 	public Terrain getTerrain() {
@@ -109,10 +127,6 @@ public class World {
 	
 	public Skydiver getSkydiver() {
 		return skydiver;
-	}
-	
-	public Plane getPlane() {
-		return plane;
 	}
 	
 	public Target getTarget() {

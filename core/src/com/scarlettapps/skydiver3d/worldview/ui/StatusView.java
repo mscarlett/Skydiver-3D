@@ -78,7 +78,7 @@ public class StatusView {
 
 			@Override
 			public boolean act(float delta) {
-				if (Status.getInstance().jumpedOffAirplane()) {
+				if (statusManager.getStatus().jumpedOffAirplane()) {
 					return true;
 				}
 				Label label = (Label)getActor();
@@ -94,7 +94,7 @@ public class StatusView {
 			
 			@Override
 			public boolean act(float delta) {
-				Status status = Status.getInstance();
+				Status status = statusManager.getStatus();
 				Group group = (Group)getActor();
 				SnapshotArray<Actor> children = group.getChildren(); // why is this null?
 				if (status.jumpedOffAirplane()) {
@@ -122,7 +122,7 @@ public class StatusView {
 
 			@Override
 			public boolean act(float delta) {
-				Status status = Status.getInstance();
+				Status status = statusManager.getStatus();
 				if (status.justOpenedParachute()) {
 					status.setJustOpenedParachute(false);
 					
@@ -177,7 +177,7 @@ public class StatusView {
 	}
 
 	private void addHud() {
-		hud = new HUD(skin);
+		hud = new HUD(skin, statusManager.getStatus());
 		stage.addActor(hud.getGroup());
 	}
 	
@@ -231,7 +231,7 @@ public class StatusView {
 			
 			@Override
 			public boolean act(float delta) {
-				float displayScoreTime = Status.getInstance().displayScoreTime();
+				float displayScoreTime = statusManager.getStatus().displayScoreTime();
 				Label label = (Label)getActor();
 				label.setColor(0, 0, 1, (1-(float)Math.sqrt(displayScoreTime))/2f);
         		label.setScale((1+2*displayScoreTime)*DefaultScreen.VIRTUAL_WIDTH/480f, (1+2*displayScoreTime)*DefaultScreen.VIRTUAL_HEIGHT/360f);
@@ -251,7 +251,7 @@ public class StatusView {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
 				SoundFactory.getInstance().play(SoundType.CLICK);
-				Status.getInstance().setPaused(true);
+				statusManager.getStatus().setPaused(true);
 			}
 			
 		});
@@ -266,7 +266,7 @@ public class StatusView {
 
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
-				Status.getInstance().setSticky();
+				statusManager.getStatus().setSticky();
 			}
 			
 		});
@@ -280,7 +280,7 @@ public class StatusView {
 				temp.set(Color.WHITE);
 				float a = Skydiver.MIN_TERMINAL_SPEED;
 				float b = Skydiver.MAX_TERMINAL_SPEED;
-				float speedFactor = (-Status.getInstance().velocity().z-a)/(b-a);
+				float speedFactor = (-statusManager.getStatus().velocity().z-a)/(b-a);
 				temp.lerp(Color.YELLOW, speedFactor);
 				image.setColor(temp);
 				return false;

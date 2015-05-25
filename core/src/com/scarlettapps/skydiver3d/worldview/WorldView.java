@@ -59,9 +59,6 @@ public class WorldView {
 			Gdx.app.log(Skydiver3D.LOG, "Resetting WorldView");
 		}
 		
-		if (Status.getInstance().jumpedOffAirplane()) { //XXX another hack
-			throw new GdxRuntimeException("Need to call reset() on statusManager first.");
-		}
 		statusView.reset();
         renderer.reset();
         renderer.switchState(statusManager, this);

@@ -9,18 +9,19 @@ import com.scarlettapps.skydiver3d.worldstate.Status;
 import com.scarlettapps.skydiver3d.worldstate.StatusManager;
 import com.scarlettapps.skydiver3d.worldview.ui.StatusView;
 
-class SkydivingStateController implements WorldViewController {
+class SkydivingStateView implements WorldStateView {
 	
 	private static final int COLLECTIBLES_OFFSET = 300;
 	private final WorldView worldView;
+	private final Status status;
 	
-	public SkydivingStateController(WorldView worldView) {
+	public SkydivingStateView(WorldView worldView, Status status) {
 		this.worldView = worldView;
+		this.status = status;
 	}
 	
 	public void initialize() {
 		PerspectiveCamera cam = worldView.getRenderer().getCam();
-		Status status = Status.getInstance();
 		StatusView statusView = worldView.getStatusView();
 		cam.position.set(0, 0.5f,status.position().z + WorldView.CAM_OFFSET);
         cam.direction.set(0,0,-1);
@@ -35,7 +36,6 @@ class SkydivingStateController implements WorldViewController {
 	@Override
 	public void update(float delta) {
 		Renderer renderer = worldView.getRenderer();
-		Status status = Status.getInstance();
 		PerspectiveCamera cam = renderer.getCam();
 		World world = renderer.getWorld();
 		cam.position.z = status.position().z + WorldView.CAM_OFFSET;
@@ -56,7 +56,6 @@ class SkydivingStateController implements WorldViewController {
 		renderer.drawTerrain();
 		renderer.drawTargetAndSkydiver();
 		renderer.drawCollectibles();
-		Status status = Status.getInstance();
 		PerspectiveCamera cam = renderer.getCam();
 		StatusView statusView = worldView.getStatusView();
 		

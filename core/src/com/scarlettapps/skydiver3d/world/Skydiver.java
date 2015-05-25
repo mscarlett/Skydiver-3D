@@ -38,9 +38,9 @@ public class Skydiver extends GameObject {
 	public static final float MAX_TERMINAL_SPEED = 89f;
 	private static final float STARTING_POSE = 8.266682f*34/200;
 	
-	private final Vector3 position = Status.getInstance().position();
+	private final Vector3 position;
 	
-	private final Vector3 velocity = Status.getInstance().velocity();
+	private final Vector3 velocity;
 	
 	private ModelInstance instance;
 	private AnimationController controller;
@@ -56,8 +56,14 @@ public class Skydiver extends GameObject {
 	private boolean finalState;
 	private float timeSinceFinalState;
 	
-	public Skydiver() {
+	private Status status;
+	
+	public Skydiver(Status status) {
 		super(true,true);
+		
+		this.status = status;
+		position = status.position();
+		velocity = status.velocity();
 	}
 	
 	@Override
@@ -117,7 +123,7 @@ public class Skydiver extends GameObject {
 	}
 	
 	private void updateSkydiving(float delta) {
-		if (!Status.getInstance().landing()) {
+		if (!status.landing()) {
 			checkBounds();
 		}
 		
@@ -144,7 +150,6 @@ public class Skydiver extends GameObject {
 	}
 	
 	private void updateTilt(float delta, float pose) {
-		Status status = Status.getInstance();
 		if (status.landing()) {
 			skydiverAngle.y = -90;
 		} else if (status.parachuting()) {
@@ -154,9 +159,7 @@ public class Skydiver extends GameObject {
 		}
 	}
 	
-	private void updateController(float delta, float pose) {
-		Status status = Status.getInstance();
-		
+	private void updateController(float delta, float pose) {		
 		if (finalState) {
 			final float totalTime = 4f;
 			if (timeSinceFinalState < totalTime) {
@@ -185,7 +188,7 @@ public class Skydiver extends GameObject {
 	}
 	
 	private void updateBeforeSkydiving(float delta) {
-		if (Status.getInstance().jumpedOffAirplane()) {
+		if (status.jumpedOffAirplane()) {
 			float jumpTime = 5f;
 			
 			if (timeSinceJumpedOffAirplane < jumpTime) {
@@ -250,7 +253,7 @@ public class Skydiver extends GameObject {
 		velocity.x += x;
 		velocity.y += y;
 		velocity.z += z;
-		if (!Status.getInstance().landing()) {
+		if (!status.landing()) {
 			if (velocity.z < -MAX_TERMINAL_SPEED) {
 				velocity.z = -MAX_TERMINAL_SPEED;
 			} else if (velocity.z > -MIN_TERMINAL_SPEED) {
@@ -340,7 +343,7 @@ public class Skydiver extends GameObject {
 	}
 
 	public boolean jumpedOffAirplane() {
-		return Status.getInstance().jumpedOffAirplane();
+		return status.jumpedOffAirplane();
 	}
 
 	public void setFinalState(boolean b) {

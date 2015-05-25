@@ -12,6 +12,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.SortedIntList;
 import com.badlogic.gdx.utils.SortedIntList.Node;
 import com.scarlettapps.skydiver3d.DefaultScreen;
+import com.scarlettapps.skydiver3d.worldstate.Status;
 import com.scarlettapps.skydiver3d.worldstate.WorldState;
 import com.scarlettapps.skydiver3d.worldview.Renderer;
 

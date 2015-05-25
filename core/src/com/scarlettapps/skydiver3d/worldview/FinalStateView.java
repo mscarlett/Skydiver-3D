@@ -6,12 +6,14 @@ import com.scarlettapps.skydiver3d.worldstate.Status;
 import com.scarlettapps.skydiver3d.worldstate.StatusManager;
 import com.scarlettapps.skydiver3d.worldview.ui.StatusView;
 
-class FinalStateController implements WorldViewController {
+class FinalStateView implements WorldStateView {
 
 	private final WorldView worldView;
+	private final Status status;
 	
-	public FinalStateController(WorldView worldView) {
+	public FinalStateView(WorldView worldView, Status status) {
 		this.worldView = worldView;
+		this.status = status;
 	}
 
 	@Override
@@ -28,7 +30,6 @@ class FinalStateController implements WorldViewController {
 
 	@Override
 	public void initialize() {
-		Status status = Status.getInstance();
 		StatusView statusView = worldView.getStatusView();
 		status.calculateTimeBonus();
 		status.calculateLandingBonus();

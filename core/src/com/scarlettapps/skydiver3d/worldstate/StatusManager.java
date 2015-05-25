@@ -19,17 +19,14 @@ import com.scarlettapps.skydiver3d.world.World;
 public class StatusManager {
 
 	private final Array<StatusListener> listeners;
-	private final World world;
+	private final Status status;
 	
-	private boolean switchState;
-	
-	public StatusManager(InputManager inputManager, World world) {
-		InputListener stickyListener = new StickyListener();
-		inputManager.addListener(stickyListener);
+	public StatusManager(InputManager inputManager, Status status) {
 		listeners = new Array<StatusListener>();
-		listeners.add(new CheckIntersectListener(world));
+		this.status = status;
 		
-		this.world = world;
+		InputListener stickyListener = new StickyListener(status);
+		inputManager.addListener(stickyListener);
 		
 		reset();
 	}
@@ -38,26 +35,17 @@ public class StatusManager {
 		listeners.add(listener);
 	}
 
-	public void update(float delta) {
-		for (StatusListener listener : listeners) {
-			listener.update(delta);
-		}
+	public void update(float delta) {		
+		status.switchState = checkSwitchState();
 		
-		Status status = Status.getInstance();
+		for (StatusListener listener : listeners) {
+			listener.update(delta, status);
+		}
 		
 		if (status.justCollected()) {
 			status.addTimeSinceCollected(delta);
 		}
-
-		if (switchState = checkSwitchState()) {
-			Array<GameObject> objects = world.getObjects();
-			WorldState worldState = status.worldState();
-			
-			for (GameObject object : objects) {
-				object.onWorldStateChanged(worldState);
-			}
-		}
-
+		
 		if (status.collected() && status.timeSinceCollected() > status.displayScoreTime()) {
 			status.setCollected(false);
 		} else {
@@ -70,7 +58,6 @@ public class StatusManager {
 	}
 
 	private boolean checkSwitchState() {
-		Status status = Status.getInstance();
 		WorldState worldState = status.getState();
 		
 		if (status.position().z >= worldState.minAltitude) {
@@ -92,11 +79,15 @@ public class StatusManager {
 			Gdx.app.log(Skydiver3D.LOG, "Resetting StatusManager");
 		}
 		
-		Status.getInstance().reset();
-		switchState = false;
+		status.reset();
+		status.switchState = false;
 	}
 
 	public boolean switchState() {
-		return switchState;
+		return status.switchState;
+	}
+
+	public Status getStatus() {
+		return status;
 	}
 }

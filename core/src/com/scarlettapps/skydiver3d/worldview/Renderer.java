@@ -30,7 +30,7 @@ import com.scarlettapps.skydiver3d.worldstate.StatusManager;
 
 public class Renderer {
 	
-	private WorldViewController controller;
+	private WorldStateView controller;
 	
 	private PerspectiveCamera cam;
 	private DecalBatch decalBatch;
@@ -59,29 +59,28 @@ public class Renderer {
 	}
 	
 	public void switchState(StatusManager statusManager, WorldView worldView) {
+		Status status = statusManager.getStatus();
 		String oldName;
 		
 		if (Skydiver3D.DEV_MODE) {
 			oldName = controller == null ? null : controller.getClass().getSimpleName();
 		}
 		
-		Status status = Status.getInstance();
-		
 		switch(status.getState()) {
 			case FINAL:
-				controller = new FinalStateController(worldView);
+				controller = new FinalStateView(worldView, status);
 				break;
 			case INITIAL:
-				controller = new InitialStateController(worldView);
+				controller = new InitialStateView(worldView, status);
 				break;
 			case LANDING:
-				controller = new LandingStateController(worldView);
+				controller = new LandingStateView(worldView, status);
 				break;
 			case PARACHUTING:
-				controller = new ParachutingStateController(worldView);
+				controller = new ParachutingStateView(worldView, status);
 				break;
 			case SKYDIVING:
-				controller = new SkydivingStateController(worldView);
+				controller = new SkydivingStateView(worldView, status);
 				break;
 			default:
 				throw new GdxRuntimeException("Invalid World State");
@@ -117,11 +116,9 @@ public class Renderer {
 		modelBatch.end();
 	}
 	
-	public void drawSkydiverAndPlane() {
+	public void drawSkydiver() {
 		modelBatch.begin(cam);
 		Skydiver skydiver = world.getSkydiver();
-		Plane plane = world.getPlane();
-		plane.render(modelBatch);
 		skydiver.render(modelBatch);
 		modelBatch.end();
 	}

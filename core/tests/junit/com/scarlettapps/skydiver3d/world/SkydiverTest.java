@@ -11,7 +11,7 @@ public class SkydiverTest extends TestCase {
 	@Override
 	public void setUp() throws Exception {
 		super.setUp();
-		skydiver = new Skydiver();
+		skydiver = new Skydiver(new Status());
 	}
 	
 	public void testInitialPosition() {

@@ -13,10 +13,12 @@ public class SkydiverControls implements InputListener {
 
 	private static final float PARACHUTING_TIME_LIMIT = 8f;
 	private float elapsedTime;
-	private World world;
+	private final World world;
+	private final Status status;
 	
-	public SkydiverControls(World world) {
+	public SkydiverControls(World world, Status status) {
 		this.world = world;
+		this.status = status;
 		reset();
 	}
 	
@@ -27,8 +29,6 @@ public class SkydiverControls implements InputListener {
 	
 	@Override
 	public boolean update(GameController gameController, float delta) {
-		Status status = Status.getInstance();
-					
 		switch (status.worldState()) {
 			case INITIAL:
 				Skydiver skydiver = world.getSkydiver();
