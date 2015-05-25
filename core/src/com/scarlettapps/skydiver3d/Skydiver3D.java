@@ -23,7 +23,7 @@ public class Skydiver3D extends Game {
 	public static final String LOG = "Skydiver3D";
 	// Whether or not the game should be run in dev mode, which enables
     // advanced debugging options for game logic and gui testing
-	public static final boolean DEV_MODE = true;
+	public static final boolean DEV_MODE = false;
 	
 	/** Screens displayed when browsing the main menu */
 	// Splash screen for main menu that is displayed while loading
