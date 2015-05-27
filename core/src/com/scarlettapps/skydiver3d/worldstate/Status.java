@@ -250,6 +250,7 @@ public class Status {
 	public Score scoreSummary() {
 		calculateMaxPoints();
 		calculateLandingBonus();
+		calculateParachutingBonus();
 		return new Score(ringScore, parachutingBonus(), landingBonus(), rating());
 	}
 

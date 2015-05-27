@@ -244,7 +244,7 @@ public class StatusView {
 	
 	private void addPauseIcon() {
 		pauseIcon = new Image(AssetFactory.getInstance().get(TextureType.PAUSE, Texture.class));
-		pauseIcon.setScale(2f);
+		pauseIcon.setScale(1f);
 		pauseIcon.setPosition(DefaultScreen.VIRTUAL_WIDTH-pauseIcon.getWidth()-10, 10);
 		pauseIcon.addListener(new ClickListener() {
 
@@ -261,7 +261,7 @@ public class StatusView {
 	
 	private void addSpeedIcon() {
 		speedIcon = new Image(AssetFactory.getInstance().get(TextureType.LIGHTNING, Texture.class));
-		speedIcon.setScale(2f);
+		speedIcon.setScale(1f);
 		speedIcon.setPosition(10, 10);
 		speedIcon.addListener(new ClickListener() {
 
