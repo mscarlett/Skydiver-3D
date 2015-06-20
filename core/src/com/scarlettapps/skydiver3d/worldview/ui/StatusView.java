@@ -189,7 +189,7 @@ public class StatusView {
 		jumpLabel.addAction(jumpLabelAction);
 		initial.addActor(jumpLabel);
 		readyLabel = new Label("Get ready", skin);
-		centerLabel(readyLabel);
+		upperLabel(readyLabel);
 		readyLabel.setColor(Color.WHITE);
 		readyLabel.setVisible(false);
 		initial.addAction(initialLabelAction);
@@ -355,6 +355,12 @@ public class StatusView {
 
 	public AccuracyMeter getAccuracyMeter() {
 		return accuracyMeter;
+	}
+	
+	private static void upperLabel(Label label) {
+		float x = DefaultScreen.VIRTUAL_WIDTH/2;
+		float y = DefaultScreen.VIRTUAL_HEIGHT*3/5;
+		setLabel(label, x, y);
 	}
 	
 	private static void centerLabel(Label label) {
