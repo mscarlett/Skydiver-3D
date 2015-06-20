@@ -27,7 +27,7 @@ public class Target extends GameObject {
 	public void initialize() { //TODO can this be drawn procedurally?
 		target = Decal.newDecal(new TextureRegion(makeTarget(512, 8)));
 		target.setPosition(0, 0, 0);
-		target.setScale(0.25f);
+		target.setScale(0.35f);
 		target.lookAt(Vector3.Z, Vector3.Z);
 		target.setBlending(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
 	}

@@ -7,14 +7,19 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Mesh;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.MathUtils;
 import com.scarlettapps.skydiver3d.Skydiver3D;
+import com.scarlettapps.skydiver3d.resources.AssetFactory;
+import com.scarlettapps.skydiver3d.resources.AssetFactory.TextureType;
 import com.scarlettapps.skydiver3d.world.utils.PerlinNoise;
 import com.scarlettapps.skydiver3d.worldstate.WorldState;
 import com.scarlettapps.skydiver3d.worldview.Renderer;
 
 public class Terrain extends GameObject { //TODO fix bug that causes parachute to randomly not open // also fix bug in which screen unresponsive
+	
+	private static final String GROUND_TEXTURE = TextureType.GRASS_TERRAIN;
 	
 	private Mesh mesh;
 	private ShaderProgram shader;
@@ -25,7 +30,9 @@ public class Terrain extends GameObject { //TODO fix bug that causes parachute t
 	private int u_texture2;
 	private int u_texture3;
 	
-	CustomHeightmap heightmap;
+	private Texture texture;
+	
+	private CustomHeightmap heightmap;
 	
 	public Terrain() {
 		super(false,true);
@@ -46,12 +53,14 @@ public class Terrain extends GameObject { //TODO fix bug that causes parachute t
 				+ "attribute vec4 a_color;                  \n"
 				+ "attribute vec2 a_texCoord0;                  \n"
 				+ "attribute float a_texIntensity;                  \n"
+				+ "varying float v_texIntensity;                  \n"
 				+ "varying vec4 v_color;                  \n"
-				//+ "varying vec2 v_texCoord0;                  \n"
+				+ "varying vec2 v_texCoord0;                  \n"
 				+ "void main()                                 \n"
 				+ "{                                           \n"
 				+ "   v_color = a_color;                       \n"
-				//+ "   v_texCoord0 = a_texCoord0;                       \n"
+				+ "   v_texCoord0 = a_texCoord0;                       \n"
+				+ "   v_texIntensity = a_texIntensity;                       \n"
 				+ "   vec4 pos = a_position;\n"
 				+ "   pos.z = 0.0;\n"
 				+ "   gl_Position = u_mvpMatrix *pos;  \n"
@@ -61,25 +70,26 @@ public class Terrain extends GameObject { //TODO fix bug that causes parachute t
 				+ "#endif\n"
 				+ "uniform float u_fogFactor;\n"
 				+ "varying vec4 v_color;                  \n"
-				//+ "varying vec2 v_texCoord0;                  \n"
+				+ "varying vec2 v_texCoord0;                  \n"
+				+ "varying float v_texIntensity;                  \n"
+				+ "uniform sampler2D u_texture0;           \n"
 				+"\n"
-				//+"vec2 truncate(vec2 v)  \n"
-				//+"\n{"
-				//+"float dx = v.x - float(int(v.x));\n"
-				//+"float dy = v.y - float(int(v.y));\n"
-				//+"return vec2(dx, dy);\n"
-				//+"}\n"
-				//+" \n"
+				+"vec2 truncate(vec2 v)  \n"
+				+"{\n"
+				+"float dx = v.x - float(int(v.x));\n"
+				+"float dy = v.y - float(int(v.y));\n"
+				+"return vec2(dx, dy);\n"
+				+"}\n"
+				+" \n"
 				+ "void main()                                  \n"
 				+ "{                                            \n"
-				+ "const vec4 fogColor = vec4(1.0, 1.0, 1.0, 1.0);\n"
-				//+ "vec4 texColor;"
-				//+ "vec2 newTexCoord = truncate(30.0*v_texCoord0);"
-				//+ "float h1 = -5.0;\n"
-				//+ "float h2 = 0.0;\n"
-				//+ "float h3 = 10.0;\n"
-				//+ "float h4 = 75.0;\n"
-				+ "gl_FragColor = mix( fogColor, v_color, u_fogFactor);\n"
+				+ "vec4 fogColor = vec4(1.0, 1.0, 1.0, 1.0);\n"
+				+ "float LOG2 = 1.442695;\n"
+				+ "float z = gl_FragCoord.z / gl_FragCoord.w;\n"
+				+ "float fogFactor = clamp(exp2( - 0.00000000005*z*z * LOG2 ),0.0,1.0);\n"
+				+ "vec2 newTexCoord = truncate(30.0*v_texCoord0);\n"
+				+ "vec4 texColor = texture2D(u_texture0, newTexCoord);\n"
+				+ "gl_FragColor = mix( fogColor, mix (v_color, texColor, v_texIntensity), fogFactor);\n"
 				+ "}";
 
 		shader = new ShaderProgram(vertexShader, fragmentShader);
@@ -100,7 +110,11 @@ public class Terrain extends GameObject { //TODO fix bug that causes parachute t
 		for (int i = 1; i < noiseMatrix.length; i++) {
 			noiseMatrix[i] = noiseMatrix[i]/noiseMatrix[noiseMatrix.length-1]*gamma;
 		}
+		
+		texture = AssetFactory.getInstance().get(GROUND_TEXTURE, Texture.class);
 	}
+	
+	
 	
 	@Override
 	public void reset() {
@@ -108,10 +122,10 @@ public class Terrain extends GameObject { //TODO fix bug that causes parachute t
 	}
 
 	public void render(Camera cam) {
-		/*Gdx.gl.glEnable(GL20.GL_TEXTURE_2D);
+		Gdx.gl.glEnable(GL20.GL_TEXTURE_2D);
 		Gdx.gl.glActiveTexture(GL20.GL_TEXTURE0);
-		texture0.bind();
-		Gdx.gl.glActiveTexture(GL20.GL_TEXTURE1);
+		texture.bind();
+		/*Gdx.gl.glActiveTexture(GL20.GL_TEXTURE1);
 		texture1.bind();
 		Gdx.gl.glActiveTexture(GL20.GL_TEXTURE2);
 		texture2.bind();

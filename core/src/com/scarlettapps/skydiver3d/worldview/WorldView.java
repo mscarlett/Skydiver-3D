@@ -32,7 +32,7 @@ public class WorldView {
 		DefaultShader.defaultCullFace = 0;
 		
 		renderer = new Renderer(world);
-		statusView = new StatusView(statusManager);
+		statusView = new StatusView(statusManager.getStatus());
 	}
 	
 	public void initialize() {

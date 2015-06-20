@@ -37,7 +37,7 @@ import com.scarlettapps.skydiver3d.worldstate.StatusManager;
 
 public class StatusView {
 
-	private final StatusManager statusManager;
+	private final Status status;
 	
 	private Stage stage;
 	private Skin skin;
@@ -66,19 +66,42 @@ public class StatusView {
 	private Action jumpLabelAction;
 	private Action parachuteAction;
 	
-	public StatusView(StatusManager statusManager) {
-		this.statusManager = statusManager;
+	public StatusView(Status status) {
+		this.status = status;
 	}
 
 	public void initialize() {
-		jumpLabelAction = new Action() {
+		createJumpLabelAction();
+		createInitialLabelAction();
+		createParachuteAction();
+		
+        visibleQueue = new PooledLinkedList<Group>(6);
+		
+		skin = new Skin(Gdx.files.internal("skin/uiskin.json"));
+		viewport = new StretchViewport(DefaultScreen.VIRTUAL_WIDTH, DefaultScreen.VIRTUAL_HEIGHT);
+		stage = new Stage(viewport);
+		
+		LabelStyle textButtonStyle = skin.get(LabelStyle.class);
+		BitmapFont font = FontFactory.getInstance().generateFont(36);
+		textButtonStyle.font = font;
+		
+		addHud();
+		addInitial();
+		addParachute();
+		addCollected();
+		addPauseIcon();
+		addSpeedIcon();
+	}
+	
+	private void createJumpLabelAction() {
+        jumpLabelAction = new Action() {
 			
 			Color white = Color.WHITE.cpy();
 			float elapsedTime = 0.5f;
 
 			@Override
 			public boolean act(float delta) {
-				if (statusManager.getStatus().jumpedOffAirplane()) {
+				if (status.jumpedOffAirplane()) {
 					return true;
 				}
 				Label label = (Label)getActor();
@@ -89,12 +112,14 @@ public class StatusView {
 			}
 			
 		};
-		
-		initialLabelAction = new Action() {
+	}
+	
+	private void createInitialLabelAction() {
+        initialLabelAction = new Action() {
 			
 			@Override
 			public boolean act(float delta) {
-				Status status = statusManager.getStatus();
+				
 				Group group = (Group)getActor();
 				SnapshotArray<Actor> children = group.getChildren(); // why is this null?
 				if (status.jumpedOffAirplane()) {
@@ -115,14 +140,16 @@ public class StatusView {
 			}
 			
 		};
-		
-		parachuteAction = new Action() {
+	}
+	
+	private void createParachuteAction() {
+        parachuteAction = new Action() {
 			
 			private float elapsedTime = 0f;
 
 			@Override
 			public boolean act(float delta) {
-				Status status = statusManager.getStatus();
+				
 				if (status.justOpenedParachute()) {
 					status.setJustOpenedParachute(false);
 					
@@ -136,12 +163,17 @@ public class StatusView {
 					lowerLabel(successLabel);
 					successLabel.setVisible(true);
 					children.get(0).setVisible(false);
+					children.get(2).setVisible(false);
 				}
 				if (status.parachuteDeployed()) {
 					float altitude = 3.28084f*status.position().z;
 					if (altitude < 1800f && elapsedTime > 2f) {
 						Group group = (Group)getActor();
+						if (group == null) { // XXX fix bug?
+							System.out.println("bug!");
+						}
 						SnapshotArray<Actor> children = group.getChildren();
+						children.get(0).setVisible(false);
 						children.get(1).setVisible(false);
 						children.get(2).setVisible(true);
 						return true;
@@ -156,27 +188,10 @@ public class StatusView {
 				elapsedTime = 0f;
 			}
 		};
-		
-        visibleQueue = new PooledLinkedList<Group>(6);
-		
-		skin = new Skin(Gdx.files.internal("skin/uiskin.json"));
-		viewport = new StretchViewport(DefaultScreen.VIRTUAL_WIDTH, DefaultScreen.VIRTUAL_HEIGHT);
-		stage = new Stage(viewport);
-		
-		LabelStyle textButtonStyle = skin.get(LabelStyle.class);
-		BitmapFont font = FontFactory.getInstance().generateFont(36);
-		textButtonStyle.font = font;
-		
-		addHud();
-		addInitial();
-		addParachute();
-		addCollected();
-		addPauseIcon();
-		addSpeedIcon();
 	}
 
 	private void addHud() {
-		hud = new HUD(skin, statusManager.getStatus());
+		hud = new HUD(skin, status);
 		stage.addActor(hud.getGroup());
 	}
 	
@@ -230,7 +245,7 @@ public class StatusView {
 			
 			@Override
 			public boolean act(float delta) {
-				float displayScoreTime = statusManager.getStatus().displayScoreTime();
+				float displayScoreTime = status.displayScoreTime();
 				Label label = (Label)getActor();
 				label.setColor(0, 0, 1, (1-(float)Math.sqrt(displayScoreTime))/2f);
         		label.setScale((1+2*displayScoreTime)*DefaultScreen.VIRTUAL_WIDTH/480f, (1+2*displayScoreTime)*DefaultScreen.VIRTUAL_HEIGHT/360f);
@@ -251,7 +266,7 @@ public class StatusView {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
 				SoundFactory.getInstance().play(SoundType.CLICK);
-				statusManager.getStatus().setPaused(true);
+				status.setPaused(true);
 			}
 			
 		});
@@ -267,7 +282,7 @@ public class StatusView {
 
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
-				statusManager.getStatus().setSticky();
+				status.setSticky();
 			}
 			
 		});
@@ -281,7 +296,7 @@ public class StatusView {
 				temp.set(Color.WHITE);
 				float a = Skydiver.MIN_TERMINAL_SPEED;
 				float b = Skydiver.MAX_TERMINAL_SPEED;
-				float speedFactor = (-statusManager.getStatus().velocity().z-a)/(b-a);
+				float speedFactor = (-status.velocity().z-a)/(b-a);
 				temp.lerp(Color.YELLOW, speedFactor);
 				image.setColor(temp);
 				return false;
@@ -408,11 +423,12 @@ public class StatusView {
         jumpLabelAction.reset();
         initialLabelAction.reset();
         parachuteAction.reset();
-
         
-		jumpLabel.addAction(jumpLabelAction);
+        jumpLabel.addAction(jumpLabelAction);
         initial.addAction(initialLabelAction);
-        parachute.addAction(parachuteAction);
+        createParachuteAction();
+        addParachute();
+        //parachute.addAction(parachuteAction);
         
 		speedIcon.setVisible(false);
 		landLabel.setVisible(false);
