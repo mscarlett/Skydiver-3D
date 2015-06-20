@@ -20,21 +20,22 @@ public class Sky extends GameObject {
 	
 	private float offsetX;
 	private float offsetX2;
+	
+	private final Status status;
 
-	public Sky() {
+	public Sky(Status status) {
 		super(true, true);
 		
-		offsetX = 0;
-		offsetX2 = DefaultScreen.VIRTUAL_WIDTH;
+		this.status = status;
 	}
 	
 	public void initialize() {
 		Texture texture = AssetFactory.getInstance().get(TextureType.SKY, Texture.class);
 		sky = new TextureRegion(texture);
-		sky.setRegionWidth(DefaultScreen.VIRTUAL_WIDTH+1);
-		sky.setRegionHeight(DefaultScreen.VIRTUAL_HEIGHT);
 		sky2 = new TextureRegion(sky);
 		sky2.flip(true, false);
+		
+		reset();
 	}
 
 	@Override
@@ -47,6 +48,13 @@ public class Sky extends GameObject {
 		}
 		if (offsetX2 < -DefaultScreen.VIRTUAL_WIDTH) {
 			offsetX2 = DefaultScreen.VIRTUAL_WIDTH;
+		}
+		
+		if (status.jumpedOffAirplane()) {
+			int height = sky.getRegionHeight();
+			height *= 1 + 0.1f*delta;
+			sky.setRegionHeight(height);
+			sky2.setRegionHeight(height);
 		}
 	}
 
@@ -62,7 +70,13 @@ public class Sky extends GameObject {
 
 	@Override
 	public void reset() {
+		sky.setRegionWidth(DefaultScreen.VIRTUAL_WIDTH+1);
+		sky.setRegionHeight(DefaultScreen.VIRTUAL_HEIGHT);
+		sky2.setRegionWidth(DefaultScreen.VIRTUAL_WIDTH+1);
+		sky2.setRegionHeight(DefaultScreen.VIRTUAL_HEIGHT);
 		
+		offsetX = 0;
+		offsetX2 = DefaultScreen.VIRTUAL_WIDTH;
 	}
 
 	public void render(Batch batch) {

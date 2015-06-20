@@ -62,8 +62,6 @@ public class WorldPresenter extends DefaultScreen<Skydiver3D> {
 		world = new World(inputManager, statusManager);
 		worldView = new WorldView(world, statusManager);
 
-		
-		
 		world.initialize();
 		worldView.initialize();
 	}

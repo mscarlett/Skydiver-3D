@@ -89,17 +89,17 @@ public final class MusicFactory {
 		first.setVolume(1-gamma);
 		second.setVolume(gamma);
 	}
+
+	public void setVolume(float v) {
+		if (current != null) {
+		    current.setVolume(v);
+		}
+	}
 	
 	public static MusicFactory getInstance() {
 		if (instance == null) {
 			instance = new MusicFactory();
 		}
 		return instance;
-	}
-
-	public void setVolume(float v) {
-		if (current != null) {
-		    current.setVolume(v);
-		}
 	}
 }

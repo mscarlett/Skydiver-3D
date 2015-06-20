@@ -56,7 +56,7 @@ public class Skydiver extends GameObject {
 	private boolean finalState;
 	private float timeSinceFinalState;
 	
-	private Status status;
+	private final Status status;
 	
 	public Skydiver(Status status) {
 		super(true,true);

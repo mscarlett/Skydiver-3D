@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.scarlettapps.skydiver3d.resources.AssetFactory;
 import com.scarlettapps.skydiver3d.world.Sky;
+import com.scarlettapps.skydiver3d.worldstate.Status;
 
 public class SkyUI implements ApplicationListener {
 
@@ -17,7 +18,7 @@ public class SkyUI implements ApplicationListener {
 	
 	@Override
 	public void create () {
-		sky = new Sky();
+		sky = new Sky(new Status());
 		AssetFactory factory = AssetFactory.getInstance();
 		factory.load();
 		factory.finishLoading();

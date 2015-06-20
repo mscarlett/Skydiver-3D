@@ -18,13 +18,13 @@ public class AndroidGameController extends GameController {
 		
 		Gdx.input.setCatchBackKey(false);
 		Gdx.input.setCatchMenuKey(true);
+		
+		ay = 0;
 	}
 	
 	@Override
 	public void update(float delta) {
 		ax = -Gdx.input.getPitch()*SENSITIVITY;
-		//ay = Gdx.input.getRoll()*SENSITIVITY;
-		ay = 0;
 	}
 	
 	@Override

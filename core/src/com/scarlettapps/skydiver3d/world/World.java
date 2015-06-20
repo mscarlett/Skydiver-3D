@@ -47,7 +47,7 @@ public class World {
 		clouds = new Clouds();
 		terrain = new Terrain();
 		target = new Target();
-		sky = new Sky();
+		sky = new Sky(status);
 		
 		objects = new Array<GameObject>();
 		objects.add(skydiver);

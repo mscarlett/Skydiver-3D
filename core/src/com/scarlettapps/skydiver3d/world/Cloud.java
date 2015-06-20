@@ -17,7 +17,8 @@ public class Cloud {
 	private static final int length = 256;
 	private static final int width = 256;
 	private static final Texture texture = genTexture();
-	private Decal decal;
+	
+	private final Decal decal;
 	
 	public Cloud(float x, float y, float z) {
 		float length = MathUtils.random(2000,5000);

@@ -42,7 +42,10 @@ public class SkydiverControls implements InputListener {
 					skydiver.addToVelocity(0, 0, -25 * delta);
 				}
 				skydiver.addToVelocity(delta*gameController.getAx(), delta*gameController.getAy(), 0);
-				skydiver.skydiverAngle().x += 10 * delta*gameController.getAx();
+				
+				if (skydiver.skydiverAngle().x >= -75 && skydiver.skydiverAngle().x <= 75) {
+				    skydiver.skydiverAngle().x += 10 * delta*gameController.getAx();
+				}
 				break;
 			case PARACHUTING:
 				if (!status.parachuteDeployed()) {

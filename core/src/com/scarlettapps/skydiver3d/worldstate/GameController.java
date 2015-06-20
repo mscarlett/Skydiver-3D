@@ -14,7 +14,6 @@ public abstract class GameController implements InputProcessor {
 	
 	protected static float sensitivity = PreferenceFactory.getInstance().getSensitivity();
 	
-	protected Vector2 touchPosition;
 	protected float ax;
 	protected float ay;
 	protected boolean faster;
@@ -44,10 +43,6 @@ public abstract class GameController implements InputProcessor {
 	
 	public final boolean getFaster() {
 		return faster || sticky;
-	}
-	
-	public final Vector2 getTouchPosition() {
-		return touchPosition;
 	}
 	
 	@Override
