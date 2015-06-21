@@ -8,19 +8,23 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.scarlettapps.skydiver3d.resources.AssetFactory;
 import com.scarlettapps.skydiver3d.resources.AssetFactory.TextureType;
 
-public class Star extends Collectible {
+public class RingNuclear extends Collectible { //TODO How do I pass the texture to an instance of this class?
 	
-	private static final String STAR_TEXTURE_FILE = TextureType.STAR;
+	private static final int POINTS = -500;
 	private static TextureRegion textureRegion = null;
-	private static final int POINTS = 1000;
 
-	public Star(float width, float height, float x, float y, float z) {
+	public RingNuclear(float width, float height, float x, float y, float z) {
 		super(width, height, getTextureRegion(), x, y, z);
+	}
+	
+	@Override
+	public int getPoints() {
+		return POINTS;
 	}
 	
 	private static TextureRegion getTextureRegion() {
 		if (textureRegion == null) {
-			textureRegion = new TextureRegion(AssetFactory.getInstance().get(TextureType.STAR, Texture.class));
+			textureRegion = new TextureRegion(AssetFactory.getInstance().get(TextureType.RING_NUCLEAR, Texture.class));
 		}
 		return textureRegion;
 	}

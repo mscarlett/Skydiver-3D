@@ -21,15 +21,15 @@ public class Collectibles extends GameObject  implements Iterable<Node<Collectib
 	private static final float ROTATION_FREQUENCY = 0.5f;
 	private static final float DECAL_WIDTH = 7/480f*DefaultScreen.VIRTUAL_WIDTH;
 	private static final float DECAL_HEIGHT = 7/320f*DefaultScreen.VIRTUAL_HEIGHT;
-	private static final int NUM_OBJECTS = 35;
 	private static final int STARTING_OFFSET = 289;
-	private static final int VERTICAL_SPACING = 89;
 	private static final int X_RANGE = DefaultScreen.VIRTUAL_WIDTH/75;
 	private static final int Y_RANGE = DefaultScreen.VIRTUAL_HEIGHT/75;
 	
 	private final SortedIntList<Collectible> preRender;
 	private final SortedIntList<Collectible> toRender;
 	private final SortedIntList<Collectible> postRender;
+	
+	private Difficulty difficulty = Difficulty.LEVEL_ONE;
 	
 	public Collectibles() {
 		super(true, true);
@@ -39,11 +39,15 @@ public class Collectibles extends GameObject  implements Iterable<Node<Collectib
 		postRender = new SortedIntList<Collectible>();
 	}
 	
+	public void setDifficulty(Difficulty difficulty) {
+		this.difficulty = difficulty;
+	}
+	
 	@Override
 	public void initialize() {
 		int z = Skydiver.STARTING_HEIGHT-STARTING_OFFSET;
 
-		for (int i = 0; i < NUM_OBJECTS; i++) {
+		for (int i = 0; i < difficulty.numObjects; i++) {
 			float x = MathUtils.random(X_RANGE * 1.8f) - X_RANGE / 2 * 1.8f;
 			float y;
 			if (Gdx.app.getType() == ApplicationType.Android) {
@@ -52,9 +56,9 @@ public class Collectibles extends GameObject  implements Iterable<Node<Collectib
 				y = MathUtils.random(Y_RANGE * 1.5f) - Y_RANGE / 2 * 1.5f;
 			}
 			boolean isRing = MathUtils.randomBoolean();
-			Collectible collectible = isRing ? new Ring(DECAL_WIDTH, DECAL_HEIGHT, x, y, z) : new Star(DECAL_WIDTH, DECAL_HEIGHT, x, y, z);
+			Collectible collectible = isRing ? new RingGold(DECAL_WIDTH, DECAL_HEIGHT, x, y, z) : new Star(DECAL_WIDTH, DECAL_HEIGHT, x, y, z);
 			preRender.insert(-z, collectible);
-			z -= VERTICAL_SPACING;
+			z -= difficulty.verticalSpacing;
 		}
 	}
 	

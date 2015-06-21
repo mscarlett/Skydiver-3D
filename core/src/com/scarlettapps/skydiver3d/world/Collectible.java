@@ -33,4 +33,8 @@ public abstract class Collectible {
 	
 	public abstract int getPoints();
 
+	public boolean isDangerous() {
+		return getPoints() < 0;
+	}
+
 }

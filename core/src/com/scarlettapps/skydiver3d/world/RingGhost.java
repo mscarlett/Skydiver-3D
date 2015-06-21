@@ -8,12 +8,12 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.scarlettapps.skydiver3d.resources.AssetFactory;
 import com.scarlettapps.skydiver3d.resources.AssetFactory.TextureType;
 
-public class Ring extends Collectible { //TODO How do I pass the texture to an instance of this class?
+public class RingGhost extends Collectible { //TODO How do I pass the texture to an instance of this class?
 	
-	private static final int POINTS = 500;
+	private static final int POINTS = -500;
 	private static TextureRegion textureRegion = null;
 
-	public Ring(float width, float height, float x, float y, float z) {
+	public RingGhost(float width, float height, float x, float y, float z) {
 		super(width, height, getTextureRegion(), x, y, z);
 	}
 	
@@ -24,7 +24,7 @@ public class Ring extends Collectible { //TODO How do I pass the texture to an i
 	
 	private static TextureRegion getTextureRegion() {
 		if (textureRegion == null) {
-			textureRegion = new TextureRegion(AssetFactory.getInstance().get(TextureType.RING, Texture.class));
+			textureRegion = new TextureRegion(AssetFactory.getInstance().get(TextureType.RING_GHOST, Texture.class));
 		}
 		return textureRegion;
 	}

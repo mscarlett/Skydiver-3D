@@ -31,6 +31,9 @@ public final class AssetFactory {
 		public static final String GRASS_TERRAIN = "data/textures/grasstile.jpg";
 		public static final String LIGHTNING = "data/textures/lightning.png";
 		public static final String SKY = "data/textures/sky.png";
+		public static final String RING_SKULL = "data/textures/ring_skull.png";
+		public static final String RING_NUCLEAR = "data/textures/ring_nuclear.png";
+		public static final String RING_GHOST = "data/textures/ring_ghost.png";
 	}
 	
 	public static class SoundType {
@@ -91,6 +94,9 @@ public final class AssetFactory {
 		
 		// Assets needed for main menu screen
 		assets.load(TextureType.RING, Texture.class);
+		assets.load(TextureType.RING_SKULL, Texture.class);
+		assets.load(TextureType.RING_NUCLEAR, Texture.class);
+		assets.load(TextureType.RING_GHOST, Texture.class);
 		assets.load(TextureType.STAR, Texture.class);
 		assets.load(SoundType.CLICK, Sound.class);
 		assets.load(MusicType.MAIN_MENU, Music.class);
@@ -115,7 +121,7 @@ public final class AssetFactory {
 	}
 	
 	public boolean isLoaded() { //XXX this is a hack
-		return getLoadedAssets() == 18;
+		return getLoadedAssets() == 21;
 	}
 	
 	public int getLoadedAssets() {

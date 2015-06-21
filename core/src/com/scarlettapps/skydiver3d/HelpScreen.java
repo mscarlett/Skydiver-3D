@@ -56,7 +56,7 @@ public class HelpScreen extends MenuScreen {
 		table.add(phone).spaceBottom(5).center();
 		table.row();
 		
-		label = new Label("Earn points by collecting rings and stars", skin);
+		label = new Label("Earn points by collecting gold rings and stars. Avoid red rings.", skin);
 		label.setAlignment(Align.center);
 		table.add(label);
 		table.row();
@@ -69,6 +69,15 @@ public class HelpScreen extends MenuScreen {
 		Image star = new Image(new Texture(TextureType.STAR));
 		star.setSize(s,s);
 		group.add(star).size(s, s);
+		Image skull = new Image(new Texture(TextureType.RING_SKULL));
+		skull.setSize(s,s);
+		group.add(skull).size(s, s);
+		Image nuclear = new Image(new Texture(TextureType.RING_NUCLEAR));
+		nuclear.setSize(s,s);
+		group.add(nuclear).size(s, s);
+		Image ghost = new Image(new Texture(TextureType.RING_GHOST));
+		ghost.setSize(s,s);
+		group.add(ghost).size(s, s);
 		
 		table.add(group).spaceBottom(5);
 		table.row();
