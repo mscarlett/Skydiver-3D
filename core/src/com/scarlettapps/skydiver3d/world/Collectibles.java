@@ -29,7 +29,7 @@ public class Collectibles extends GameObject  implements Iterable<Node<Collectib
 	private final SortedIntList<Collectible> toRender;
 	private final SortedIntList<Collectible> postRender;
 	
-	private Difficulty difficulty = Difficulty.LEVEL_ONE;
+	private Level difficulty = Level.LEVEL_ONE;
 	
 	public Collectibles() {
 		super(true, true);
@@ -39,7 +39,7 @@ public class Collectibles extends GameObject  implements Iterable<Node<Collectib
 		postRender = new SortedIntList<Collectible>();
 	}
 	
-	public void setDifficulty(Difficulty difficulty) {
+	public void setDifficulty(Level difficulty) {
 		this.difficulty = difficulty;
 	}
 	

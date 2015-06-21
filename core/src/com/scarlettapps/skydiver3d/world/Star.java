@@ -25,4 +25,9 @@ public class Star extends Collectible {
 		return textureRegion;
 	}
 
+	@Override
+	public int getPoints() {
+		return POINTS;
+	}
+
 }

@@ -145,6 +145,11 @@ public class World {
 		SoundFactory sound = SoundFactory.getInstance();
 		sound.play(SoundType.BELL);
 	}
+	
+	public void playBoom() {
+		SoundFactory sound = SoundFactory.getInstance();
+		sound.play(SoundType.BELL);
+	}
 
 	public Array<GameObject> getObjects() {
 		return objects;
