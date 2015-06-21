@@ -85,6 +85,9 @@ public class SkydiverControls implements InputListener {
 					if (pos.z < 9) {
 						status.velocity().z = 0;
 						status.setState(WorldState.FINAL);
+						if (status.rating() == 5) {
+						    SoundFactory.getInstance().play(SoundType.APPLAUSE);
+						}
 					}
 				} else if (dist2 > 2027 && dist2 < 3550) {
 					if (pos.z < 20) {
