@@ -8,6 +8,7 @@ public final class Score {
 	public final int totalScore;
 	public final int rating;
 	
+	// TODO constructor should use difficulty to compute score
 	public Score(int ringScore, int parachutingScore, int landingScore, int rating) {
 		this.ringScore = ringScore;
 		this.parachutingScore = parachutingScore;
