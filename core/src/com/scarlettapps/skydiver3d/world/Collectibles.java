@@ -9,6 +9,7 @@ import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g3d.decals.Decal;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.SortedIntList;
 import com.badlogic.gdx.utils.SortedIntList.Node;
 import com.scarlettapps.skydiver3d.DefaultScreen;
@@ -47,16 +48,37 @@ public class Collectibles extends GameObject  implements Iterable<Node<Collectib
 	public void initialize() {
 		int z = Skydiver.STARTING_HEIGHT-STARTING_OFFSET;
 
+		int numDangerous = difficulty.numDangerous;
+		
 		for (int i = 0; i < difficulty.numObjects; i++) {
+			boolean dangerous = MathUtils.randomBoolean(numDangerous/((float)difficulty.numObjects-i));
+			
 			float x = MathUtils.random(X_RANGE * 1.8f) - X_RANGE / 2 * 1.8f;
 			float y;
+			
 			if (Gdx.app.getType() == ApplicationType.Android) {
 				y = 0;
 			} else {
 				y = MathUtils.random(Y_RANGE * 1.5f) - Y_RANGE / 2 * 1.5f;
 			}
-			boolean isRing = MathUtils.randomBoolean();
-			Collectible collectible = isRing ? new RingGold(DECAL_WIDTH, DECAL_HEIGHT, x, y, z) : new Star(DECAL_WIDTH, DECAL_HEIGHT, x, y, z);
+			
+			Collectible collectible;
+			
+			if (dangerous) {
+				numDangerous--;
+				int type = MathUtils.random(2);
+				
+				switch (type) {
+					case 0: collectible = new RingNuclear(DECAL_WIDTH, DECAL_HEIGHT, x, y, z); break;
+					case 1: collectible = new RingGhost(DECAL_WIDTH, DECAL_HEIGHT, x, y, z); break;
+					case 2: collectible = new RingSkull(DECAL_WIDTH, DECAL_HEIGHT, x, y, z); break;
+					default: throw new GdxRuntimeException("Invalid type: " + type);
+				}
+			} else {
+				boolean isRing = MathUtils.randomBoolean();
+				collectible = isRing ? new RingGold(DECAL_WIDTH, DECAL_HEIGHT, x, y, z) : new Star(DECAL_WIDTH, DECAL_HEIGHT, x, y, z);
+			}
+			
 			preRender.insert(-z, collectible);
 			z -= difficulty.verticalSpacing;
 		}
