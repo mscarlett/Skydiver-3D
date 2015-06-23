@@ -47,7 +47,7 @@ public class HelpScreen extends MenuScreen {
 		table.add(title).spaceBottom(5).fill().center();
 		table.row();
 		
-		Label label = new Label("Tilt your phone sideways to drift left or right", skin);
+		Label label = new Label("Tilt phone sideways to drift left or right. Touch screen to dive faster.", skin);
 		label.setAlignment(Align.center);
 		table.add(label).center();
 		table.row();

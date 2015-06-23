@@ -233,7 +233,7 @@ public class Status {
 	}
 
 	public int rating() {
-		return (int)(Math.max(0, Math.min(5f * score / ((float) maxPoints), 5)));
+		return (int)Math.round(Math.max(0, Math.min(5f * score / ((float) maxPoints), 5)));
 	}
 	
 	public void calculateParachutingBonus() {

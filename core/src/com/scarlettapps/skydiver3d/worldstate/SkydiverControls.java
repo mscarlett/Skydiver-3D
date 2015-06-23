@@ -86,7 +86,7 @@ public class SkydiverControls implements InputListener {
 						status.velocity().z = 0;
 						status.setState(WorldState.FINAL);
 						status.calculateMaxPoints();
-						if (status.rating() == 5) {
+						if (status.rating() >= 5) {
 						    SoundFactory.getInstance().play(SoundType.APPLAUSE);
 						}
 					}
