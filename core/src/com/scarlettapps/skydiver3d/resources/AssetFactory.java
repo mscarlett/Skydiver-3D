@@ -38,6 +38,7 @@ public final class AssetFactory {
 	
 	public static class SoundType {
 		public static final String BELL = "data/sounds/bell.ogg";
+		public static final String SLAP = "data/sounds/slap.ogg";
 		public static final String CLICK = "data/sounds/click.ogg";
 		public static final String LAUGH = "data/sounds/laugh.ogg";
 		public static final String APPLAUSE = "data/sounds/applause.ogg";
@@ -105,6 +106,7 @@ public final class AssetFactory {
 		// Assets needed for game
 		assets.load(ModelType.SKYDIVER, Model.class);
 		assets.load(SoundType.BELL, Sound.class);
+		assets.load(SoundType.SLAP, Sound.class);
 		assets.load(SoundType.LAUGH, Sound.class);
 		assets.load(SoundType.APPLAUSE, Sound.class);
 		assets.load(MusicType.WIND, Music.class);
@@ -123,7 +125,7 @@ public final class AssetFactory {
 	}
 	
 	public boolean isLoaded() { //XXX this is a hack
-		return getLoadedAssets() == 22;
+		return getLoadedAssets() == 23;
 	}
 	
 	public int getLoadedAssets() {

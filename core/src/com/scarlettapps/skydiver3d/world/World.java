@@ -146,9 +146,9 @@ public class World {
 		sound.play(SoundType.BELL);
 	}
 	
-	public void playBoom() {
+	public void playSlap() {
 		SoundFactory sound = SoundFactory.getInstance();
-		sound.play(SoundType.BELL);
+		sound.play(SoundType.SLAP);
 	}
 
 	public Array<GameObject> getObjects() {
@@ -157,6 +157,10 @@ public class World {
 
 	public Sky getSky() {
 	    return sky;
+	}
+
+	public void setLevel(Level difficulty) {
+		collectibles.setDifficulty(difficulty);
 	}
 	
 }

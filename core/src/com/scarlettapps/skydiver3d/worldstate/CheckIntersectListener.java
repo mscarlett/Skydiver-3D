@@ -34,7 +34,7 @@ public class CheckIntersectListener implements StatusListener {
 			Collectible closest = collectibles.getClosest();
 			if (closest != null && skydiver.intersects(closest)) {
 				if (closest.isDangerous()) {
-					world.playBoom();
+					world.playSlap();
 				} else {
 				    world.playBell();
 				}

@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.scarlettapps.skydiver3d.resources.AssetFactory;
 import com.scarlettapps.skydiver3d.resources.AssetFactory.MusicType;
 import com.scarlettapps.skydiver3d.resources.MusicFactory;
+import com.scarlettapps.skydiver3d.world.Level;
 import com.scarlettapps.skydiver3d.world.World;
 import com.scarlettapps.skydiver3d.worldstate.GameController;
 import com.scarlettapps.skydiver3d.worldstate.InputManager;
@@ -145,7 +146,10 @@ public class WorldPresenter extends DefaultScreen<Skydiver3D> {
 	 * Go to the next level
 	 */
 	public void nextLevel() {
-		restartLevel(); //XXX temporary hack until this is implemented
+		status.nextLevel();
+		Level difficulty = status.difficulty();
+		world.setLevel(difficulty);
+		restartLevel();
 	}
 	
 	/**

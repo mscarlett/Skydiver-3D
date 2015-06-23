@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector3;
 import com.scarlettapps.skydiver3d.Skydiver3D;
 import com.scarlettapps.skydiver3d.world.Skydiver;
+import com.scarlettapps.skydiver3d.world.Level;
 
 public class Status {
 
@@ -222,8 +223,9 @@ public class Status {
 
 	public void calculateMaxPoints() {
 		final int l = MAX_LANDING_BONUS;
-		final int p = 30000 + MAX_PARACHUTING_BONUS;
-		maxPoints = l + p;
+		final int p = MAX_PARACHUTING_BONUS;
+		int maxCollectibles = level.numSafe*750;
+		maxPoints = l + p + maxCollectibles;
 	}
 
 	public int maxPoints() {
@@ -231,7 +233,7 @@ public class Status {
 	}
 
 	public int rating() {
-		return (int)(Math.min(5f * score / ((float) maxPoints), 5));
+		return (int)(Math.max(0, Math.min(5f * score / ((float) maxPoints), 5)));
 	}
 	
 	public void calculateParachutingBonus() {
@@ -269,7 +271,7 @@ public class Status {
 	}
 
 	public boolean isCompleted() {
-		return getState() == WorldState.FINAL;
+		return worldState.isCompleted();
 	}
 
 	public void addTimeSinceCollected(float delta) {
@@ -294,5 +296,17 @@ public class Status {
 
 	public boolean parachuting() {
 		return parachuting;
+	}
+
+	public void nextLevel() {
+		if (level.nextLevel != null) {
+		    level = level.nextLevel;
+		}
+	}
+	
+	Level level = Level.LEVEL_ONE;
+
+	public Level difficulty() {
+		return level;
 	}
 }

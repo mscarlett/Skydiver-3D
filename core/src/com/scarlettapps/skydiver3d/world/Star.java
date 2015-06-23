@@ -10,7 +10,6 @@ import com.scarlettapps.skydiver3d.resources.AssetFactory.TextureType;
 
 public class Star extends Collectible {
 	
-	private static final String STAR_TEXTURE_FILE = TextureType.STAR;
 	private static TextureRegion textureRegion = null;
 	private static final int POINTS = 1000;
 

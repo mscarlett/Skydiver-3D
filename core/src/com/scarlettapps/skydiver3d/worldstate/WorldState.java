@@ -33,6 +33,11 @@ public enum WorldState implements AbstractWorldState {
 	}
 	
 	@Override
+	public boolean isCompleted() {
+		return this == WorldState.FINAL;
+	}
+	
+	@Override
 	public String toString() {
 		switch (this) {
 		case INITIAL:
