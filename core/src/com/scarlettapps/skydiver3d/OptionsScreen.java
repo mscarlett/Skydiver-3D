@@ -28,6 +28,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.scarlettapps.skydiver3d.resources.AssetFactory.MusicType;
 import com.scarlettapps.skydiver3d.resources.AssetFactory.SoundType;
 import com.scarlettapps.skydiver3d.resources.FontFactory;
+import com.scarlettapps.skydiver3d.resources.LanguageFactory;
 import com.scarlettapps.skydiver3d.resources.MusicFactory;
 import com.scarlettapps.skydiver3d.resources.PreferenceFactory;
 import com.scarlettapps.skydiver3d.resources.SoundFactory;
@@ -50,6 +51,7 @@ public class OptionsScreen extends MenuScreen {
 		final PreferenceFactory preferences = PreferenceFactory.getInstance();
 		final SoundFactory sound = SoundFactory.getInstance();
 		final MusicFactory music = MusicFactory.getInstance();
+		final LanguageFactory lang = LanguageFactory.getInstance();
 		
 		TextButtonStyle textButtonStyle = skin.get(TextButtonStyle.class);
 		BitmapFont font = fontFactory.generateFont(42);
@@ -68,7 +70,7 @@ public class OptionsScreen extends MenuScreen {
 
 		table.defaults().spaceBottom(20);
 		table.columnDefaults(0).padRight(20);
-		Label title = new Label("Options", skin, "Title font", Color.WHITE);
+		Label title = new Label(lang.OPTIONS, skin, "Title font", Color.WHITE);
 		table.add(title).colspan(3);
 
 		// create the labels widgets
@@ -89,7 +91,7 @@ public class OptionsScreen extends MenuScreen {
 			}
 		});
 		table.row();
-		table.add("Sound Effects");
+		table.add(lang.SOUND_EFFECTS);
 		table.add(soundEffectsCheckbox).colspan(2).left();
 
 		final CheckBox musicCheckbox = new CheckBox("", skin);
@@ -115,7 +117,7 @@ public class OptionsScreen extends MenuScreen {
 			}
 		});
 		table.row();
-		table.add("Music");
+		table.add(lang.MUSIC);
 		table.add(musicCheckbox).colspan(2).left();
 
 		// range is [0.0,1.0]; step is 0.1f
@@ -143,7 +145,7 @@ public class OptionsScreen extends MenuScreen {
 
 		// add the volume row
 		table.row();
-		table.add("Volume");
+		table.add(lang.VOLUME);
 		table.add(volumeSlider);
 		table.add(volumeValue).width(40);
 		
@@ -166,7 +168,7 @@ public class OptionsScreen extends MenuScreen {
 		
 		// add the volume row
 		table.row();
-		table.add("Motion Sensitivity");
+		table.add(lang.MOTION_SENSITIVITY);
 		table.add(sensitivitySlider);
 		table.add(sensitivityValue).width(40);
 
@@ -175,8 +177,9 @@ public class OptionsScreen extends MenuScreen {
 	
 	protected void addBackButton() {
 		final SoundFactory sound = SoundFactory.getInstance();
+		LanguageFactory lang = LanguageFactory.getInstance();
 		// register the back button
-		TextButton backButton = new TextButton("Back to Main", skin);
+		TextButton backButton = new TextButton(lang.BACK_TO_MAIN, skin);
 		backButton.addListener(new ClickListener() {
 			
 			@Override

@@ -12,10 +12,6 @@ public class AndroidGameController extends GameController {
 	private static final float SENSITIVITY = 0.3f;
 	
 	public AndroidGameController() {
-		if (!Gdx.input.isPeripheralAvailable(Peripheral.Compass)) {
-			throw new GdxRuntimeException("Compass not available");
-		}
-		
 		Gdx.input.setCatchBackKey(false);
 		Gdx.input.setCatchMenuKey(true);
 		

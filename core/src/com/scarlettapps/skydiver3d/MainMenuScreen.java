@@ -19,6 +19,7 @@ import com.scarlettapps.skydiver3d.resources.AssetFactory.MusicType;
 import com.scarlettapps.skydiver3d.resources.AssetFactory.SoundType;
 import com.scarlettapps.skydiver3d.resources.AssetFactory.TextureType;
 import com.scarlettapps.skydiver3d.resources.FontFactory;
+import com.scarlettapps.skydiver3d.resources.LanguageFactory;
 import com.scarlettapps.skydiver3d.resources.MusicFactory;
 import com.scarlettapps.skydiver3d.resources.SoundFactory;
 
@@ -63,6 +64,7 @@ public class MainMenuScreen extends MenuScreen {
         }
 		
 		FontFactory fontFactory = FontFactory.getInstance();
+		LanguageFactory lang = LanguageFactory.getInstance();
 		
 		// Add DistanceFieldFont to fonts and apply to styles
 		TextButtonStyle textButtonStyle = skin.get(TextButtonStyle.class);
@@ -70,7 +72,7 @@ public class MainMenuScreen extends MenuScreen {
 		textButtonStyle.font = font;
 		
 		// register the button "start game"
-		TextButton startGameButton = new TextButton("Play", skin);
+		TextButton startGameButton = new TextButton(lang.PLAY, skin);
 		startGameButton.addListener(new ClickListener() {
 			@Override
 	        public void clicked(InputEvent event, float x, float y) {
@@ -82,7 +84,7 @@ public class MainMenuScreen extends MenuScreen {
 		buttonTable.row();
 		
 		// register the button "high scores"
-		TextButton helpButton = new TextButton("Help", skin);
+		TextButton helpButton = new TextButton(lang.HELP, skin);
 		helpButton.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
@@ -94,7 +96,7 @@ public class MainMenuScreen extends MenuScreen {
 		buttonTable.row();
 
 		// register the button "options"
-		TextButton optionsButton = new TextButton("Options", skin);
+		TextButton optionsButton = new TextButton(lang.OPTIONS, skin);
 		optionsButton.addListener(new ClickListener() {
 			@Override
 	        public void clicked(InputEvent event, float x, float y) {
@@ -107,7 +109,7 @@ public class MainMenuScreen extends MenuScreen {
 		buttonTable.row();
 
 		// register the button "high scores"
-		TextButton highScoresButton = new TextButton("Credits", skin);
+		TextButton highScoresButton = new TextButton(lang.CREDITS, skin);
 		highScoresButton.addListener(new ClickListener() {
 			@Override
 	        public void clicked(InputEvent event, float x, float y) {

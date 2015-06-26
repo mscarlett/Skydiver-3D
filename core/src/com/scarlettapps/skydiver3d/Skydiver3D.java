@@ -3,6 +3,8 @@
 
 package com.scarlettapps.skydiver3d;
 
+import java.util.Locale;
+
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -56,7 +58,7 @@ public class Skydiver3D extends Game {
 	 * Instantiate game resources and screens, then display the initial screen
 	 */
 	@Override
-	public void create() {
+	public void create() {		
 		long start;
 		
 		if (DEV_MODE) {

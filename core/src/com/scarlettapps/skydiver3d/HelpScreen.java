@@ -18,6 +18,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.scarlettapps.skydiver3d.resources.AssetFactory.SoundType;
 import com.scarlettapps.skydiver3d.resources.AssetFactory.TextureType;
 import com.scarlettapps.skydiver3d.resources.FontFactory;
+import com.scarlettapps.skydiver3d.resources.LanguageFactory;
 import com.scarlettapps.skydiver3d.resources.SoundFactory;
 
 public class HelpScreen extends MenuScreen {
@@ -31,7 +32,8 @@ public class HelpScreen extends MenuScreen {
 		super.initializeScreen();
 		
         FontFactory fontFactory = FontFactory.getInstance();
-		
+		LanguageFactory lang = LanguageFactory.getInstance();
+        
 		TextButtonStyle textButtonStyle = skin.get(TextButtonStyle.class);
 		BitmapFont font = fontFactory.generateFont(42);
 		textButtonStyle.font = font;
@@ -42,12 +44,12 @@ public class HelpScreen extends MenuScreen {
 		font = fontFactory.generateFont(64);
 		skin.add("Title font", font, BitmapFont.class);
 		
-		Label title = new Label("Help", skin, "Title font", Color.WHITE);
+		Label title = new Label(lang.HELP, skin, "Title font", Color.WHITE);
 		title.setAlignment(Align.center);
 		table.add(title).spaceBottom(5).fill().center();
 		table.row();
 		
-		Label label = new Label("Tilt phone sideways to drift left or right. Touch screen to dive faster.", skin);
+		Label label = new Label(lang.HELP_TEXT_1, skin);
 		label.setAlignment(Align.center);
 		table.add(label).center();
 		table.row();
@@ -56,7 +58,7 @@ public class HelpScreen extends MenuScreen {
 		table.add(phone).spaceBottom(5).center();
 		table.row();
 		
-		label = new Label("Earn points by collecting gold rings and stars. Avoid red rings.", skin);
+		label = new Label(lang.HELP_TEXT_2, skin);
 		label.setAlignment(Align.center);
 		table.add(label);
 		table.row();
@@ -82,7 +84,7 @@ public class HelpScreen extends MenuScreen {
 		table.add(group).spaceBottom(5);
 		table.row();
 		
-		label = new Label("Open your parachute with perfect timing and\nland in the center of the target to get bonus points", skin);
+		label = new Label(lang.HELP_TEXT_3, skin);
 		label.setAlignment(Align.center);
 		table.add(label).center().fill();
 		table.row();
@@ -92,7 +94,7 @@ public class HelpScreen extends MenuScreen {
 		table.row();
 		
 		// register the button "resume game"
-		TextButton backButton = new TextButton("Back to Main", skin);
+		TextButton backButton = new TextButton(lang.BACK_TO_MAIN, skin);
 		backButton.addListener(new ClickListener() {
 			
 			@Override

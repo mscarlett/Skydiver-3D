@@ -12,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.scarlettapps.skydiver3d.resources.FontFactory;
+import com.scarlettapps.skydiver3d.resources.LanguageFactory;
 import com.scarlettapps.skydiver3d.resources.MusicFactory;
 import com.scarlettapps.skydiver3d.resources.SoundFactory;
 import com.scarlettapps.skydiver3d.resources.AssetFactory.SoundType;
@@ -32,6 +33,7 @@ public class PauseScreen extends MenuScreen { // PAUSE the game if pause button 
 		super.initializeScreen();
 		
         FontFactory fontFactory = FontFactory.getInstance();
+        LanguageFactory lang = LanguageFactory.getInstance();
 		
 		TextButtonStyle textButtonStyle = skin.get(TextButtonStyle.class);
 		BitmapFont font = fontFactory.generateFont(42);
@@ -43,11 +45,11 @@ public class PauseScreen extends MenuScreen { // PAUSE the game if pause button 
 		
 		table.setColor(BACKGROUND_BRIGHTNESS, BACKGROUND_BRIGHTNESS, BACKGROUND_BRIGHTNESS, 1);
 
-		table.add("Paused").spaceBottom(50);
+		table.add(lang.PAUSED).spaceBottom(50);
 		table.row();
 		
 		// register the button "resume game"
-		TextButton resumeButton = new TextButton("Resume", skin);
+		TextButton resumeButton = new TextButton(lang.RESUME, skin);
 		resumeButton.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
@@ -59,7 +61,7 @@ public class PauseScreen extends MenuScreen { // PAUSE the game if pause button 
 		table.row();
 
 		// register the button "options"
-		TextButton restartButton = new TextButton("Try Again", skin);
+		TextButton restartButton = new TextButton(lang.TRY_AGAIN, skin);
 		restartButton.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
@@ -72,7 +74,7 @@ public class PauseScreen extends MenuScreen { // PAUSE the game if pause button 
 		table.row();
 
 		// register the button "high scores"
-		TextButton optionsButton = new TextButton("Options", skin);
+		TextButton optionsButton = new TextButton(lang.OPTIONS, skin);
 		optionsButton.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
@@ -84,7 +86,7 @@ public class PauseScreen extends MenuScreen { // PAUSE the game if pause button 
 		table.row();
 		
 		// register the button "high scores"
-		TextButton mainMenuButton = new TextButton("Main Menu", skin);
+		TextButton mainMenuButton = new TextButton(lang.MAIN_MENU, skin);
 		mainMenuButton.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {

@@ -20,6 +20,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TiledDrawable;
 import com.scarlettapps.skydiver3d.resources.AssetFactory;
 import com.scarlettapps.skydiver3d.resources.FontFactory;
+import com.scarlettapps.skydiver3d.resources.LanguageFactory;
 
 /**
  * This is the screen which is shown initially as the main menu is loading.
@@ -51,14 +52,15 @@ public class SplashScreen extends MenuScreen {
 		super.render(0);
 		
         FontFactory fontFactory = FontFactory.getInstance();
-		
+		LanguageFactory lang = LanguageFactory.getInstance();
+        
 		// Style for text label
 		LabelStyle labelStyle = skin.get(LabelStyle.class);
 		BitmapFont font = fontFactory.generateFont(42);
 		labelStyle.font = font;
 		
 		// Text which displays "Loading"
-		Label label = new Label("Loading", skin);
+		Label label = new Label(lang.LOADING, skin);
 		label.setWidth(DefaultScreen.VIRTUAL_WIDTH/2);
 		label.setAlignment(Align.center);
 		table.add(label).width(DefaultScreen.VIRTUAL_WIDTH/2);

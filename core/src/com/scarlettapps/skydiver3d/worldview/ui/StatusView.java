@@ -29,6 +29,7 @@ import com.scarlettapps.skydiver3d.resources.AssetFactory;
 import com.scarlettapps.skydiver3d.resources.AssetFactory.SoundType;
 import com.scarlettapps.skydiver3d.resources.AssetFactory.TextureType;
 import com.scarlettapps.skydiver3d.resources.FontFactory;
+import com.scarlettapps.skydiver3d.resources.LanguageFactory;
 import com.scarlettapps.skydiver3d.resources.SoundFactory;
 import com.scarlettapps.skydiver3d.world.Skydiver;
 import com.scarlettapps.skydiver3d.worldstate.Status;
@@ -196,12 +197,13 @@ public class StatusView {
 	private void addInitial() {
 		initial = new Group();
 		initial.setVisible(false);
-		jumpLabel = new Label("Tap screen to jump off plane", skin);
+		LanguageFactory lang = LanguageFactory.getInstance();
+		jumpLabel = new Label(lang.TAP_SCREEN_TO_JUMP_OFF_PLANE, skin);
 		centerLabel(jumpLabel);
 		jumpLabel.setColor(Color.WHITE);
 		jumpLabel.addAction(jumpLabelAction);
 		initial.addActor(jumpLabel);
-		readyLabel = new Label("Get ready", skin);
+		readyLabel = new Label(lang.GET_READY, skin);
 		upperLabel(readyLabel);
 		readyLabel.setColor(Color.WHITE);
 		readyLabel.setVisible(false);
@@ -213,7 +215,8 @@ public class StatusView {
 	private void addParachute() {
 		parachute = new Group();
 		parachute.setVisible(false);
-		tapScreenLabel = new Label("Tap screen to open parachute", skin);
+		LanguageFactory lang = LanguageFactory.getInstance();
+		tapScreenLabel = new Label(lang.TAP_SCREEN_TO_OPEN_PARACHUTE, skin);
 		centerLabel(tapScreenLabel);
 		tapScreenLabel.setColor(Color.WHITE);
 		parachute.addActor(tapScreenLabel);
@@ -221,7 +224,7 @@ public class StatusView {
 		label.setVisible(false);
 		label.setColor(Color.WHITE);
 		parachute.addActor(label);
-		landLabel = new Label("Get ready to land", skin);
+		landLabel = new Label(lang.GET_READY_TO_LAND, skin);
 		landLabel.setVisible(false);
 		lowerLabel(landLabel);
 		landLabel.setColor(Color.WHITE);
@@ -306,28 +309,29 @@ public class StatusView {
 
 	
 	private String getSuccess(int success) {
+		LanguageFactory lang = LanguageFactory.getInstance();
 		if (success < 10) {
-			return "Crash Landing!!!";
+			return lang.SUCCESS_0;
 		} else if (success < 20) {
-			return "Poor Reflexes";
+			return lang.SUCCESS_1;
 		} else if (success < 30) {
-			return "Bad Reflexes";
+			return lang.SUCCESS_2;
 		} else if (success < 40) {
-			return "Sloppy Timing";
+			return lang.SUCCESS_3;
 		} else if (success < 50) {
-			return "OK Timing";
+			return lang.SUCCESS_4;
 		} else if (success < 60) {
-			return "Average Timing";
+			return lang.SUCCESS_5;
 		} else if (success < 70) {
-			return "Good Timing";
+			return lang.SUCCESS_6;
 		} else if (success < 80) {
-			return "Great Timing!";
+			return lang.SUCCESS_7;
 		} else if (success < 90) {
-			return "Nice Timing!";
+			return lang.SUCCESS_8;
 		} else if (success < 97) {
-			return "Perfect Timing!";
+			return lang.SUCCESS_9;
 		} else {
-			return "Incredible Timing!!!";
+			return lang.SUCCESS_10;
 		}
 	}
 	

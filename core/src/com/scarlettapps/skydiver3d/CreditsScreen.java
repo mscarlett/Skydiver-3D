@@ -16,6 +16,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.scarlettapps.skydiver3d.resources.FontFactory;
 import com.scarlettapps.skydiver3d.resources.AssetFactory.SoundType;
+import com.scarlettapps.skydiver3d.resources.LanguageFactory;
 import com.scarlettapps.skydiver3d.resources.SoundFactory;
 
 public class CreditsScreen extends MenuScreen {
@@ -34,6 +35,7 @@ public class CreditsScreen extends MenuScreen {
 	
 	private void drawCopyrightMessage() {
 		FontFactory fontFactory = FontFactory.getInstance();
+		LanguageFactory lang = LanguageFactory.getInstance();
 		
 		TextButtonStyle textButtonStyle = skin.get(TextButtonStyle.class);
 		BitmapFont font = fontFactory.generateFont(42);
@@ -45,7 +47,7 @@ public class CreditsScreen extends MenuScreen {
 		font = fontFactory.generateFont(64);
 		skin.add("Title font", font, BitmapFont.class);
 		
-		Label title = new Label("Credits", skin, "Title font", Color.WHITE);
+		Label title = new Label(lang.CREDITS, skin, "Title font", Color.WHITE);
 		table.add(title);
 		table.row();
 		
@@ -63,7 +65,8 @@ public class CreditsScreen extends MenuScreen {
 	
 	private void addBackButton() {
 		// register the button "resume game"
-		TextButton backButton = new TextButton("Back to Main", skin);
+		LanguageFactory lang = LanguageFactory.getInstance();
+		TextButton backButton = new TextButton(lang.BACK_TO_MAIN, skin);
 		backButton.addListener(new ClickListener() {
 			
 			@Override

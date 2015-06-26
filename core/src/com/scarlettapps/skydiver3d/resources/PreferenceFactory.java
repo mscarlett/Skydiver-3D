@@ -3,6 +3,8 @@
 
 package com.scarlettapps.skydiver3d.resources;
 
+import java.util.Locale;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
 
@@ -51,6 +53,11 @@ public final class PreferenceFactory {
 	public void setSensitivity(float value) {
 		preferences.putFloat("Sensitivity", value);
 		preferences.flush();
+	}
+	
+	public boolean useMetric() {
+		Locale locale = Locale.getDefault();
+		return locale != Locale.US || !locale.getLanguage().equals("en");
 	}
 	
 	public static PreferenceFactory getInstance() {

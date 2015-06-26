@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.scarlettapps.skydiver3d.android"
-    android:versionCode="2"
-    android:versionName="1.1" >
+    android:versionCode="5"
+    android:versionName="1.1.3" >
 
     <uses-sdk android:minSdkVersion="8" android:targetSdkVersion="22" />
-    <uses-feature android:name="android.hardware.sensor.accelerometer" android:required="true" />
+    <uses-feature android:name="android.hardware.sensor.gyroscope" android:required="true" />
 
     <application
         android:allowBackup="true"

@@ -29,6 +29,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.scarlettapps.skydiver3d.resources.AssetFactory.MusicType;
 import com.scarlettapps.skydiver3d.resources.AssetFactory.SoundType;
 import com.scarlettapps.skydiver3d.resources.FontFactory;
+import com.scarlettapps.skydiver3d.resources.LanguageFactory;
 import com.scarlettapps.skydiver3d.resources.MusicFactory;
 import com.scarlettapps.skydiver3d.resources.PreferenceFactory;
 import com.scarlettapps.skydiver3d.resources.SoundFactory;
@@ -48,8 +49,9 @@ public class GameOptionsScreen extends OptionsScreen {
 	@Override
 	protected void addBackButton() {
 		final SoundFactory sound = SoundFactory.getInstance();
+		LanguageFactory lang = LanguageFactory.getInstance();
 		// register the back button
-		TextButton backButton = new TextButton("Back to Game", skin);
+		TextButton backButton = new TextButton(lang.BACK_TO_GAME, skin);
 		backButton.addListener(new ClickListener() {
 			
 			@Override

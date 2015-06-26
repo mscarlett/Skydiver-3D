@@ -29,6 +29,7 @@ import com.badlogic.gdx.utils.SnapshotArray;
 import com.scarlettapps.skydiver3d.resources.AssetFactory;
 import com.scarlettapps.skydiver3d.resources.AssetFactory.TextureType;
 import com.scarlettapps.skydiver3d.resources.FontFactory;
+import com.scarlettapps.skydiver3d.resources.LanguageFactory;
 import com.scarlettapps.skydiver3d.worldstate.Score;
 
 public class LevelCompletedScreen extends MenuScreen {
@@ -59,6 +60,7 @@ public class LevelCompletedScreen extends MenuScreen {
 		super.initializeScreen();
 		
         FontFactory fontFactory = FontFactory.getInstance();
+        LanguageFactory lang = LanguageFactory.getInstance();
 		
 		TextButtonStyle textButtonStyle = skin.get(TextButtonStyle.class);
 		BitmapFont font = fontFactory.generateFont(42);
@@ -68,16 +70,16 @@ public class LevelCompletedScreen extends MenuScreen {
 		font = fontFactory.generateFont(36);
 		labelStyle.font = font;
 		
-		ringScore = new Label("Ring Score: 0", skin);
+		ringScore = new Label(lang.RING_SCORE + ": 0", skin);
 		table.add(ringScore).size(300, 40);
 		table.row();
-		parachutingScore = new Label("Parachuting Score: 0", skin);
+		parachutingScore = new Label(lang.PARACHUTING_SCORE + ": 0", skin);
 		table.add(parachutingScore).size(300, 40);
 		table.row();
-		landingScore = new Label("Landing Score: 0", skin);
+		landingScore = new Label(lang.LANDING_SCORE + ": 0", skin);
 		table.add(landingScore).size(300, 40);
 		table.row();
-		totalScore = new Label("Total Score: 0", skin);
+		totalScore = new Label(lang.TOTAL_SCORE + ": 0", skin);
 		table.add(totalScore).size(300, 40);
 		table.row();
 		
@@ -102,7 +104,7 @@ public class LevelCompletedScreen extends MenuScreen {
 		table.row();
 		
 		// register the button "Next Level"
-		TextButton nextLevelButton = new TextButton("Next Level", skin);
+		TextButton nextLevelButton = new TextButton(lang.NEXT_LEVEL, skin);
 		nextLevelButton.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
@@ -114,7 +116,7 @@ public class LevelCompletedScreen extends MenuScreen {
 		table.row();
 
 		// register the button "Try Again"
-		TextButton tryAgainButton = new TextButton("Try Again", skin);
+		TextButton tryAgainButton = new TextButton(lang.TRY_AGAIN, skin);
 		tryAgainButton.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
@@ -126,7 +128,7 @@ public class LevelCompletedScreen extends MenuScreen {
 		table.row();
 
 		// register the button "Main Menu"
-		TextButton optionsButton = new TextButton("Main Menu", skin);
+		TextButton optionsButton = new TextButton(lang.MAIN_MENU, skin);
 		optionsButton.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
@@ -137,7 +139,7 @@ public class LevelCompletedScreen extends MenuScreen {
 		table.row();
 
 		// register the button "Quit"
-		TextButton quitButton = new TextButton("Quit", skin);
+		TextButton quitButton = new TextButton(lang.QUIT, skin);
 		quitButton.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
@@ -231,15 +233,16 @@ public class LevelCompletedScreen extends MenuScreen {
 	@Override
 	protected void showScreen() {
 		AssetFactory assetFactory = AssetFactory.getInstance();
+		LanguageFactory lang = LanguageFactory.getInstance();
 		goldTextureDrawable = new TextureRegionDrawable(new TextureRegion(assetFactory.get(TextureType.GOLD_STAR, Texture.class))); //TODO load with asset loader
 		emptyTextureDrawable = new TextureRegionDrawable(new TextureRegion(assetFactory.get(TextureType.EMPTY_STAR, Texture.class)));
 		
 		Score score = game.playingScreen.scoreSummary();
 		
-		ringScore.setText("Ring Score: " + score.ringScore);
-		parachutingScore.setText("Parachuting Score: " + score.parachutingScore);
-		landingScore.setText("Landing Score: " + score.landingScore);
-		totalScore.setText("Total Score: " + score.totalScore);
+		ringScore.setText(lang.RING_SCORE + ": " + score.ringScore);
+		parachutingScore.setText(lang.PARACHUTING_SCORE + ": " + score.parachutingScore);
+		landingScore.setText(lang.LANDING_SCORE + ": " + score.landingScore);
+		totalScore.setText(lang.TOTAL_SCORE + ": " + score.totalScore);
 		
 		SnapshotArray<Actor> children = stars.getChildren();
 		

@@ -20,6 +20,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TiledDrawable;
 import com.scarlettapps.skydiver3d.resources.AssetFactory;
 import com.scarlettapps.skydiver3d.resources.FontFactory;
+import com.scarlettapps.skydiver3d.resources.LanguageFactory;
 
 public class LoadingScreen extends MenuScreen {
 
@@ -44,7 +45,8 @@ public class LoadingScreen extends MenuScreen {
 		BitmapFont font = fontFactory.generateFont(42);
 		labelStyle.font = font;
 		
-		Label label = new Label("Loading", skin);
+		LanguageFactory lang = LanguageFactory.getInstance();
+		Label label = new Label(lang.LOADING, skin);
 		label.setWidth(DefaultScreen.VIRTUAL_WIDTH/2);
 		label.setAlignment(Align.center);
 		table.add(label).width(DefaultScreen.VIRTUAL_WIDTH/2);
