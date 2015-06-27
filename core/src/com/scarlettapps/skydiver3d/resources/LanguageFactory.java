@@ -58,7 +58,8 @@ public class LanguageFactory {
 
 	private LanguageFactory() {
 		I18NBundle.setSimpleFormatter(true);
-		lang = I18NBundle.createBundle(Gdx.files.local(BUNDLE_LOCATION));
+		I18NBundle.setExceptionOnMissingKey(false);
+		lang = I18NBundle.createBundle(Gdx.files.internal(BUNDLE_LOCATION));
 		
 		LOADING = lang.get("loading");
 		PLAY = lang.get("play");
