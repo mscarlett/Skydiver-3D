@@ -109,7 +109,7 @@ public class MainMenuScreen extends MenuScreen {
 		buttonTable.row();
 
 		// register the button "high scores"
-		TextButton highScoresButton = new TextButton(lang.CREDITS, skin);
+		TextButton highScoresButton = new TextButton("кредиты", skin);
 		highScoresButton.addListener(new ClickListener() {
 			@Override
 	        public void clicked(InputEvent event, float x, float y) {

@@ -57,7 +57,7 @@ public final class PreferenceFactory {
 	
 	public boolean useMetric() {
 		Locale locale = Locale.getDefault();
-		return locale != Locale.US || !locale.getLanguage().equals("en");
+		return !locale.getCountry().equals("US") || !locale.getLanguage().equals("en");
 	}
 	
 	public static PreferenceFactory getInstance() {
