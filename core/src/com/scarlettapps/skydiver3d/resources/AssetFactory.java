@@ -51,6 +51,8 @@ public final class AssetFactory {
 	
 	public static class FontType {
 		public static final String TUFFY = "data/fonts/tuffy.ttf";
+		public static final String ARIMO = "data/fonts/arimo.ttf";
+		public static final String NOTOSANS = "data/fonts/NotoSans-Regular.ttf";
 	}
 	
 	public static class ModelType {

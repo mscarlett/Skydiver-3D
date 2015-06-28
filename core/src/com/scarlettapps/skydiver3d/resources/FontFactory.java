@@ -2,6 +2,8 @@
 
 package com.scarlettapps.skydiver3d.resources;
 
+import java.util.Locale;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -11,13 +13,54 @@ import com.scarlettapps.skydiver3d.resources.AssetFactory.FontType;
 
 public final class FontFactory {
 	
-	public enum FontStyle {
-		REGULAR, BOLD, ITALIC
-	}
+	public static final String RUSSIAN_CHARACTERS =
+			"АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ"
+            + "абвгдеёжзийклмнопрстуфхцчшщъыьэюя"
+            + "1234567890.,:;_¡!¿?\"'+-*/()[]={}%"
+            + "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+            + "abcdefghijklmnopqrstuvwxyz";
+	
+	public static final String JAPANESE_CHARACTERS =
+			"あいうえおかきくけこがぎぐげごさしすせそざじずぜぞた"
+			+ "ちつてとだぢづでどなにぬねのはひふへほばびぶべぼ"
+			+ "ぱぴぷぺぽまみむめもやゆよらりるれろわをんっゝ゛゜"
+			+ "アイウエオカキクケコガギグゲゴサシスセソザジズゼゾ"
+			+ "タチツテトダヂヅデドナニヌネノハヒフヘホバビブベボパ"
+			+ "ピプペポマミムメモヤユヨラリルレロワヲンッーヽ"
+			+ "1234567890.,:;_¡!¿?\"'+-*/()[]={}%"
+			+ "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+            + "abcdefghijklmnopqrstuvwxyz";
+	
+	public static final String CHINESE_CHARACTERS = ""
+			+ "1234567890.,:;_¡!¿?\"'+-*/()[]={}%"
+			+ "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+            + "abcdefghijklmnopqrstuvwxyz";
 
 	private static FontFactory instance = null;
 	
-	private FontFactory() {};
+	private final FreeTypeFontGenerator generator;
+	private final String characters;
+	
+	private FontFactory() {
+		String fontType;
+        String lang = Locale.getDefault().getLanguage();
+		
+		if (lang.equals("ru")) {
+			fontType = FontType.ARIMO;
+			characters = RUSSIAN_CHARACTERS;
+		} /*else if (lang.equals("ja")) {
+			fontType = FontType.NOTOSANS;
+			characters = JAPANESE_CHARACTERS;
+		} else if (lang.equals("zh")) {
+			fontType = FontType.NOTOSANS;
+			characters = CHINESE_CHARACTERS;
+		}*/ else {
+			fontType = FontType.TUFFY;
+			characters = FreeTypeFontGenerator.DEFAULT_CHARS;
+		}
+		
+		generator = new FreeTypeFontGenerator(Gdx.files.internal(fontType));
+	}
 	
 	public BitmapFont generateFont(int size) {
 		return generateFont(size, false);
@@ -30,6 +73,7 @@ public final class FontFactory {
 	public BitmapFont generateFont(int size, boolean genMipMaps, TextureFilter minFilter, TextureFilter magFilter) {
 		FreeTypeFontParameter parameter = new FreeTypeFontParameter();
 		parameter.size = size;
+		parameter.characters = characters;
 		parameter.genMipMaps = genMipMaps;
 		parameter.minFilter = minFilter;
 		parameter.magFilter = magFilter;
@@ -37,10 +81,11 @@ public final class FontFactory {
 	}
 	
 	public BitmapFont generateFont(FreeTypeFontParameter parameter) {
-		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal(FontType.TUFFY));
-		BitmapFont font = generator.generateFont(parameter);
+		return generator.generateFont(parameter);
+	}
+	
+	public void dispose() {
 		generator.dispose();
-		return font;
 	}
 	
 	public static FontFactory getInstance() {
