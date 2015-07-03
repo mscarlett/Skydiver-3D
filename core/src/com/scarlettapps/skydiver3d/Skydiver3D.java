@@ -11,6 +11,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.FPSLogger;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.scarlettapps.skydiver3d.resources.AssetFactory;
+import com.scarlettapps.skydiver3d.resources.FontFactory;
 
 /**
  * Class that stores the current instance of the game and the current screen,
@@ -139,6 +140,7 @@ public class Skydiver3D extends Game {
 		
 		// Dispose game resources
 		AssetFactory.getInstance().dispose();
+		FontFactory.getInstance().dispose();
 	}
 
 	/**
