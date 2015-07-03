@@ -394,7 +394,7 @@ public class StatusView {
 	
 	private static void setLabel(Label label, float x, float y) {
 		LabelStyle style = new LabelStyle();
-		style.font = FontFactory.getInstance().generateFont(64);
+		style.font = FontFactory.getInstance().generateFont(60);
 		style.fontColor = Color.WHITE;
 		label.setStyle(style);
 		TextBounds bounds = label.getTextBounds();
