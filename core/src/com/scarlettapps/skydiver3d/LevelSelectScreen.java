@@ -39,6 +39,9 @@ public class LevelSelectScreen extends MenuScreen {
 	
 	private int screenIdx;
 	
+	private Image leftArrow;
+	private Image rightArrow;
+	
 	public LevelSelectScreen(Skydiver3D game) {
 		super(game);
 		
@@ -58,9 +61,11 @@ public class LevelSelectScreen extends MenuScreen {
 		BitmapFont font = fontFactory.generateFont(42);
 		textButtonStyle.font = font;
 		
-		LabelStyle labelStyle = skin.get(LabelStyle.class);
+		LabelStyle labelStyle = new LabelStyle();
 		font = fontFactory.generateFont(56, Color.DARK_GRAY);
 		labelStyle.font = font;
+		skin.add("Level style", labelStyle, LabelStyle.class);
+		
 		font = fontFactory.generateFont(64);
 		skin.add("Title font", font, BitmapFont.class);
 		
@@ -73,11 +78,11 @@ public class LevelSelectScreen extends MenuScreen {
 		blueArrow2.flip(true,  false);
 				
 		float arrowSize = 80f;
-		final Image leftArrow = new Image(blueArrow2);
+		leftArrow = new Image(blueArrow2);
 		leftArrow.setVisible(false);
 		leftArrow.setWidth(arrowSize);
 		leftArrow.setHeight(arrowSize);
-		final Image rightArrow = new Image(blueArrow);
+		rightArrow = new Image(blueArrow);
 		leftArrow.setY(DefaultScreen.VIRTUAL_HEIGHT/2);
 		rightArrow.setWidth(arrowSize);
 		rightArrow.setHeight(arrowSize);
@@ -168,7 +173,7 @@ public class LevelSelectScreen extends MenuScreen {
 	    	 if (isPlayable) {
 	    		//Second add wrapped overlay object
 		    	 Table overlay = new Table();
-	    		 Label level = new Label("" + (i+1), skin);
+	    		 Label level = new Label("" + (i+1), skin, "Level style");
 	    	     overlay.add(level).top().center().padBottom(12f);
 	    	     
 	    		 stack.addListener(new ClickListener() {
@@ -205,6 +210,8 @@ public class LevelSelectScreen extends MenuScreen {
 	@Override
 	protected void showScreen() {
 		screenIdx = 0;
+		leftArrow.setVisible(false);
+		rightArrow.setVisible(true);
 		miniTable.clearChildren();
 		makeMiniTable(miniTable);
 	}
