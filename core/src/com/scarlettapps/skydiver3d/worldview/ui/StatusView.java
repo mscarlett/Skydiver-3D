@@ -8,7 +8,7 @@ import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.BitmapFont.TextBounds;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
@@ -397,7 +397,7 @@ public class StatusView {
 		style.font = FontFactory.getInstance().generateFont(60);
 		style.fontColor = Color.WHITE;
 		label.setStyle(style);
-		TextBounds bounds = label.getTextBounds();
+		GlyphLayout bounds = new GlyphLayout(style.font, label.getText());
 		x -= bounds.width/2;
 		y -= bounds.height/2;
 		label.setPosition(x, y);

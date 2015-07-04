@@ -1,9 +1,7 @@
 package com.scarlettapps.skydiver3d.worldview.ui;
 
-import java.util.Locale;
-
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.g2d.BitmapFont.TextBounds;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -26,7 +24,7 @@ public class HUD {
 		hud = new Group();
 		hud.setVisible(false);
 		label = new Label(lang.POINTS + ": 0", skin);
-		TextBounds bounds = label.getTextBounds();
+		GlyphLayout bounds = new GlyphLayout(label.getStyle().font, label.getText());
 		label.setPosition(10, DefaultScreen.VIRTUAL_HEIGHT*0.975f-bounds.height);
 		label.setColor(Color.WHITE);
 		label.addAction(new Action() {
@@ -43,7 +41,7 @@ public class HUD {
 		hud.addActor(label);
 		
 		label = new Label(lang.SPEED + ": 000 mph", skin);
-		bounds = label.getTextBounds();
+		bounds = new GlyphLayout(label.getStyle().font, label.getText());
 		label.setPosition(9*DefaultScreen.VIRTUAL_WIDTH/20-bounds.width/2, DefaultScreen.VIRTUAL_HEIGHT*0.975f-bounds.height);
 		label.setColor(Color.WHITE);
 		label.addAction(new Action() {
@@ -65,7 +63,7 @@ public class HUD {
 		hud.addActor(label);
 		
 		label = new Label(lang.ALTITUDE + ": 00000 feet", skin);
-		bounds = label.getTextBounds();
+		bounds = new GlyphLayout(label.getStyle().font, label.getText());
 		label.setPosition(DefaultScreen.VIRTUAL_WIDTH-bounds.width, DefaultScreen.VIRTUAL_HEIGHT*0.975f-bounds.height);
 		label.setColor(Color.WHITE);
 		label.addAction(new Action() {
@@ -91,4 +89,6 @@ public class HUD {
 		return hud;
 	}
 
+	
+	
 }
