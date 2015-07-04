@@ -18,6 +18,7 @@ public class LanguageFactory {
 	public final String HELP;
 	public final String OPTIONS;
 	public final String CREDITS;
+	public final String LEVEL_SELECT;
 	public final String BACK_TO_MAIN;
 	public final String BACK_TO_GAME;
 	public final String SOUND_EFFECTS;
@@ -66,6 +67,7 @@ public class LanguageFactory {
 		HELP = lang.get("help");
 		OPTIONS = lang.get("options");
 		CREDITS = lang.get("credits");
+		LEVEL_SELECT = lang.get("levelSelect");
 		BACK_TO_MAIN = lang.get("backToMain");
 		BACK_TO_GAME = lang.get("backToGame");
 		SOUND_EFFECTS = lang.get("soundEffects");

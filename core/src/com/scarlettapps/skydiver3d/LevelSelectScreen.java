@@ -64,7 +64,7 @@ public class LevelSelectScreen extends MenuScreen {
 		font = fontFactory.generateFont(64);
 		skin.add("Title font", font, BitmapFont.class);
 		
-		Label title = new Label("Level Select", skin, "Title font", Color.WHITE);
+		Label title = new Label(lang.LEVEL_SELECT, skin, "Title font", Color.WHITE);
 		table.add(title).spaceBottom(5).center();
 		table.row();
 		
