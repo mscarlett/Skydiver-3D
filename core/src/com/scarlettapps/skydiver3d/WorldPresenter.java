@@ -15,7 +15,6 @@ import com.scarlettapps.skydiver3d.world.World;
 import com.scarlettapps.skydiver3d.worldstate.GameController;
 import com.scarlettapps.skydiver3d.worldstate.InputManager;
 import com.scarlettapps.skydiver3d.worldstate.Score;
-import com.scarlettapps.skydiver3d.worldstate.SkydiverControls;
 import com.scarlettapps.skydiver3d.worldstate.Status;
 import com.scarlettapps.skydiver3d.worldstate.StatusManager;
 import com.scarlettapps.skydiver3d.worldview.WorldView;
@@ -48,12 +47,6 @@ public class WorldPresenter extends DefaultScreen<Skydiver3D> {
 	 */
 	public WorldPresenter(Skydiver3D game) {
 		super(game, false);
-	}
-	
-	public void initializeScreen() {
-		if (Skydiver3D.DEV_MODE) {
-			Gdx.app.log(Skydiver3D.LOG, "Initializing world");
-		}
 		
 		status = new Status();
 		gameController = GameController.newGameController();
@@ -62,6 +55,12 @@ public class WorldPresenter extends DefaultScreen<Skydiver3D> {
 		statusManager = new StatusManager(inputManager, status);
 		world = new World(inputManager, statusManager);
 		worldView = new WorldView(world, statusManager);
+	}
+	
+	public void initializeScreen() {
+		if (Skydiver3D.DEV_MODE) {
+			Gdx.app.log(Skydiver3D.LOG, "Initializing world");
+		}
 
 		world.initialize();
 		worldView.initialize();
@@ -148,7 +147,7 @@ public class WorldPresenter extends DefaultScreen<Skydiver3D> {
 	public void nextLevel() {
 		status.nextLevel();
 		Level difficulty = status.difficulty();
-		world.setLevel(difficulty);
+		setLevel(difficulty);
 		restartLevel();
 	}
 	
@@ -174,6 +173,28 @@ public class WorldPresenter extends DefaultScreen<Skydiver3D> {
 	 */
 	public void setPaused(boolean b) {
 		status.setPaused(b);
+	}
+
+	public void setLevel(int levelNum) {
+		if (Skydiver3D.DEV_MODE) {
+			Gdx.app.log(Skydiver3D.LOG, "Setting level to " + levelNum);
+		}
+		
+	    levelNum = Math.min(levelNum, Level.LEVELS.size());
+		Level l = Level.LEVELS.get(levelNum - 1);
+		setLevel(l);
+	}
+	
+	public void setLevel(Level difficulty) {
+		if (Skydiver3D.DEV_MODE) {
+			Gdx.app.log(Skydiver3D.LOG, "Setting level to " + difficulty);
+		}
+		
+		status.setDifficulty(difficulty);
+	}
+
+	public Level level() {
+		return status.difficulty();
 	}
 
 }

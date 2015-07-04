@@ -43,7 +43,7 @@ public class World {
 		status = statusManager.getStatus();
 		
 		skydiver = new Skydiver(status);
-		collectibles = new Collectibles();
+		collectibles = new Collectibles(status);
 		clouds = new Clouds();
 		terrain = new Terrain();
 		target = new Target();
@@ -90,7 +90,7 @@ public class World {
 	}
 	
 	private float getWindVolume() {
-		return (0.2f-status.velocity().z/Skydiver.MAX_TERMINAL_SPEED)/1.2f;
+		return 0.1f*(0.2f-status.velocity().z/Skydiver.MAX_TERMINAL_SPEED)/1.2f;
 	}
 	
 	private void updatePositions(float delta) {
@@ -157,10 +157,6 @@ public class World {
 
 	public Sky getSky() {
 	    return sky;
-	}
-
-	public void setLevel(Level difficulty) {
-		collectibles.setDifficulty(difficulty);
 	}
 	
 }

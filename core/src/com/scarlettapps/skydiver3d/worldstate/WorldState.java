@@ -5,8 +5,8 @@ import com.badlogic.gdx.utils.GdxRuntimeException;
 public enum WorldState implements AbstractWorldState {
 	FINAL(-21, null),
     LANDING(-20, FINAL),
-    PARACHUTING(400, LANDING),
-    SKYDIVING(1000, PARACHUTING),
+    PARACHUTING(200, LANDING),
+    SKYDIVING(800, PARACHUTING),
     INITIAL(4400, SKYDIVING);
 
 	public final int minAltitude;

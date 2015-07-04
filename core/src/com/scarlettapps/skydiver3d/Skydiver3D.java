@@ -26,7 +26,7 @@ public class Skydiver3D extends Game {
 	public static final String LOG = "Skydiver3D";
 	// Whether or not the game should be run in dev mode, which enables
     // advanced debugging options for game logic and gui testing
-	public static final boolean DEV_MODE = false;
+	public static final boolean DEV_MODE = true;
 	
 	/** Screens displayed when browsing the main menu */
 	// Splash screen for main menu that is displayed while loading
@@ -41,6 +41,8 @@ public class Skydiver3D extends Game {
 	CreditsScreen creditsScreen;
 	
 	/** Screens displayed when playing game */
+	// Choose game level
+	LevelSelectScreen levelSelectScreen;
 	// Loading screen for game
 	LoadingScreen loadingScreen;
 	// Game screen which displays the current game state
@@ -81,6 +83,7 @@ public class Skydiver3D extends Game {
 		creditsScreen = new CreditsScreen(this);
 		splashScreen = new SplashScreen(this);
 		gameOptionsScreen = new GameOptionsScreen(this);
+		levelSelectScreen = new LevelSelectScreen(this);
 		
 		// Set screen to splash screen
 		setScreen(splashScreen);

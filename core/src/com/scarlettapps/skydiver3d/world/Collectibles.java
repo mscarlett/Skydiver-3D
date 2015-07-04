@@ -30,23 +30,23 @@ public class Collectibles extends GameObject  implements Iterable<Node<Collectib
 	private final SortedIntList<Collectible> toRender;
 	private final SortedIntList<Collectible> postRender;
 	
-	private Level difficulty = Level.LEVEL_ONE;
+	private final Status status;
 	
-	public Collectibles() {
+	public Collectibles(Status status) {
 		super(true, true);
+		
+		this.status = status;
 		
 		preRender = new SortedIntList<Collectible>();
 		toRender = new SortedIntList<Collectible>();
 		postRender = new SortedIntList<Collectible>();
 	}
 	
-	public void setDifficulty(Level difficulty) {
-		this.difficulty = difficulty;
-	}
-	
 	@Override
 	public void initialize() {
 		int z = Skydiver.STARTING_HEIGHT-STARTING_OFFSET;
+		
+		Level difficulty = status.difficulty();
 
 		int numDangerous = difficulty.numDangerous;
 		

@@ -34,6 +34,9 @@ public final class AssetFactory {
 		public static final String RING_SKULL = "data/textures/ring_skull.png";
 		public static final String RING_NUCLEAR = "data/textures/ring_nuclear.png";
 		public static final String RING_GHOST = "data/textures/ring_ghost.png";
+		public static final String BUTTON = "data/textures/button.png";
+		public static final String ARROW_BLUE = "data/textures/arrow-blue.png";
+		public static final String LOCK = "data/textures/lock.png";
 	}
 	
 	public static class SoundType {
@@ -97,15 +100,16 @@ public final class AssetFactory {
 		assets.load(TextureType.TITLE, Texture.class);
 		
 		// Assets needed for main menu screen
+		assets.load(TextureType.GOLD_STAR, Texture.class);
+		assets.load(SoundType.CLICK, Sound.class);
+		assets.load(MusicType.MAIN_MENU, Music.class);
+		
+		// Assets needed for game
 		assets.load(TextureType.RING, Texture.class);
 		assets.load(TextureType.RING_SKULL, Texture.class);
 		assets.load(TextureType.RING_NUCLEAR, Texture.class);
 		assets.load(TextureType.RING_GHOST, Texture.class);
 		assets.load(TextureType.STAR, Texture.class);
-		assets.load(SoundType.CLICK, Sound.class);
-		assets.load(MusicType.MAIN_MENU, Music.class);
-		
-		// Assets needed for game
 		assets.load(ModelType.SKYDIVER, Model.class);
 		assets.load(SoundType.BELL, Sound.class);
 		assets.load(SoundType.SLAP, Sound.class);
@@ -116,7 +120,6 @@ public final class AssetFactory {
 		assets.load(TextureType.SLIDERBAR, Texture.class);
 		assets.load(TextureType.PAUSE, Texture.class);
 		assets.load(TextureType.LIGHTNING, Texture.class);
-		assets.load(TextureType.GOLD_STAR, Texture.class);
 		assets.load(TextureType.EMPTY_STAR, Texture.class);
 		assets.load(TextureType.SKY, Texture.class);
 		assets.load(TextureType.GRASS_TERRAIN, Texture.class);

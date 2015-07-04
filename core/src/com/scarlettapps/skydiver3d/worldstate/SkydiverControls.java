@@ -71,12 +71,12 @@ public class SkydiverControls implements InputListener {
 			case LANDING:
 				skydiver = world.getSkydiver();
 				float accuracy = status.getAccuracy();
-				float error = 3-2*accuracy;
+				float error = 10-9*accuracy;
 				skydiver.addToVelocity(15*gameController.getAx()*error*delta,15*gameController.getAy()*error*delta,0);
 				status.velocity().z = -8f*(1.7f-accuracy)*(7*status.position().z/1000f+1);
-				status.velocity().x += 3*(Math.signum(status.velocity().x) == 0 ? Math.random() : Math.signum(status.velocity().x))*Math.abs(Math.random()*delta);
+				status.velocity().x += 3*error*(Math.signum(status.velocity().x) == 0 ? Math.random() : Math.signum(status.velocity().x))*Math.abs(Math.random()*delta);
 				if (Gdx.app.getType() != ApplicationType.Android) {
-					status.velocity().y += 3*(Math.signum(status.velocity().y) == 0 ? Math.random() : Math.signum(status.velocity().y))*Math.abs(Math.random()*delta);
+					status.velocity().y += 3*error*(Math.signum(status.velocity().y) == 0 ? Math.random() : Math.signum(status.velocity().y))*Math.abs(Math.random()*delta);
 				}
 				status.setLanding(true);
 				Vector3 pos = status.position();

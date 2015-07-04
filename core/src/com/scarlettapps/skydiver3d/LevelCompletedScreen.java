@@ -26,6 +26,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.SnapshotArray;
+import com.scarlettapps.skydiver3d.resources.AchievementsFactory;
 import com.scarlettapps.skydiver3d.resources.AssetFactory;
 import com.scarlettapps.skydiver3d.resources.AssetFactory.TextureType;
 import com.scarlettapps.skydiver3d.resources.FontFactory;
@@ -53,6 +54,8 @@ public class LevelCompletedScreen extends MenuScreen {
 	
 	public LevelCompletedScreen(Skydiver3D game) {
 		super(game, false);
+		
+		shapeRenderer = null;
 	}
 	
 	@Override
@@ -152,7 +155,9 @@ public class LevelCompletedScreen extends MenuScreen {
 		
 		stage.addActor(table);
 		
-		shapeRenderer = new ShapeRenderer();
+		if (shapeRenderer == null) {
+			shapeRenderer = new ShapeRenderer();
+		}
 	}
 	
 	@Override
@@ -190,7 +195,7 @@ public class LevelCompletedScreen extends MenuScreen {
 		}
 		
 		// Draw the stage
-		stage.draw();		
+		stage.draw();
 		
 		elapsedTime += delta;
 	}
@@ -231,7 +236,7 @@ public class LevelCompletedScreen extends MenuScreen {
 	}
 
 	@Override
-	protected void showScreen() {
+	protected void showScreen() {	
 		AssetFactory assetFactory = AssetFactory.getInstance();
 		LanguageFactory lang = LanguageFactory.getInstance();
 		goldTextureDrawable = new TextureRegionDrawable(new TextureRegion(assetFactory.get(TextureType.GOLD_STAR, Texture.class))); //TODO load with asset loader
@@ -253,6 +258,17 @@ public class LevelCompletedScreen extends MenuScreen {
 		}
 		
 		elapsedTime = 0f;
+		
+		AchievementsFactory achievements = AchievementsFactory.getInstance();
+		int rating = achievements.getLevelRating(game.playingScreen.level());
+		if (score.rating > rating) {
+		    achievements.setLevelRating(game.playingScreen.level(), score.rating);
+		}
+		
+		int levels = achievements.levelsCompleted();
+		if (game.playingScreen.level().index() >= levels) {
+			 achievements.setLevelsCompleted(game.playingScreen.level());
+		}
 	}
 
 	@Override

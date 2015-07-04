@@ -56,11 +56,6 @@ public class OptionsScreen extends MenuScreen {
 		TextButtonStyle textButtonStyle = skin.get(TextButtonStyle.class);
 		BitmapFont font = fontFactory.generateFont(42);
 		textButtonStyle.font = font;
-		//CheckBoxStyle checkBoxStyle = skin.get(CheckBoxStyle.class);
-		//checkBoxStyle.checkboxOff.setMinWidth(50f);
-		//checkBoxStyle.checkboxOff.setMinHeight(50f);
-		//checkBoxStyle.checkboxOn.setMinWidth(50f);
-		//checkBoxStyle.checkboxOn.setMinHeight(50f);
 		
 		LabelStyle labelStyle = skin.get(LabelStyle.class);
 		font = fontFactory.generateFont(36);
@@ -149,7 +144,7 @@ public class OptionsScreen extends MenuScreen {
 		table.add(volumeSlider);
 		table.add(volumeValue).width(40);
 		
-		Slider sensitivitySlider = new Slider(0.5f, 1.5f, 0.1f, true, sliderStyle);
+		Slider sensitivitySlider = new Slider(0.5f, 2.0f, 0.1f, true, sliderStyle);
 		sensitivitySlider.setScaleX(10);
 		sensitivitySlider.setValue(preferences.getSensitivity());
 		sensitivitySlider.addListener(new ChangeListener() {

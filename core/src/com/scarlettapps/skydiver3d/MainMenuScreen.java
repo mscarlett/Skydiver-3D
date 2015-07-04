@@ -77,7 +77,7 @@ public class MainMenuScreen extends MenuScreen {
 			@Override
 	        public void clicked(InputEvent event, float x, float y) {
 				sound.play(SoundType.CLICK);
-	            startGame();
+	            playGame();
 	        }
 		});
 		buttonTable.add(startGameButton).size(BUTTONS_WIDTH, BUTTONS_HEIGHT).uniform().spaceBottom(SPACE_BOTTOM);
@@ -126,9 +126,8 @@ public class MainMenuScreen extends MenuScreen {
 	 * Transition to the game loading screen if it is still being loaded, or the
 	 * game screen if loading is finished
 	 */
-	private void startGame() {
-		DefaultScreen<?> next = game.playingScreen.isLoaded() ? game.playingScreen : game.loadingScreen;
-		transitionScreen(next, TRANSITION_TIME);
+	private void playGame() {
+		game.setScreen(game.levelSelectScreen);
 	}
 	
 	/**
@@ -161,7 +160,7 @@ public class MainMenuScreen extends MenuScreen {
 	}
 
 	// List of dependencies which need to be loaded
-	private static final String[] dependencies = new String[]{TextureType.RING, TextureType.STAR, SoundType.CLICK, MusicType.MAIN_MENU, TextureType.TITLE};
+	private static final String[] dependencies = new String[]{SoundType.CLICK, MusicType.MAIN_MENU, TextureType.TITLE, TextureType.GOLD_STAR};
 	
 	/**
 	 * Check if this screen is loaded

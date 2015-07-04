@@ -5,6 +5,7 @@ package com.scarlettapps.skydiver3d.resources;
 import java.util.Locale;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
@@ -63,15 +64,20 @@ public final class FontFactory {
 	}
 	
 	public BitmapFont generateFont(int size) {
-		return generateFont(size, false);
+		return generateFont(size, Color.WHITE);
 	}
 	
-	public BitmapFont generateFont(int size, boolean genMipMaps) {
-		return generateFont(size, genMipMaps, TextureFilter.Nearest, TextureFilter.Nearest);
+	public BitmapFont generateFont(int size, Color c) {
+		return generateFont(size, c, false);
 	}
 	
-	public BitmapFont generateFont(int size, boolean genMipMaps, TextureFilter minFilter, TextureFilter magFilter) {
+	public BitmapFont generateFont(int size, Color c, boolean genMipMaps) {
+		return generateFont(size, c, genMipMaps, TextureFilter.Nearest, TextureFilter.Nearest);
+	}
+	
+	public BitmapFont generateFont(int size, Color c, boolean genMipMaps, TextureFilter minFilter, TextureFilter magFilter) {
 		FreeTypeFontParameter parameter = new FreeTypeFontParameter();
+		parameter.color = c;
 		parameter.size = size;
 		parameter.characters = characters;
 		parameter.genMipMaps = genMipMaps;

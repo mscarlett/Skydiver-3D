@@ -309,4 +309,8 @@ public class Status {
 	public Level difficulty() {
 		return level;
 	}
+	
+	public void setDifficulty(Level l) {
+		level = l;
+	}
 }

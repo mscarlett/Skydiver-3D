@@ -45,5 +45,8 @@ com.badlogic.gdx.scenes.scene2d.ui.List$ListStyle: {
 },
 com.badlogic.gdx.scenes.scene2d.ui.ProgressBar$ProgressBarStyle: {
 	default-horizontal: { }
+},
+com.badlogic.gdx.scenes.scene2d.ui.ImageButton$ImageButtonStyle: {
+    default: { }
 }
 }
