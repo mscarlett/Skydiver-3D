@@ -130,6 +130,7 @@ public class LevelSelectScreen extends MenuScreen {
 			
 			@Override
 	        public void clicked(InputEvent event, float x, float y) {
+				sound.play(SoundType.CLICK);
 				backToMainMenu();
 	        }
 			

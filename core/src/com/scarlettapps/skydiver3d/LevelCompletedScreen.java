@@ -283,7 +283,8 @@ public class LevelCompletedScreen extends MenuScreen {
 
 	@Override
 	protected void hideScreen() {
-		
+		shapeRenderer.dispose();
+		shapeRenderer = null;
 	}
 
 	@Override
